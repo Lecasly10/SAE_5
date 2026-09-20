@@ -1,0 +1,17 @@
+# Environnement virtuel Python
+ai/.venv/
+
+# Datasets (beaucoup trop volumineux pour Git)
+ai/dataset/
+ai/dataset_small/
+
+# Cache Python
+__pycache__/
+*.pyc
+*.pyo
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
