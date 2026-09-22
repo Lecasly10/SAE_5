@@ -4,7 +4,7 @@ Cette branche est dédiée au développement de l’application mobile Flutter d
 
 L’objectif de cette partie est de proposer une interface mobile pour scanner une voiture à partir d’une photo, afficher le résultat de l’analyse, enregistrer les véhicules détectés dans une bibliothèque locale et gérer un profil utilisateur dans les paramètres.
 
-## 🧩 Ce que contient cette branche
+## Ce que contient cette branche
 
 Cette branche concerne uniquement l’application Flutter, donc la partie front-end mobile du projet. Elle ne décrit pas le modèle IA de classification d’images, mais elle prépare l’intégration de l’interface utilisateur autour du scan d’un véhicule.
 
@@ -16,7 +16,7 @@ L’application permet :
 - de consulter les voitures déjà scannées ;
 - de gérer un compte utilisateur et les paramètres.
 
-## 🛠️ Technologies utilisées
+## Technologies utilisées
 
 - Flutter
 - Dart
@@ -25,7 +25,7 @@ L’application permet :
 - image_picker
 - window_manager
 
-## ▶️ Comment lancer l’application Flutter
+## Comment lancer l’application Flutter
 
 1. Ouvrir un terminal dans le dossier de l’application :
 
@@ -51,7 +51,7 @@ L’application permet :
    `flutter pub get`
    `flutter run`
 
-## 📁 Structure principale du projet
+## Structure principale du projet
 
 Le cœur de l’application se trouve dans le dossier `flutter_application_1/lib`.
 
@@ -122,7 +122,7 @@ Il définit les couleurs utilisées pour :
 
 Il permet d’avoir une interface visuelle cohérente et uniforme dans toute l’application.
 
-## 🧠 Ce que fait l’application dans son état actuel
+## Ce que fait l’application dans son état actuel
 
 L’application actuelle est une maquette fonctionnelle de l’interface mobile Spot'It. Elle ne connecte pas encore un modèle de reconnaissance IA réel, mais elle prépare l’intégration de celui-ci.
 
@@ -135,6 +135,6 @@ Pour l’instant, elle permet :
 
 La partie “modèle reconnu par l’IA” est encore un texte de remplacement à remplacer par le vrai résultat de l’analyse dès que le modèle sera intégré.
 
-## 📌 Résumé rapide
+## Résumé rapide
 
 Cette branche correspond à la version Flutter de la branche SAE_5 dédiée à l’interface utilisateur du projet Spot'It. Elle permet de visualiser le produit final attendu côté mobile, avec scan d’images, gestion de bibliothèque et paramètres utilisateur.
