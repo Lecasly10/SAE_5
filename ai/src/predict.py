@@ -5,7 +5,7 @@ import numpy as np
 # Chemins
 MODEL_PATH = "models/spotit_mobilenet.keras"
 CLASSES_PATH = "models/classes.json"
-IMAGE_PATH = "images/mx5.jpg"
+IMAGE_PATH = "images/z4.jpg"
 
 # Chargement du modèle entraîné
 model = tf.keras.models.load_model(MODEL_PATH)
