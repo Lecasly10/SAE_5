@@ -1,0 +1,19 @@
+# Dépendances Node.js (backend)
+node_modules/
+package-lock.json
+
+# Variables d'environnement (secrets - jamais sur Git)
+.env
+backend/.env
+
+# Flutter / Dart
+**/build/
+**/.dart_tool/
+**/.flutter-plugins
+**/.flutter-plugins-dependencies
+**/.pub-cache/
+**/.pub/
+
+# macOS / IDE
+.DS_Store
+.vscode/
