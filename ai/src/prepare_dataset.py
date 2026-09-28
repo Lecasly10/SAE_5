@@ -2,12 +2,12 @@ from pathlib import Path
 import shutil
 
 CLASSES = [
-    "BMW_Z4_Coupe_E86_20062009",
-    "BMW_Z4_M_Roadster_E85_20062009",
-    "BMW_Z4_Roadster_E89_20092013",
-    "BMW_Z4_Roadster_LCI_E89_20132016",
-    "BMW_Z4_G29_2018Present",
-    "MAZDA_MX5__Miata_2015Present",
+    "JEEP_Grand_Cherokee_20132020",
+    "FORD_Mustang_20142017",
+    "FIAT_500_Abarth_2008Present",
+    "FERRARI_F12_Berlinetta_20122015",
+    "TOYOTA_Hilux_Double_Cab_2020Present",
+    "CITROEN_2CV_19491990",
 ]
 
 SOURCE = Path("dataset")
