@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'auth_service.dart';
+import 'car_service.dart';
 import 'spot_it_theme.dart';
+import 'toast.dart';
 
 enum _AuthMode { login, register }
 
@@ -20,11 +22,11 @@ class _SettingsPageState extends State<SettingsPage> {
   final _passwordController = TextEditingController();
 
   _AuthMode _mode = _AuthMode.login;
-  bool _isConnected = false;
+  bool _isConnected = AuthService.isLoggedIn;
   bool _isEditing = false;
   bool _obscurePassword = true;
-  String _savedName = 'Victorien';
-  String _savedEmail = 'victorien@example.com';
+  String _savedName = AuthService.name ?? '';
+  String _savedEmail = AuthService.email ?? '';
 
   @override
   void dispose() {
@@ -40,6 +42,7 @@ class _SettingsPageState extends State<SettingsPage> {
     final result = _mode == _AuthMode.login
         ? await AuthService.login(_emailController.text.trim(), _passwordController.text)
         : await AuthService.register(_nameController.text.trim(), _emailController.text.trim(), _passwordController.text);
+    if (!mounted) return;
     setState(() {
       _savedName = result['name'];
       _savedEmail = result['email'];
@@ -48,7 +51,8 @@ class _SettingsPageState extends State<SettingsPage> {
       _passwordController.clear();
     });
   } catch (e) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
+    if (!mounted) return;
+    showSpotItToast(context, e.toString().replaceFirst('Exception: ', ''), isError: true);
   }
 }
 
@@ -65,12 +69,12 @@ class _SettingsPageState extends State<SettingsPage> {
       _savedEmail = _emailController.text.trim();
       _isEditing = false;
     });
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Informations mises à jour')),
-    );
+    showSpotItToast(context, 'Informations mises à jour');
   }
 
   void _logout() {
+    AuthService.logout();
+    CarService.clearCache();
     setState(() {
       _isConnected = false;
       _isEditing = false;
@@ -86,6 +90,8 @@ class _SettingsPageState extends State<SettingsPage> {
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: SpotItColors.surface,
+        insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+        constraints: const BoxConstraints(maxWidth: 354),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
           side: const BorderSide(color: SpotItColors.border),
@@ -114,9 +120,7 @@ class _SettingsPageState extends State<SettingsPage> {
     if (confirmed == true) {
       _logout();
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Compte supprimé')),
-        );
+        showSpotItToast(context, 'Compte supprimé');
       }
     }
   }
