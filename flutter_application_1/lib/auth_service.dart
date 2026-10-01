@@ -3,8 +3,21 @@ import 'package:http/http.dart' as http;
 
 class AuthService {
   // sur émulateur Android : 10.0.2.2 au lieu de localhost
-  //static const String baseUrl = 'http://10.0.2.2:3000/api/auth'; // android
-  static const String baseUrl = 'http://localhost:3000/api/auth'; // localhost pc
+  //static const String host = 'http://10.0.2.2:3000'; // android
+  static const String host = 'http://localhost:3000'; // localhost pc
+  static const String baseUrl = '$host/api/auth';
+
+  static String? token;
+  static String? name;
+  static String? email;
+
+  static bool get isLoggedIn => token != null;
+
+  static void logout() {
+    token = null;
+    name = null;
+    email = null;
+  }
 
   static Future<Map<String, dynamic>> login(String email, String password) async {
     final res = await http.post(
@@ -14,7 +27,10 @@ class AuthService {
     );
     final data = jsonDecode(res.body);
     if (res.statusCode != 200) throw Exception(data['error'] ?? 'Erreur');
-    return data; 
+    AuthService.token = data['token'];
+    AuthService.name = data['name'];
+    AuthService.email = data['email'];
+    return data;
   }
 
   static Future<Map<String, dynamic>> register(String name, String email, String password) async {
@@ -25,6 +41,6 @@ class AuthService {
     );
     final data = jsonDecode(res.body);
     if (res.statusCode != 201) throw Exception(data['error'] ?? 'Erreur');
-    return data;
+    return login(email, password);
   }
 }
