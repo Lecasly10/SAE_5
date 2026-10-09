@@ -1,14 +1,14 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'auth_service.dart';
-import 'car_preview_page.dart';
+import 'car_card_dialog.dart';
+import 'car_image.dart';
 import 'car_service.dart';
 import 'scanned_car.dart';
 import 'settings_page.dart';
 import 'spot_it_theme.dart';
+import 'spot_it_widgets.dart';
 import 'toast.dart';
 
 class CarLibraryPage extends StatefulWidget {
@@ -47,10 +47,8 @@ class _CarLibraryPageState extends State<CarLibraryPage> {
   }
 
   Future<void> _openPreview(ScannedCar car) async {
-    final deleted = await Navigator.of(context).push<bool>(
-      MaterialPageRoute<bool>(builder: (_) => CarPreviewPage(car: car)),
-    );
-    if (deleted != true || !mounted) return;
+    final deleted = await showCarCardDialog(context, car);
+    if (!deleted || !mounted) return;
     setState(() => _cars = _cars.where((c) => c.id != car.id).toList());
     showSpotItToast(context, 'Photo supprimée de la bibliothèque');
   }
@@ -130,86 +128,18 @@ class _CarLibraryPageState extends State<CarLibraryPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: SpotItColors.background,
-      body: SafeArea(
-        child: Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 402),
-            child: Column(
-              children: [
-                _LibraryHeader(
-                  count: _cars.length,
-                  showCount: AuthService.isLoggedIn,
-                  onBack: () => Navigator.pop(context),
-                ),
-                Expanded(child: _body()),
-              ],
-            ),
+    final count = _cars.length;
+    return SpotItPage(
+      child: Column(
+        children: [
+          SpotItHeader(
+            title: 'Ma bibliothèque',
+            subtitle: AuthService.isLoggedIn
+                ? '$count ${count > 1 ? 'voitures scannées' : 'voiture scannée'}'
+                : null,
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class _LibraryHeader extends StatelessWidget {
-  const _LibraryHeader({
-    required this.count,
-    required this.showCount,
-    required this.onBack,
-  });
-
-  final int count;
-  final bool showCount;
-  final VoidCallback onBack;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 91,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-        child: Row(
-          children: [
-            Material(
-              color: SpotItColors.surface,
-              borderRadius: BorderRadius.circular(20),
-              child: InkWell(
-                onTap: onBack,
-                borderRadius: BorderRadius.circular(20),
-                child: const SizedBox(
-                  width: 40,
-                  height: 40,
-                  child: Icon(Icons.arrow_back, size: 20),
-                ),
-              ),
-            ),
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Ma bibliothèque',
-                    style: GoogleFonts.outfit(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                  if (showCount)
-                    Text(
-                      '$count ${count > 1 ? 'voitures scannées' : 'voiture scannée'}',
-                      style: GoogleFonts.inter(
-                        fontSize: 11,
-                        color: SpotItColors.secondaryText,
-                      ),
-                    ),
-                ],
-              ),
-            ),
-            const SizedBox(width: 40),
-          ],
-        ),
+          Expanded(child: _body()),
+        ],
       ),
     );
   }
@@ -223,12 +153,12 @@ class _CarCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final radius = BorderRadius.circular(18);
+    final recognition = car.recognition;
     return Material(
       color: SpotItColors.surface,
       clipBehavior: Clip.antiAlias,
       shape: RoundedRectangleBorder(
-        borderRadius: radius,
+        borderRadius: BorderRadius.circular(18),
         side: const BorderSide(color: SpotItColors.border),
       ),
       child: InkWell(
@@ -236,115 +166,63 @@ class _CarCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Expanded(
-              child: Hero(
-                tag: CarPreviewPage.heroTag(car.id),
-                child: _CarImage(key: ValueKey(car.id), carId: car.id),
-              ),
-            ),
-          Padding(
-            padding: const EdgeInsets.all(12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    const Icon(
-                      Icons.auto_awesome,
-                      size: 13,
-                      color: SpotItColors.accent,
-                    ),
-                    const SizedBox(width: 5),
-                    Text(
-                      'RECONNU PAR L’IA',
-                      style: GoogleFonts.inter(
-                        fontSize: 8,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: 0.5,
+            Expanded(child: CarImage(key: ValueKey(car.id), carId: car.id)),
+            Padding(
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.auto_awesome,
+                        size: 13,
                         color: SpotItColors.accent,
+                      ),
+                      const SizedBox(width: 5),
+                      Expanded(
+                        child: Text(
+                          recognition.brand.toUpperCase(),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: GoogleFonts.inter(
+                            fontSize: 9,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: 0.8,
+                            color: SpotItColors.accent,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  if (recognition.model.isNotEmpty) ...[
+                    const SizedBox(height: 7),
+                    Text(
+                      recognition.model,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: GoogleFonts.outfit(
+                        fontSize: 15,
+                        height: 1.1,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
                       ),
                     ),
                   ],
-                ),
-                const SizedBox(height: 7),
-                Text(
-                  car.recognizedName,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: GoogleFonts.outfit(
-                    fontSize: 15,
-                    height: 1.1,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.white,
+                  const SizedBox(height: 5),
+                  Text(
+                    car.scannedDate,
+                    style: GoogleFonts.inter(
+                      fontSize: 9,
+                      color: SpotItColors.secondaryText,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 5),
-                Text(
-                  _formatDate(car.scannedAt),
-                  style: GoogleFonts.inter(
-                    fontSize: 9,
-                    color: SpotItColors.secondaryText,
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
           ],
         ),
       ),
-    );
-  }
-
-  String _formatDate(DateTime date) {
-    String twoDigits(int value) => value.toString().padLeft(2, '0');
-    return '${twoDigits(date.day)}/${twoDigits(date.month)}/${date.year}';
-  }
-}
-
-class _CarImage extends StatefulWidget {
-  const _CarImage({required this.carId, super.key});
-
-  final String carId;
-
-  @override
-  State<_CarImage> createState() => _CarImageState();
-}
-
-class _CarImageState extends State<_CarImage> {
-  late final Future<Uint8List> _bytes = CarService.image(widget.carId);
-
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder<Uint8List>(
-      future: _bytes,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return Image.memory(
-            snapshot.data!,
-            fit: BoxFit.cover,
-            gaplessPlayback: true,
-          );
-        }
-        return Container(
-          color: SpotItColors.selectedSurface,
-          child: Center(
-            child: snapshot.hasError
-                ? const Icon(
-                    Icons.broken_image_outlined,
-                    size: 36,
-                    color: SpotItColors.disabledText,
-                  )
-                : const SizedBox(
-                    width: 22,
-                    height: 22,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      color: SpotItColors.accent,
-                    ),
-                  ),
-          ),
-        );
-      },
     );
   }
 }

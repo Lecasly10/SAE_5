@@ -11,4 +11,6 @@ class SpotItColors {
   static const secondaryText = Color(0xFF9CA3AF);
   static const disabledText = Color(0xFF4B5563);
   static const danger = Color(0xFFFF5A67);
+  static const warning = Color(0xFFFFB84D);
+  static const detection = Color(0xFFFF2D3B);
 }

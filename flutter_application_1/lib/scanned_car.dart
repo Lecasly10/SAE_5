@@ -1,20 +1,24 @@
+import 'recognition.dart';
+
 class ScannedCar {
   const ScannedCar({
     required this.id,
-    required this.recognizedName,
-    required this.caption,
+    required this.recognition,
     required this.scannedAt,
   });
 
   factory ScannedCar.fromJson(Map<String, dynamic> json) => ScannedCar(
         id: json['id'] as String,
-        recognizedName: json['recognizedName'] as String,
-        caption: (json['caption'] as String?) ?? '',
+        recognition: Recognition.fromJson(json),
         scannedAt: DateTime.parse(json['createdAt'] as String).toLocal(),
       );
 
   final String id;
-  final String recognizedName;
-  final String caption;
+  final Recognition recognition;
   final DateTime scannedAt;
+
+  String get scannedDate {
+    String twoDigits(int value) => value.toString().padLeft(2, '0');
+    return '${twoDigits(scannedAt.day)}/${twoDigits(scannedAt.month)}/${scannedAt.year}';
+  }
 }

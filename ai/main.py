@@ -4,16 +4,6 @@ from src.predictor import CarPredictor
 from src.trainer import MobileNetTrainer
 
 
-CLASSES = [
-    "JEEP_Grand_Cherokee_20132020",
-    "FORD_Mustang_20142017",
-    "FIAT_500_Abarth_2008Present",
-    "FERRARI_F12_Berlinetta_20122015",
-    "TOYOTA_Hilux_Double_Cab_2020Present",
-    "CITROEN_2CV_19491990",
-]
-
-
 def analyze_dataset():
     print("\n========== ANALYSE DU DATASET ==========\n")
 
@@ -27,9 +17,7 @@ def analyze_dataset():
 def prepare_dataset():
     print("\n========== PRÉPARATION DU DATASET ==========\n")
 
-    preparer = DatasetPreparer(
-        classes=CLASSES
-    )
+    preparer = DatasetPreparer()
 
     preparer.prepare()
 

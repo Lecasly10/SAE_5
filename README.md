@@ -1,187 +1,168 @@
-# SAE_5 - Spot'It (application Flutter + backend d'authentification)
+# SAE_5 - Spot'It (application Flutter + backend + IA de reconnaissance)
 
-Cette branche contient l'application mobile Flutter de l'outil Spot'It **ainsi que le petit serveur backend (Node.js + MongoDB) qui gère la création de compte et la connexion des utilisateurs**.
-
-L'objectif de l'application est de proposer une interface mobile pour scanner une voiture à partir d'une photo, afficher le résultat de l'analyse, enregistrer les véhicules détectés dans une bibliothèque locale et gérer un profil utilisateur (inscription / connexion) dans les paramètres.
+Spot'It est une application mobile qui reconnaît une voiture à partir d'une photo, comme un Pokédex : on scanne une voiture, l'IA donne la marque et le modèle, et on les garde dans sa bibliothèque personnelle.
 
 ## Architecture du projet
 
-Le projet est composé de trois parties qui communiquent entre elles :
+Le projet est composé de quatre parties qui communiquent entre elles :
 
-1. **L'application Flutter** (`flutter_application_1/`) : l'interface mobile/desktop que voit l'utilisateur.
-2. **Le backend** (`backend/`) : un petit serveur Node.js/Express qui reçoit les demandes d'inscription et de connexion, vérifie les mots de passe et parle à la base de données. L'application Flutter ne se connecte **jamais** directement à la base de données, elle passe toujours par ce serveur.
-3. **MongoDB Atlas** : la base de données en ligne où sont stockés les comptes utilisateurs (nom, email, mot de passe hashé).
+1. **L'application Flutter** (`flutter_application_1/`) : l'interface que voit l'utilisateur.
+2. **Le backend** (`backend/`) : un serveur Node.js/Express. Il gère les comptes (inscription/connexion), la bibliothèque de photos et il appelle l'IA. L'application Flutter ne parle **jamais** directement à la base de données ni à l'IA, elle passe toujours par ce serveur.
+3. **MongoDB Atlas** : la base de données en ligne (comptes utilisateurs et photos de la bibliothèque).
+4. **Le service IA** (`ai/`) : un petit serveur Python (Flask) avec deux modèles : un **détecteur** (SSD MobileNet, TensorFlow Lite) qui trouve où est la voiture dans la photo, et un **classifieur** (MobileNetV3) qui dit quelle voiture c'est.
 
 ```
-Application Flutter  --->  requêtes HTTP  --->  Backend Node.js  --->  MongoDB Atlas
+Application Flutter  --->  Backend Node.js  --->  MongoDB Atlas
+                                 |
+                                 +--->  Service IA (Python + TensorFlow)
 ```
+
+Quand on clique sur « Analyser », la photo est envoyée à l'IA, qui renvoie la marque, le modèle, les années de production, la confiance et la position de la voiture. L'application dessine alors un **cadre rouge** autour de la voiture, puis ouvre un popup avec le résultat :
+- **avec compte** : bouton « Ajouter à la bibliothèque » (la photo, le résultat et le cadre sont enregistrés) ;
+- **sans compte** : bouton « Se connecter pour sauvegarder » ;
+- dans les deux cas, « Fermer » ne sauvegarde rien.
+
+Dans la bibliothèque, un clic sur une photo ouvre sa fiche (cadre, marque, modèle, production, date de découverte, confiance) avec un bouton pour la supprimer.
+
+Pour l'instant le modèle ne connaît que **6 voitures** (voir `ai/models/classes.json`).
 
 ## Prérequis à installer avant de commencer
 
-- **Flutter SDK** installé et fonctionnel (vérifie avec `flutter doctor` dans un terminal).
-- **Node.js** (version LTS) et **npm**, nécessaires pour faire tourner le backend. Vérifie avec :
-  ```
-  node -v
-  npm -v
-  ```
-  Si ces commandes ne répondent rien, installe Node.js depuis [nodejs.org](https://nodejs.org) (version LTS), puis redémarre complètement ton éditeur.
+- **Flutter SDK** installé et fonctionnel (vérifie avec `flutter doctor`).
+- **Node.js** (version LTS) et **npm** (vérifie avec `node -v` et `npm -v`).
+- **Python** pour le service IA. TensorFlow ne supporte pas toujours les versions les plus récentes de Python : si l'installation échoue, utilise Python 3.13.
 - Un éditeur de code (VSCode recommandé, avec les extensions Flutter/Dart).
-- **Les identifiants de la base MongoDB du groupe** (dans le fichier `.env`, voir plus bas) — demande-les à l'équipe, ils ne sont jamais sur Git.
+- **Les identifiants de la base MongoDB du groupe** (dans le fichier `backend/.env`, voir plus bas) : demande-les à l'équipe, ils ne sont jamais sur Git.
 
 ## Structure du dépôt
 
 ```
-SAE_5-flutter_dev/
 ├── README.md
-├── package.json              <- dépendances du backend (Node.js)
+├── package.json               <- dépendances du backend (Node.js)
+├── requirements.txt           <- dépendances Python (IA + service Flask)
 ├── .gitignore
 ├── backend/
-│   ├── server.js             <- point d'entrée du serveur (connexion Mongo + routes)
-│   ├── .env                  <- à créer toi-même à partir de .env.example (jamais sur Git)
-│   ├── .env.example          <- modèle du fichier .env à copier
+│   ├── server.js              <- point d'entrée (connexion Mongo + routes)
+│   ├── .env                   <- à créer toi-même à partir de .env.example (jamais sur Git)
+│   ├── .env.example           <- modèle du fichier .env
+│   ├── middleware/
+│   │   └── requireAuth.js     <- vérifie le token de connexion
 │   ├── models/
-│   │   └── User.js           <- schéma MongoDB d'un utilisateur
-│   └── routes/
-│       └── auth.js           <- routes /register et /login
+│   │   ├── User.js            <- schéma d'un utilisateur
+│   │   └── Car.js             <- schéma d'une photo de la bibliothèque
+│   ├── routes/
+│   │   ├── auth.js            <- /register et /login
+│   │   ├── cars.js            <- bibliothèque (ajouter, lister, image, supprimer)
+│   │   └── predict.js         <- reconnaissance d'une image sans compte
+│   └── services/
+│       ├── imageUpload.js     <- vérifie l'image reçue
+│       └── recognition.js     <- appelle l'IA et met en forme marque, modèle, années
+├── ai/
+│   ├── server.py              <- service Flask utilisé par le backend
+│   ├── main.py                <- menu pour entraîner / tester le modèle
+│   ├── models/                <- modèle entraîné et résultats d'évaluation
+│   │   └── detector/          <- détecteur de voitures (SSD MobileNet v1 COCO, TensorFlow, licence Apache 2.0)
+│   ├── src/                   <- code d'entraînement, de prédiction et de détection
+│   └── README.md              <- documentation du modèle (entraînement, dataset)
 └── flutter_application_1/
     └── lib/
-        ├── main.dart
-        ├── auth_service.dart <- appels HTTP vers le backend (login/register)
-        ├── settings_page.dart
-        ├── car_library_page.dart
-        ├── scanned_car.dart
-        └── spot_it_theme.dart
+        ├── main.dart            <- page d'accueil (photo + analyse)
+        ├── car_library_page.dart <- bibliothèque
+        ├── car_reveal_dialog.dart <- popup après un scan (ajouter / se connecter / fermer)
+        ├── car_card_dialog.dart <- fiche d'une voiture de la bibliothèque (suppression)
+        ├── car_showcase_dialog.dart <- popup animé commun (titre, stats, confiance)
+        ├── framed_image.dart    <- image avec le cadre rouge autour de la voiture
+        ├── car_image.dart       <- chargement d'une photo de la bibliothèque
+        ├── recognition.dart     <- résultat de l'IA (marque, modèle, années, confiance, cadre)
+        ├── car_service.dart     <- appels HTTP (bibliothèque, reconnaissance)
+        ├── auth_service.dart    <- appels HTTP (connexion) et session
+        ├── settings_page.dart   <- compte utilisateur
+        ├── scanned_car.dart     <- modèle de données d'une voiture
+        ├── spot_it_widgets.dart <- widgets partagés (page, en-tête, boutons, confirmation)
+        ├── toast.dart           <- petites bulles de message
+        └── spot_it_theme.dart   <- couleurs
 ```
 
-## 1. Lancer le backend (API + connexion MongoDB)
+## Lancer le projet
 
-Le backend doit tourner **avant** de lancer l'application Flutter, et rester ouvert dans un terminal pendant que tu testes.
+Il faut lancer **trois choses**, chacune dans son propre terminal et dans cet ordre. Laisse-les ouvertes pendant que tu testes.
 
-1. Ouvre un terminal **à la racine du dépôt** (le dossier `SAE_5-flutter_dev`, pas dans `backend/`).
+### 1. Le service IA
 
-2. Installe les dépendances Node.js :
+À la racine du dépôt :
+
+```
+python -m venv ai/.venv
+ai\.venv\Scripts\activate
+pip install -r requirements.txt
+cd ai
+python server.py
+```
+
+(sur Mac/Linux, l'activation est `source ai/.venv/bin/activate`). Le service écoute sur `http://localhost:5000`. L'installation de TensorFlow est lourde (plusieurs centaines de Mo), mais elle ne se fait qu'une fois.
+
+### 2. Le backend (API + MongoDB)
+
+1. À la racine du dépôt, installe les dépendances Node.js :
    ```
    npm install
    ```
-   Ça crée un dossier `node_modules/` — ne le touche pas, ne le pousse jamais sur Git (il est dans `.gitignore`).
-
-3. Crée ton fichier `.env` : copie `backend/.env.example`, renomme la copie en `backend/.env`, et remplis-le avec les vraies valeurs (demande-les à l'équipe si tu les as pas) :
+2. Crée ton fichier `backend/.env` : copie `backend/.env.example` et remplis-le avec les vraies valeurs :
    ```
    MONGODB_URI=mongodb+srv://utilisateur:motdepasse@spotitdb.qbodabt.mongodb.net/spotit?retryWrites=true&w=majority
    JWT_SECRET=une_phrase_secrete_a_vous
    PORT=3000
+   AI_URL=http://localhost:5000
    ```
-   ⚠️ Ce fichier ne doit **jamais** être commité, il contient le mot de passe de la base de données.
-
-4. Lance le serveur :
+   ⚠️ Ce fichier ne doit **jamais** être commité, il contient le mot de passe de la base. `AI_URL` est facultatif : s'il manque, `http://localhost:5000` est utilisé.
+3. Lance le serveur :
    ```
    node backend/server.js
    ```
-   Si tout va bien, le terminal affiche :
-   ```
-   MongoDB OK
-   Serveur sur le port 3000
-   ```
-   Laisse ce terminal ouvert tant que tu testes l'application.
+   Le terminal doit afficher `MongoDB OK` puis `Serveur sur le port 3000`.
 
-## 2. Lancer l'application Flutter
+### 3. L'application Flutter
 
-1. Ouvrir un terminal dans le dossier de l'application :
-   ```
-   cd flutter_application_1
-   ```
-2. Installer les dépendances :
-   ```
-   flutter pub get
-   ```
-3. Lancer l'application :
-   ```
-   flutter run
-   ```
-4. Si tu veux cibler un appareil précis :
-   - macOS : `flutter run -d macos`
-   - Windows : `flutter run -d windows`
-   - Android : `flutter devices` puis `flutter run -d <device-id>`
-   - Web : `flutter run -d chrome`
-5. Si l'application ne démarre pas correctement, réinitialise le cache :
-   ```
-   flutter clean
-   flutter pub get
-   flutter run
-   ```
+```
+cd flutter_application_1
+flutter pub get
+flutter run
+```
 
-### ⚠️ Adapter l'adresse du serveur selon ta plateforme
+Pour cibler un appareil précis : `flutter devices` puis `flutter run -d <id>` (par exemple `-d windows`, `-d macos`, `-d edge`). Si l'application ne démarre pas correctement : `flutter clean`, `flutter pub get`, `flutter run`.
 
-Dans `lib/auth_service.dart`, la constante `baseUrl` doit pointer vers l'adresse du backend. Adapte-la selon où tu testes :
+### Adapter l'adresse du serveur selon ta plateforme
 
-- App desktop (macOS/Windows/Linux) ou navigateur, sur le même ordinateur que le serveur :
-  `http://localhost:3000/api/auth`
-- Émulateur Android :
-  `http://10.0.2.2:3000/api/auth`
-- Téléphone physique (sur le même Wi-Fi que l'ordinateur qui fait tourner le serveur) :
-  `http://IP_LOCALE_DU_PC:3000/api/auth` (trouve l'IP avec `ipconfig` sur Windows ou dans Réglages réseau sur Mac)
+Dans `lib/auth_service.dart`, la constante `host` doit pointer vers le backend :
+
+- App desktop ou navigateur, sur le même ordinateur que le serveur : `http://localhost:3000`
+- Émulateur Android : `http://10.0.2.2:3000`
+- Téléphone physique (même Wi-Fi que le PC) : `http://IP_LOCALE_DU_PC:3000`
 
 ### macOS uniquement : autoriser les connexions réseau sortantes
 
-Sur Mac, l'app est en sandbox par défaut et bloque les requêtes réseau sortantes. Si tu as une erreur réseau au moment de t'inscrire/te connecter, vérifie que ces deux fichiers contiennent bien la permission `com.apple.security.network.client` à `true` :
+Sur Mac, l'app est en sandbox par défaut et bloque les requêtes sortantes. Vérifie que ces deux fichiers contiennent `com.apple.security.network.client` à `true` :
 - `flutter_application_1/macos/Runner/DebugProfile.entitlements`
 - `flutter_application_1/macos/Runner/Release.entitlements`
 
 ## Comment vérifier que tout fonctionne
 
-1. Backend lancé (`node backend/server.js`), terminal laissé ouvert.
-2. Application Flutter lancée (`flutter run`).
-3. Aller dans les Réglages (icône engrenage) → onglet inscription → remplir le formulaire → "S'inscrire".
-4. Vérifier dans MongoDB Atlas (Data Explorer) que le compte apparaît dans la base `spotit`, collection `users`, avec un mot de passe **hashé** (jamais en clair, ça doit ressembler à `$2b$10$...`).
-5. Se déconnecter puis se reconnecter avec le même email/mot de passe pour tester le login.
+1. Les trois terminaux sont lancés (IA, backend, Flutter).
+2. Sans compte : choisis une photo d'une des 6 voitures (par exemple `ai/images/f12.jpg`) puis « Analyser la photo ». Un cadre rouge se dessine autour de la voiture, puis un popup affiche la marque, le modèle, les années et la confiance de l'IA.
+3. Va dans les Réglages (engrenage), crée un compte puis reviens à l'accueil.
+4. Analyse une photo : elle apparaît dans « Ma bibliothèque ». Clique dessus pour ouvrir sa fiche (cadre, infos) ou la supprimer.
+5. Déconnecte-toi puis reconnecte-toi : tes photos sont toujours là (elles sont dans MongoDB).
 
-## Fichiers de la lib (Flutter)
-
-### `main.dart`
-Point d'entrée de l'application. Contient l'initialisation Flutter et la configuration de la fenêtre desktop, la création de l'application principale `SpotItApp`, la page d'accueil `SpotItHomePage`, la gestion du choix entre caméra et galerie, la logique de sélection d'une image, le bouton d'analyse et l'ajout d'un véhicule dans la bibliothèque, ainsi que la navigation vers la bibliothèque et vers les paramètres.
-
-### `car_library_page.dart`
-Page "Ma bibliothèque". Affiche la liste des voitures scannées, une grille de cartes avec l'image, le nom reconnu et la date du scan, l'état vide quand aucune voiture n'a encore été ajoutée, et le bouton retour vers l'écran principal.
-
-### `settings_page.dart`
-Page des paramètres et du compte utilisateur. Gère le mode connexion/inscription, la validation des formulaires, l'édition du profil, la déconnexion, la suppression du compte. Depuis l'ajout du backend, cette page **appelle réellement `AuthService`** (voir `auth_service.dart`) au lieu de simuler la connexion localement : les identifiants sont vérifiés côté serveur et en base de données.
-
-### `auth_service.dart` (nouveau)
-Contient les appels réseau vers le backend pour l'inscription et la connexion. Envoie les informations du formulaire aux routes `/api/auth/register` et `/api/auth/login`, et renvoie soit les infos de l'utilisateur (nom, email) soit une erreur affichée à l'écran.
-
-### `scanned_car.dart`
-Modèle de données représentant une voiture scannée : chemin de l'image, nom reconnu par l'IA, date du scan.
-
-### `spot_it_theme.dart`
-Centralise la palette graphique de l'application (fond, cartes, bordures, texte secondaire, couleur d'accentuation, alertes) pour une interface cohérente.
-
-## Fichiers du backend
-
-### `backend/server.js`
-Point d'entrée du serveur : charge les variables d'environnement (`.env`), connecte Mongoose à MongoDB Atlas, démarre le serveur Express et branche les routes d'authentification sur `/api/auth`.
-
-### `backend/models/User.js`
-Définit le schéma Mongoose d'un utilisateur : `name`, `email` (unique) et `password`. Le mot de passe est **toujours stocké hashé** (avec bcrypt), jamais en clair.
-
-### `backend/routes/auth.js`
-Contient les deux routes principales :
-- `POST /api/auth/register` : crée un compte, hash le mot de passe avant de l'enregistrer en base.
-- `POST /api/auth/login` : vérifie l'email et le mot de passe, renvoie un token JWT valable 7 jours si c'est correct.
+Si l'IA n'est pas lancée, l'application affiche « Service de reconnaissance indisponible » et rien n'est enregistré.
 
 ## Sécurité — à ne jamais pousser sur Git
 
-Le fichier `backend/.env` contient le mot de passe de la base MongoDB et une clé secrète (JWT). Il est listé dans `.gitignore` et ne doit **jamais** être commité. Avant chaque `git add`, vérifie avec `git status` que `.env` n'apparaît pas dans la liste. Pour le partager avec l'équipe, passe-le en message privé, jamais sur un repo public ou un Discord/Slack accessible à tous.
-
-## Ce que fait l'application dans son état actuel
-
-L'application permet aujourd'hui de choisir une image, de créer un compte et de se connecter (vérifié en base de données), d'ajouter un élément à la bibliothèque, de naviguer entre les écrans, avec une interface mobile élégante et cohérente. La partie "reconnaissance IA" n'est pas encore branchée : le texte "Modèle reconnu par l'IA" est un texte de remplacement à remplacer par le vrai résultat du modèle dès qu'il sera intégré.
+Le fichier `backend/.env` contient le mot de passe de la base MongoDB et une clé secrète (JWT). Il est dans `.gitignore`. Avant chaque `git add`, vérifie avec `git status` qu'il n'apparaît pas. Pour le partager avec l'équipe, passe-le en message privé.
 
 ## Limitations actuelles / à faire ensuite
 
-- Le token reçu après connexion n'est pas encore sauvegardé sur l'appareil : l'utilisateur doit se reconnecter à chaque redémarrage de l'app (prévoir le package `shared_preferences` pour corriger ça).
-- Le backend ne tourne pour l'instant qu'en local sur la machine de développement : pour que l'app marche sans avoir le serveur d'un développeur allumé, il faudra l'héberger en ligne (Render ou Railway ont un plan gratuit suffisant).
-- Le modèle de reconnaissance IA n'est pas encore intégré.
-
-## Résumé rapide
-
-Cette branche contient la version Flutter de Spot'It (scan d'images, bibliothèque, paramètres) ainsi qu'un backend Node.js + MongoDB qui gère l'inscription et la connexion des utilisateurs. Pour tout lancer : `npm install` puis `node backend/server.js` à la racine (backend), et `flutter pub get` puis `flutter run` dans `flutter_application_1/` (application).
+- Le modèle ne connaît que 6 voitures et répond toujours l'une d'elles, même pour une autre voiture : il faut ajouter un seuil de confiance (« voiture non reconnue »).
+- Le détecteur rate parfois une voiture (photo très rapprochée, intérieur) : dans ce cas il n'y a pas de cadre, mais la reconnaissance fonctionne quand même.
+- L'IA tourne sur le serveur ; à terme, l'exporter en TensorFlow Lite pour qu'elle tourne directement sur le téléphone.
+- Le token de connexion n'est pas sauvegardé sur l'appareil : il faut se reconnecter à chaque redémarrage (prévoir `shared_preferences`).
+- Le backend et le service IA ne tournent qu'en local ; pour s'en passer il faudra les héberger en ligne.

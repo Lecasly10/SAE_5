@@ -12,15 +12,15 @@ class DatasetPreparer:
         "CITROEN_2CV_19491990",
     ]
 
-def __init__(
-    self,
-    classes=None,
-    source="dataset",
-    destination="dataset_small"
-):
-    self.classes = list(classes) if classes is not None else self.CLASSES.copy()
-    self.source = Path(source)
-    self.destination = Path(destination)
+    def __init__(
+        self,
+        classes=None,
+        source="dataset",
+        destination="dataset_small"
+    ):
+        self.classes = list(classes) if classes is not None else self.CLASSES.copy()
+        self.source = Path(source)
+        self.destination = Path(destination)
 
     def prepare(self):
         for split in ["train", "test"]:
