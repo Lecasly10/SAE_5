@@ -2,37 +2,35 @@ const express = require('express');
 const mongoose = require('mongoose');
 const Car = require('../models/Car');
 const requireAuth = require('../middleware/requireAuth');
+const { readImage } = require('../services/imageUpload');
+const { recognizeCar, RecognitionError } = require('../services/recognition');
 const router = express.Router();
-
-const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
-const MAX_IMAGE_BYTES = 6 * 1024 * 1024;
 
 router.use(requireAuth);
 
 const toJson = (car) => ({
   id: car._id,
-  recognizedName: car.recognizedName,
-  caption: car.caption || '',
+  brand: car.brand,
+  model: car.model,
+  years: car.years,
+  confidence: car.confidence,
+  box: car.box,
   createdAt: car.createdAt,
 });
 
 router.post('/', async (req, res) => {
+  const { image, error } = readImage(req.body);
+  if (error) return res.status(400).json({ error });
+
   try {
-    const { image, contentType } = req.body;
-    if (typeof image !== 'string' || !ALLOWED_TYPES.includes(contentType)) {
-      return res.status(400).json({ error: 'Image invalide' });
-    }
-    const data = Buffer.from(image, 'base64');
-    if (data.length === 0 || data.length > MAX_IMAGE_BYTES) {
-      return res.status(400).json({ error: 'Image vide ou trop lourde (6 Mo max)' });
-    }
-    const car = await Car.create({
-      user: req.userId,
-      image: { data, contentType },
-    });
+    const recognition = await recognizeCar(image.data);
+    const car = await Car.create({ user: req.userId, image, ...recognition });
     res.status(201).json(toJson(car));
   } catch (err) {
-    res.status(500).json({ error: 'Impossible de sauvegarder la photo' });
+    const unavailable = err instanceof RecognitionError;
+    res.status(unavailable ? 503 : 500).json({
+      error: unavailable ? err.message : 'Impossible de sauvegarder la photo',
+    });
   }
 });
 

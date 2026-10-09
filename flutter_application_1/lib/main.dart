@@ -5,12 +5,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:window_manager/window_manager.dart';
 
-import 'auth_service.dart';
-import 'car_caption.dart';
 import 'car_library_page.dart';
+import 'car_reveal_dialog.dart';
 import 'car_service.dart';
+import 'framed_image.dart';
+import 'recognition.dart';
 import 'settings_page.dart';
 import 'spot_it_theme.dart';
+import 'spot_it_widgets.dart';
 import 'toast.dart';
 
 Future<void> main() async {
@@ -60,6 +62,7 @@ class _SpotItHomePageState extends State<SpotItHomePage> {
   XFile? _selectedImage;
   Uint8List? _selectedBytes;
   bool _analyzing = false;
+  DetectionBox? _detectionBox;
 
   Future<void> _pickImage(ImageSource source) async {
     if (_analyzing) return;
@@ -93,6 +96,7 @@ class _SpotItHomePageState extends State<SpotItHomePage> {
     setState(() {
       _selectedImage = null;
       _selectedBytes = null;
+      _detectionBox = null;
     });
   }
 
@@ -102,107 +106,43 @@ class _SpotItHomePageState extends State<SpotItHomePage> {
     if (image == null || bytes == null || _analyzing) return;
     HapticFeedback.mediumImpact();
 
-    if (!AuthService.isLoggedIn) {
-      _clearImage();
-      await _showAnalyzedDialog(bytes);
-      return;
-    }
-
     setState(() => _analyzing = true);
     try {
-      await CarService.upload(image, bytes);
+      final recognition = await CarService.recognize(image, bytes);
       if (!mounted) return;
-      _clearImage();
-      _showToast(
-        'Image analysée, ajoutée à votre bibliothèque',
-        actionLabel: 'Voir',
-        onAction: _openLibrary,
+      if (recognition.box != null) {
+        setState(() => _detectionBox = recognition.box);
+        await Future.delayed(const Duration(milliseconds: 1100));
+        if (!mounted) return;
+      }
+      final choice = await showCarRevealDialog(
+        context,
+        bytes: bytes,
+        recognition: recognition,
       );
+      if (!mounted) return;
+
+      switch (choice) {
+        case AnalysisChoice.addToLibrary:
+          await CarService.upload(image, bytes);
+          if (!mounted) return;
+          _clearImage();
+          _showToast(
+            'Voiture ajoutée à votre bibliothèque',
+            actionLabel: 'Voir',
+            onAction: _openLibrary,
+          );
+        case AnalysisChoice.login:
+          _openSettings();
+        case null:
+          _clearImage();
+      }
     } catch (e) {
       if (!mounted) return;
       _showToast(e.toString().replaceFirst('Exception: ', ''), isError: true);
     } finally {
       if (mounted) setState(() => _analyzing = false);
     }
-  }
-
-  Future<void> _showAnalyzedDialog(Uint8List bytes) {
-    return showDialog<void>(
-      context: context,
-      builder: (context) => Dialog(
-        backgroundColor: SpotItColors.surface,
-        insetPadding: const EdgeInsets.symmetric(horizontal: 28, vertical: 24),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(28),
-          side: const BorderSide(color: SpotItColors.border),
-        ),
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 380),
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(24, 28, 24, 20),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  'Image analysée',
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.outfit(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w800,
-                    color: Colors.white,
-                  ),
-                ),
-                const SizedBox(height: 18),
-                Container(
-                  clipBehavior: Clip.antiAlias,
-                  constraints: const BoxConstraints(maxHeight: 260),
-                  decoration: BoxDecoration(
-                    color: SpotItColors.background,
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: SpotItColors.border),
-                  ),
-                  child: Image.memory(bytes, fit: BoxFit.contain),
-                ),
-                const SizedBox(height: 12),
-                const CarCaption(),
-                const SizedBox(height: 16),
-                Text(
-                  'Pour sauvegarder vos images dans votre bibliothèque, veuillez vous connecter.',
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.inter(
-                    fontSize: 12,
-                    height: 1.45,
-                    color: SpotItColors.secondaryText,
-                  ),
-                ),
-                const SizedBox(height: 20),
-                SizedBox(
-                  height: 50,
-                  child: FilledButton(
-                    onPressed: () => Navigator.pop(context),
-                    style: FilledButton.styleFrom(
-                      backgroundColor: SpotItColors.accent,
-                      foregroundColor: SpotItColors.background,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                    ),
-                    child: Text(
-                      'OK',
-                      style: GoogleFonts.outfit(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
   }
 
   void _showToast(
@@ -227,95 +167,96 @@ class _SpotItHomePageState extends State<SpotItHomePage> {
     );
   }
 
+  void _openSettings() {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(builder: (_) => const SettingsPage()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final hasImage = _selectedBytes != null;
-    return Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 402),
-            child: Column(
-              children: [
-                _TopNavigation(onLibrary: _openLibrary),
-                Expanded(
-                  child: SingleChildScrollView(
-                    padding: const EdgeInsets.fromLTRB(24, 4, 24, 28),
-                    child: Column(
-                      children: [
-                        Text(
-                          'Scannez la voiture',
-                          textAlign: TextAlign.center,
-                          style: GoogleFonts.outfit(
-                            fontSize: 22,
-                            fontWeight: FontWeight.w800,
-                            color: Colors.white,
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        _ScannerViewfinder(
-                          bytes: _selectedBytes,
-                          onClear: _analyzing ? null : _clearImage,
-                        ),
-                        const SizedBox(height: 18),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: _PhotoSourceButton(
-                                icon: Icons.photo_camera_rounded,
-                                label: 'Prendre une photo',
-                                caption: 'Appareil photo',
-                                primary: true,
-                                onTap: () => _pickImage(ImageSource.camera),
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: _PhotoSourceButton(
-                                icon: Icons.add_photo_alternate_rounded,
-                                label: 'Insérer une photo',
-                                caption: 'Depuis la galerie',
-                                onTap: () => _pickImage(ImageSource.gallery),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 18),
-                        _AnalyzeButton(
-                          enabled: hasImage,
-                          loading: _analyzing,
-                          onPressed: _analyze,
-                        ),
-                        const SizedBox(height: 14),
-                        Text(
-                          hasImage
-                              ? 'Votre photo est prête à être analysée'
-                              : "Sélectionnez ou prenez un cliché pour démarrer l'analyse",
-                          textAlign: TextAlign.center,
-                          style: GoogleFonts.inter(
-                            fontSize: 11,
-                            color: hasImage
-                                ? SpotItColors.secondaryText
-                                : SpotItColors.disabledText,
-                          ),
-                        ),
-                      ],
+    return SpotItPage(
+      child: Column(
+        children: [
+          _TopNavigation(onLibrary: _openLibrary, onSettings: _openSettings),
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.fromLTRB(24, 4, 24, 28),
+              child: Column(
+                children: [
+                  Text(
+                    'Scannez la voiture',
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.outfit(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w800,
+                      color: Colors.white,
                     ),
                   ),
-                ),
-              ],
+                  const SizedBox(height: 16),
+                  _ScannerViewfinder(
+                    bytes: _selectedBytes,
+                    box: _detectionBox,
+                    onClear: _analyzing ? null : _clearImage,
+                  ),
+                  const SizedBox(height: 18),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _PhotoSourceButton(
+                          icon: Icons.photo_camera_rounded,
+                          label: 'Prendre une photo',
+                          caption: 'Appareil photo',
+                          primary: true,
+                          onTap: () => _pickImage(ImageSource.camera),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: _PhotoSourceButton(
+                          icon: Icons.add_photo_alternate_rounded,
+                          label: 'Insérer une photo',
+                          caption: 'Depuis la galerie',
+                          onTap: () => _pickImage(ImageSource.gallery),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 18),
+                  _AnalyzeButton(
+                    enabled: hasImage,
+                    loading: _analyzing,
+                    onPressed: _analyze,
+                  ),
+                  const SizedBox(height: 14),
+                  Text(
+                    hasImage
+                        ? 'Votre photo est prête à être analysée'
+                        : "Sélectionnez ou prenez un cliché pour démarrer l'analyse",
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.inter(
+                      fontSize: 11,
+                      color: hasImage
+                          ? SpotItColors.secondaryText
+                          : SpotItColors.disabledText,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }
 }
 
 class _TopNavigation extends StatelessWidget {
-  const _TopNavigation({required this.onLibrary});
+  const _TopNavigation({required this.onLibrary, required this.onSettings});
 
   final VoidCallback onLibrary;
+  final VoidCallback onSettings;
 
   @override
   Widget build(BuildContext context) {
@@ -326,7 +267,7 @@ class _TopNavigation extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            _NavButton(
+            SpotItIconButton(
               icon: Icons.menu_book_outlined,
               onTap: onLibrary,
               size: 42,
@@ -340,13 +281,9 @@ class _TopNavigation extends StatelessWidget {
                 color: Colors.white,
               ),
             ),
-            _NavButton(
+            SpotItIconButton(
               icon: Icons.settings_outlined,
-              onTap: () => Navigator.of(context).push(
-                MaterialPageRoute<void>(
-                  builder: (_) => const SettingsPage(),
-                ),
-              ),
+              onTap: onSettings,
               size: 40,
               radius: 20,
               showBorder: true,
@@ -358,48 +295,15 @@ class _TopNavigation extends StatelessWidget {
   }
 }
 
-class _NavButton extends StatelessWidget {
-  const _NavButton({
-    required this.icon,
-    required this.onTap,
-    required this.size,
-    required this.radius,
-    this.showBorder = false,
+class _ScannerViewfinder extends StatelessWidget {
+  const _ScannerViewfinder({
+    required this.bytes,
+    required this.box,
+    required this.onClear,
   });
 
-  final IconData icon;
-  final VoidCallback onTap;
-  final double size;
-  final double radius;
-  final bool showBorder;
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      color: SpotItColors.surface,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(radius),
-        side: showBorder
-            ? const BorderSide(color: SpotItColors.border)
-            : BorderSide.none,
-      ),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(radius),
-        child: SizedBox(
-          width: size,
-          height: size,
-          child: Icon(icon, size: 20, color: Colors.white),
-        ),
-      ),
-    );
-  }
-}
-
-class _ScannerViewfinder extends StatelessWidget {
-  const _ScannerViewfinder({required this.bytes, required this.onClear});
-
   final Uint8List? bytes;
+  final DetectionBox? box;
   final VoidCallback? onClear;
 
   @override
@@ -431,7 +335,12 @@ class _ScannerViewfinder extends StatelessWidget {
                 key: const ValueKey('photo'),
                 fit: StackFit.expand,
                 children: [
-                  Image.memory(bytes!, fit: BoxFit.cover),
+                  FramedImage(
+                    bytes: bytes!,
+                    box: box,
+                    fit: BoxFit.cover,
+                    revealDelay: Duration.zero,
+                  ),
                   CustomPaint(
                     painter: _CornerBracketsPainter(SpotItColors.accent),
                   ),

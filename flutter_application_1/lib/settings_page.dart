@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'auth_service.dart';
 import 'car_service.dart';
 import 'spot_it_theme.dart';
+import 'spot_it_widgets.dart';
 import 'toast.dart';
 
 enum _AuthMode { login, register }
@@ -86,38 +87,12 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Future<void> _deleteAccount() async {
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: SpotItColors.surface,
-        insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
-        constraints: const BoxConstraints(maxWidth: 354),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-          side: const BorderSide(color: SpotItColors.border),
-        ),
-        title: Text(
-          'Supprimer le compte ?',
-          style: GoogleFonts.outfit(fontWeight: FontWeight.w700),
-        ),
-        content: Text(
-          'Cette action est définitive. Toutes vos données seront supprimées.',
-          style: GoogleFonts.inter(color: SpotItColors.secondaryText),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: const Text('Annuler'),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(context, true),
-            style: TextButton.styleFrom(foregroundColor: SpotItColors.danger),
-            child: const Text('Supprimer'),
-          ),
-        ],
-      ),
+    final confirmed = await showConfirmDialog(
+      context,
+      title: 'Supprimer le compte ?',
+      message: 'Cette action est définitive. Toutes vos données seront supprimées.',
     );
-    if (confirmed == true) {
+    if (confirmed) {
       _logout();
       if (mounted) {
         showSpotItToast(context, 'Compte supprimé');
@@ -127,30 +102,20 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: SpotItColors.background,
-      body: SafeArea(
-        child: Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 402),
-            child: Column(
-              children: [
-                _SettingsHeader(onBack: () => Navigator.pop(context)),
-                Expanded(
-                  child: SingleChildScrollView(
-                    padding: const EdgeInsets.fromLTRB(24, 12, 24, 32),
-                    child: AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 220),
-                      child: _isConnected
-                          ? _buildConnectedView()
-                          : _buildAuthView(),
-                    ),
-                  ),
-                ),
-              ],
+    return SpotItPage(
+      child: Column(
+        children: [
+          const SpotItHeader(title: 'Paramètres'),
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.fromLTRB(24, 12, 24, 32),
+              child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 220),
+                child: _isConnected ? _buildConnectedView() : _buildAuthView(),
+              ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -187,23 +152,10 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
           const SizedBox(height: 28),
           if (!isLogin) ...[
-            _SpotItTextField(
-              controller: _nameController,
-              label: 'Nom ou pseudo',
-              icon: Icons.badge_outlined,
-              validator: (value) => (value == null || value.trim().length < 2)
-                  ? 'Saisissez au moins 2 caractères'
-                  : null,
-            ),
+            _nameField(),
             const SizedBox(height: 14),
           ],
-          _SpotItTextField(
-            controller: _emailController,
-            label: 'Adresse e-mail',
-            icon: Icons.mail_outline,
-            keyboardType: TextInputType.emailAddress,
-            validator: _validateEmail,
-          ),
+          _emailField(),
           const SizedBox(height: 14),
           _SpotItTextField(
             controller: _passwordController,
@@ -263,22 +215,9 @@ class _SettingsPageState extends State<SettingsPage> {
           children: [
             _sectionTitle('Modifier mes informations'),
             const SizedBox(height: 20),
-            _SpotItTextField(
-              controller: _nameController,
-              label: 'Nom ou pseudo',
-              icon: Icons.badge_outlined,
-              validator: (value) => (value == null || value.trim().length < 2)
-                  ? 'Saisissez au moins 2 caractères'
-                  : null,
-            ),
+            _nameField(),
             const SizedBox(height: 14),
-            _SpotItTextField(
-              controller: _emailController,
-              label: 'Adresse e-mail',
-              icon: Icons.mail_outline,
-              keyboardType: TextInputType.emailAddress,
-              validator: _validateEmail,
-            ),
+            _emailField(),
             const SizedBox(height: 22),
             _PrimaryButton(
               label: 'Enregistrer',
@@ -353,6 +292,27 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
+  Widget _nameField() => _SpotItTextField(
+        controller: _nameController,
+        label: 'Nom ou pseudo',
+        icon: Icons.badge_outlined,
+        validator: _validateName,
+      );
+
+  Widget _emailField() => _SpotItTextField(
+        controller: _emailController,
+        label: 'Adresse e-mail',
+        icon: Icons.mail_outline,
+        keyboardType: TextInputType.emailAddress,
+        validator: _validateEmail,
+      );
+
+  String? _validateName(String? value) {
+    return (value == null || value.trim().length < 2)
+        ? 'Saisissez au moins 2 caractères'
+        : null;
+  }
+
   String? _validateEmail(String? value) {
     final email = value?.trim() ?? '';
     return !RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$').hasMatch(email)
@@ -375,50 +335,6 @@ class _SettingsPageState extends State<SettingsPage> {
         side: const BorderSide(color: SpotItColors.border),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       );
-}
-
-class _SettingsHeader extends StatelessWidget {
-  const _SettingsHeader({required this.onBack});
-
-  final VoidCallback onBack;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 91,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-        child: Row(
-          children: [
-            Material(
-              color: SpotItColors.surface,
-              borderRadius: BorderRadius.circular(20),
-              child: InkWell(
-                onTap: onBack,
-                borderRadius: BorderRadius.circular(20),
-                child: const SizedBox(
-                  width: 40,
-                  height: 40,
-                  child: Icon(Icons.arrow_back, size: 20),
-                ),
-              ),
-            ),
-            Expanded(
-              child: Text(
-                'Paramètres',
-                textAlign: TextAlign.center,
-                style: GoogleFonts.outfit(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-            ),
-            const SizedBox(width: 40),
-          ],
-        ),
-      ),
-    );
-  }
 }
 
 class _AccountIcon extends StatelessWidget {

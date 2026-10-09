@@ -4,8 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'spot_it_theme.dart';
-
-const double _contentWidth = 402;
+import 'spot_it_widgets.dart';
 
 void showSpotItToast(
   BuildContext context,
@@ -17,7 +16,7 @@ void showSpotItToast(
   final color = isError ? SpotItColors.danger : SpotItColors.accent;
   final width = math.min(
     MediaQuery.sizeOf(context).width - 48,
-    _contentWidth - 48,
+    kContentMaxWidth - 48,
   );
 
   ScaffoldMessenger.of(context)
