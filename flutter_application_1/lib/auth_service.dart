@@ -2,9 +2,11 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class AuthService {
-  // sur émulateur Android : 10.0.2.2 au lieu de localhost
-  //static const String host = 'http://10.0.2.2:3000'; // android
-  static const String host = 'http://localhost:3000'; // localhost pc
+  // sur émulateur Android : flutter run --dart-define=API_HOST=http://10.0.2.2:3000
+  static const String host = String.fromEnvironment(
+    'API_HOST',
+    defaultValue: 'http://localhost:3000',
+  );
   static const String baseUrl = '$host/api/auth';
 
   static String? token;
