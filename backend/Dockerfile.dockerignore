@@ -1,0 +1,8 @@
+*
+!package.json
+!package-lock.json
+!backend
+backend/.env
+backend/node_modules
+backend/Dockerfile
+backend/Dockerfile.dockerignore

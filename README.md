@@ -9,7 +9,7 @@ Projet réalisé en équipe dans le cadre de la **SAE 5.01 — Développement av
 | **Dépôt** | https://github.com/Lecasly10/SAE_5 |
 | **Équipe** | Matteo LAURI, Evan STILLE, Thomas FREY, Victorien DENOYELLE |
 | **Suivi des tâches** | https://trello.com/b/TlcXJrDZ/sae5 |
-| **Testé sur** | Windows 11, Node.js 26, Python 3.13, TensorFlow 2.21, Flutter 3.47, navigateur Edge |
+| **Testé sur** | Windows 11, Docker Desktop 29 (Docker Compose 5), Node.js 26, Python 3.13, TensorFlow 2.21, Flutter 3.47, navigateur Edge |
 
 <p align="center">
   <img src="docs/screenshots/home.png" alt="Écran d'accueil" width="190">
@@ -20,7 +20,136 @@ Projet réalisé en équipe dans le cadre de la **SAE 5.01 — Développement av
 
 ---
 
+## Démarrage rapide avec Docker (recommandé)
+
+**C'est le moyen le plus simple pour essayer l'application.** Docker fabrique et lance tout à ta place (l'IA, le serveur, la base de données et l'application), chacun dans sa « boîte » appelée *conteneur*. **Tu n'as besoin d'installer que Docker Desktop** : ni Node.js, ni Python, ni Flutter, ni compte MongoDB, ni fichier `.env`.
+
+```
+Installer Docker Desktop  →  télécharger le projet  →  docker compose up --build  →  http://localhost:8080
+```
+
+### Étape A — Installer Docker Desktop (une seule fois)
+
+**Ce qu'il faut :** Windows 10 ou 11 (64 bits), **8 Go de mémoire (RAM) minimum**, environ **10 Go de disque libre**, et la virtualisation activée (c'est le cas sur presque tous les PC récents).
+
+1. Ouvre **PowerShell** (touche **Windows**, tape `PowerShell`, Entrée) et tape :
+   ```powershell
+   winget install -e --id Docker.DockerDesktop
+   ```
+   *(Si `winget` n'existe pas, télécharge « Docker Desktop for Windows » sur https://www.docker.com/products/docker-desktop/ et lance l'installateur.)*
+2. **Redémarre l'ordinateur** si l'installateur le demande.
+3. **Lance « Docker Desktop »** depuis le menu Démarrer, accepte les conditions d'utilisation, et garde l'option **WSL 2** cochée. Si Windows te demande d'installer WSL, tape dans un PowerShell ouvert **en administrateur** `wsl --install`, puis redémarre.
+4. **Attends** que Docker Desktop affiche **« Engine running »** (moteur démarré) en bas à gauche.
+5. Vérifie dans PowerShell :
+   ```powershell
+   docker --version
+   docker compose version
+   ```
+   Chaque commande doit afficher un numéro de version.
+
+> ⚠️ **Docker Desktop doit rester ouvert** tant que tu utilises l'application.
+
+### Étape B — Télécharger le projet
+
+**Sans Git (le plus simple)** : clique sur ce lien pour télécharger le projet, puis fais un clic droit sur le fichier → **Extraire tout…** :
+https://github.com/Lecasly10/SAE_5/archive/refs/heads/ia-integration.zip
+
+*(Quand la version sera sur `main`, le lien sera `https://github.com/Lecasly10/SAE_5/archive/refs/heads/main.zip`.)*
+
+**Avec Git** :
+```powershell
+git clone https://github.com/Lecasly10/SAE_5.git
+```
+```powershell
+cd SAE_5
+```
+> Si la version Docker n'est pas encore sur `main` : `git switch ia-integration`
+
+Ensuite, **ouvre PowerShell dans le dossier du projet** : dans l'Explorateur de fichiers, ouvre le dossier (celui où se trouve `docker-compose.yml`), fais un clic droit dans un espace vide → **« Ouvrir dans le Terminal »**.
+
+### Étape C — Tout lancer (une seule commande)
+
+```powershell
+docker compose up --build
+```
+
+- ⏳ **La toute première fois, compte 10 à 25 minutes selon ta connexion** : Docker télécharge et construit tout (environ 3 Go à télécharger : TensorFlow, Flutter, etc.). Ça ne se fait qu'**une seule fois**. Les fois suivantes, le démarrage prend moins d'une minute.
+- Le terminal affiche beaucoup de texte : c'est normal. Ne le ferme pas.
+- C'est prêt quand tu vois dans les messages `Serveur sur le port 3000` (l'IA met 20 à 60 secondes à se charger). Tu peux aussi vérifier avec `docker compose ps` : les conteneurs `ai`, `backend` et `mongo` doivent être **healthy**.
+- **Ouvre ensuite ton navigateur sur : http://localhost:8080**
+
+### Utiliser l'application
+
+Suis le parcours de la [section 8](#8-tester-que-tout-fonctionne). En résumé : **Insérer une photo** → choisis `ai/images/f12.jpg` (dans le dossier du projet) → **Analyser la photo** → un cadre rouge entoure la voiture et un popup donne la marque, le modèle et la confiance. Crée un compte (engrenage en haut à droite) pour ajouter la voiture à ta bibliothèque.
+
+> 💾 Les comptes et les voitures créés avec Docker sont enregistrés **sur ton ordinateur** (une base MongoDB locale), pas dans la base partagée de l'équipe. Ils sont conservés d'un lancement à l'autre.
+
+### Arrêter, relancer, réinitialiser
+
+| Je veux… | Commande |
+|---|---|
+| **Arrêter** | `Ctrl + C` dans le terminal, puis `docker compose down` |
+| **Relancer** (rapide) | `docker compose up` |
+| **Relancer après une mise à jour du projet** (`git pull` ou nouveau ZIP) | `docker compose up --build` |
+| **Lancer en arrière-plan** (sans garder le terminal) | `docker compose up --build -d`, puis `docker compose down` pour arrêter |
+| **Voir l'état des conteneurs** | `docker compose ps` |
+| **Voir les messages d'un conteneur** (en cas de souci) | `docker compose logs ai` (ou `backend`, `app`, `mongo`) |
+| **Tout effacer et repartir de zéro** (comptes et voitures aussi) | `docker compose down -v` |
+
+### Le fichier `.env` : facultatif
+
+**Avec Docker, tu n'as rien à écrire** : tout fonctionne avec des valeurs par défaut prévues pour tester en local. Le fichier `.env` sert seulement si tu veux **changer un réglage**.
+
+Pour en créer un, depuis le dossier du projet :
+```powershell
+Copy-Item .env.example .env
+```
+Ouvre `.env` (Bloc-notes ou VS Code), **enlève le `#`** au début de la ligne que tu veux modifier, change la valeur, puis relance avec `docker compose up --build`.
+
+| Réglage | Valeur par défaut | À quoi ça sert |
+|---|---|---|
+| `JWT_SECRET` | `dev-only-secret-change-me` | Clé qui signe les connexions. Pour autre chose qu'un test local, mets une longue valeur aléatoire (voir le fichier `.env.example`). |
+| `MONGODB_URI` | base locale lancée par Docker | Mets ton adresse **MongoDB Atlas** (avec `/spotit` avant le `?`) pour utiliser la base partagée de l'équipe. Voir [section 6](#6-configurer-la-base-de-données-mongodb-atlas). |
+| `APP_PORT` | `8080` | Port de l'application dans le navigateur. Mets `8081` si le 8080 est déjà pris. |
+| `API_HOST` | `http://localhost:3000` | Adresse du serveur vue par le navigateur. À changer seulement pour ouvrir l'application depuis un autre ordinateur. |
+
+> ℹ️ Ne confonds pas avec `backend/.env` : celui-là sert uniquement à l'[installation manuelle](#4-installation-pas-à-pas--windows-de-zéro) pour développer. Docker ne le lit pas.
+
+### Ce que Docker lance
+
+| Conteneur | Rôle | Accessible sur |
+|---|---|---|
+| `app` | L'application Flutter (compilée en site web, servie par nginx) | http://localhost:8080 |
+| `backend` | Le serveur Node.js (comptes, bibliothèque, appels à l'IA) | http://localhost:3000 |
+| `ai` | Le service IA Python (détecteur + classifieur) | interne (pas ouvert) |
+| `mongo` | La base de données MongoDB locale | interne (pas ouvert) |
+
+Ils démarrent dans le bon ordre : la base et l'IA d'abord, puis le serveur, puis l'application.
+
+### Problèmes Docker fréquents
+
+| Message ou symptôme | Cause | Solution |
+|---|---|---|
+| `docker : The term 'docker' is not recognized…` | Docker Desktop n'est pas installé, ou le terminal a été ouvert avant | Installe-le (étape A), puis **ferme et rouvre** PowerShell |
+| `failed to connect to the docker API at npipe:////./pipe/dockerDesktopLinuxEngine… cannot find the file` | **Docker Desktop n'est pas lancé** | Ouvre Docker Desktop et attends « Engine running » |
+| Docker Desktop ne démarre pas, parle de **virtualisation** ou de **WSL** | La virtualisation est désactivée, ou WSL 2 n'est pas installé | Dans un PowerShell **administrateur** : `wsl --install`, puis redémarre. Si besoin, active la virtualisation dans le BIOS de l'ordinateur |
+| Au démarrage de Docker Desktop : `Ingest server … sailor-ingest.sock … The file cannot be accessed by the system` | Un vieux fichier temporaire de Docker bloque un petit service interne (télémétrie) | **Sans gravité** si le moteur démarre. Sinon : quitte complètement Docker Desktop (clic droit sur l'icône → Quit), supprime les fichiers `*.stale` du dossier `%LOCALAPPDATA%\Docker\run`, puis relance |
+| `Bind for 127.0.0.1:8080 failed: port is already allocated` | Un autre programme (ou un autre projet Docker) utilise déjà le port 8080 | Crée un `.env` avec `APP_PORT=8081` (voir plus haut) et ouvre http://localhost:8081. Pour le port 3000, arrête le programme qui l'utilise (`docker ps` te montre les conteneurs en cours) |
+| Le téléchargement est très long ou semble bloqué | Première construction (≈ 3 Go) ou connexion lente | Patiente. Si ça s'interrompt, relance `docker compose up --build` : Docker reprend où il s'est arrêté |
+| `no space left on device` | Plus assez de disque pour Docker (la première construction occupe jusqu'à ≈ 10 Go) | Libère de la place. Après la première construction, `docker builder prune` récupère environ 7 Go de fichiers temporaires sans rien casser |
+| `dependency failed to start: container … ai … is unhealthy`, ou le conteneur `ai` s'arrête (code 137, « Killed ») | L'IA manque de mémoire ou n'a pas fini de charger | Docker Desktop → **Settings → Resources** : donne au moins **4 Go** de mémoire. Puis `docker compose logs ai` |
+| L'application affiche **« Serveur injoignable »** | Le backend n'est pas prêt, ou `API_HOST` est faux | `docker compose ps` (le backend doit être « healthy »), puis `docker compose logs backend` |
+| **« Service de reconnaissance indisponible »** | Le conteneur `ai` n'est pas encore prêt (TensorFlow charge pendant 30 à 60 s) | Attends un peu, vérifie avec `docker compose ps` |
+| Erreur `Could not connect to any servers in your MongoDB Atlas cluster` | Tu as mis `MONGODB_URI` (Atlas) et ton IP n'est pas autorisée | Autorise ton IP dans Atlas (voir [section 6](#6-configurer-la-base-de-données-mongodb-atlas)), ou supprime la ligne `MONGODB_URI` du `.env` pour revenir à la base locale |
+| J'ai modifié le code mais je ne vois pas la différence | Docker utilise l'ancienne version construite | Relance avec `docker compose up --build` |
+
+> 🛠️ **Tu veux modifier le code ?** Docker sert à **essayer** le projet. Pour développer (rechargement à chaud, débogage), utilise plutôt l'[installation manuelle](#4-installation-pas-à-pas--windows-de-zéro).
+
+---
+
 ## Sommaire
+
+**➡️ Pressé ? Va directement au [Démarrage rapide avec Docker](#démarrage-rapide-avec-docker-recommandé).**
 
 1. [À quoi ça sert ?](#1-à-quoi-ça-sert-)
 2. [Comment ça marche](#2-comment-ça-marche)
@@ -114,6 +243,8 @@ La jauge de l'application est verte à partir de 70 %, orange à partir de 40 %,
 
 ## 3. Ce qu'il faut avant de commencer (prérequis)
 
+> 💡 **Avec Docker, tu n'as besoin de rien de tout ça** (ni Node.js, ni Python, ni Flutter) : seulement Docker Desktop, voir le [Démarrage rapide](#démarrage-rapide-avec-docker-recommandé). Cette liste concerne l'**installation manuelle**, pour développer.
+
 ### Matériel et système
 - Un ordinateur sous **Windows 10/11** (guide complet ci-dessous), **Linux** ou **macOS**.
 - **Environ 8 Go d'espace disque libre** (Flutter, TensorFlow, dépendances).
@@ -137,6 +268,8 @@ La jauge de l'application est verte à partir de 70 %, orange à partir de 40 %,
 ---
 
 ## 4. Installation pas à pas — Windows (de zéro)
+
+> 💡 Cette installation est destinée à **développer** le projet. Pour simplement l'essayer, le [Démarrage rapide avec Docker](#démarrage-rapide-avec-docker-recommandé) est beaucoup plus court.
 
 On suppose un Windows 11 « vierge ». Chaque commande se tape dans **PowerShell** : appuie sur la touche **Windows**, tape `PowerShell`, appuie sur Entrée.
 
@@ -231,6 +364,8 @@ npm install
 ```
 
 ### Étape 7 — Créer le fichier de configuration `.env`
+
+> ℹ️ Ce fichier concerne l'installation manuelle uniquement : **Docker n'en a pas besoin**.
 
 Ce fichier contient les mots de passe : il reste **sur ton ordinateur** et n'est jamais envoyé sur GitHub.
 
@@ -378,7 +513,7 @@ Pendant que `flutter run` tourne, tu peux taper dans son terminal :
 - `R` (majuscule) : redémarrer l'application ;
 - `q` : quitter.
 
-> 📱 **Autres plateformes** : `flutter devices` liste ce qui est disponible. L'application native Windows (`-d windows`) demande Visual Studio avec la charge de travail « Développement Desktop en C++ » ; un émulateur ou téléphone Android demande Android Studio. Pour ces cas, change l'adresse du serveur dans [`lib/auth_service.dart`](flutter_application_1/lib/auth_service.dart) (constante `host`) : `http://10.0.2.2:3000` pour l'émulateur Android, ou `http://IP_DE_TON_PC:3000` pour un vrai téléphone sur le même Wi-Fi.
+> 📱 **Autres plateformes** : `flutter devices` liste ce qui est disponible. L'application native Windows (`-d windows`) demande Visual Studio avec la charge de travail « Développement Desktop en C++ » ; un émulateur ou téléphone Android demande Android Studio. Pour ces cas, indique l'adresse du serveur au lancement : `flutter run --dart-define=API_HOST=http://10.0.2.2:3000` pour l'émulateur Android, ou `flutter run --dart-define=API_HOST=http://IP_DE_TON_PC:3000` pour un vrai téléphone sur le même Wi-Fi (par défaut : `http://localhost:3000`).
 
 ### Tout arrêter
 
@@ -475,7 +610,7 @@ Les erreurs ci-dessous sont soit **rencontrées pendant le projet**, soit **trè
 | Message ou symptôme | Cause | Solution |
 |---|---|---|
 | **« Service de reconnaissance indisponible »** | Le service IA (terminal 1) n'est pas lancé ou charge encore | Lance-le et attends `Running on http://127.0.0.1:5000` |
-| **« Serveur injoignable. Vérifiez votre connexion. »** | Le backend (terminal 2) n'est pas lancé, ou la constante `host` de `auth_service.dart` ne correspond pas à ta plateforme | Relance le backend ; sur émulateur Android utilise `10.0.2.2` |
+| **« Serveur injoignable. Vérifiez votre connexion. »** | Le backend (terminal 2) n'est pas lancé, ou l'adresse `API_HOST` ne correspond pas à ta plateforme | Relance le backend ; sur émulateur Android lance l'appli avec `--dart-define=API_HOST=http://10.0.2.2:3000` |
 | **« Image vide ou trop lourde (6 Mo max) »** | Photo trop grosse ou vide | Choisis une photo plus légère (l'application la réduit déjà à 1280 px de large) |
 | **« Email ou mot de passe incorrect »** | Identifiants faux, ou compte créé dans une autre base | Vérifie l'e-mail ; crée un compte si besoin |
 | **« Email déjà utilisé ou données invalides »** | Un compte existe déjà avec cet e-mail | Connecte-toi au lieu de t'inscrire |
@@ -504,10 +639,13 @@ SAE_5/
 ├── package.json                 ← dépendances du backend (Node.js)
 ├── requirements.txt             ← dépendances Python (IA + service Flask)
 ├── .gitignore
+├── docker-compose.yml           ← lance tout avec Docker (une commande)
+├── .env.example                 ← réglages facultatifs pour Docker
 ├── docs/screenshots/            ← captures d'écran de ce README
 │
 ├── backend/                     ← LE BACKEND (Node.js / Express)
 │   ├── server.js                ← point d'entrée : connexion Mongo + routes
+│   ├── Dockerfile               ← construit le conteneur du backend
 │   ├── .env.example             ← modèle du fichier de configuration
 │   ├── middleware/
 │   │   └── requireAuth.js       ← vérifie le token de connexion
@@ -524,6 +662,7 @@ SAE_5/
 │
 ├── ai/                          ← L'INTELLIGENCE ARTIFICIELLE (Python)
 │   ├── server.py                ← service Flask appelé par le backend
+│   ├── Dockerfile               ← construit le conteneur de l'IA
 │   ├── main.py                  ← menu pour analyser/préparer/entraîner/tester
 │   ├── images/                  ← photos d'exemple
 │   ├── dataset_small/           ← 920 images (6 voitures : entraînement + test)
@@ -542,6 +681,8 @@ SAE_5/
 │
 └── flutter_application_1/       ← L'APPLICATION (Flutter / Dart)
     ├── pubspec.yaml             ← dépendances de l'application
+    ├── Dockerfile               ← compile l'application en site web (nginx)
+    ├── nginx.conf               ← réglages du serveur web de l'application
     └── lib/
         ├── main.dart            ← page d'accueil : photo, analyse, viseur
         ├── car_library_page.dart    ← bibliothèque (grille de voitures)
@@ -577,6 +718,7 @@ Les routes marquées 🔒 demandent l'en-tête `Authorization: Bearer <token>` (
 | `POST` | `/api/cars` 🔒 | Reconnaît **et enregistre** la voiture | `201` voiture · `400` · `503` · `500` |
 | `GET` | `/api/cars/:id/image` 🔒 | Renvoie la photo d'une de tes voitures | `200` image · `404` |
 | `DELETE` | `/api/cars/:id` 🔒 | Supprime une de tes voitures | `204` · `404` |
+| `GET` | `/api/health` | Vérifie que le serveur tourne (utilisé par Docker) | `200` |
 
 Le champ `box` est le rectangle de la voiture, en proportions de l'image (0 à 1) : `{ "x": 0.16, "y": 0.37, "width": 0.60, "height": 0.43 }`. Il vaut `null` si aucune voiture n'a été détectée.
 
@@ -584,6 +726,7 @@ Le champ `box` est le rectangle de la voiture, en proportions de l'image (0 à 1
 
 | Méthode | Route | Rôle |
 |---|---|---|
+| `GET` | `/health` | Vérifie que le service tourne (utilisé par Docker). |
 | `POST` | `/predict` | Reçoit les octets d'une image, renvoie `{ "label": "FERRARI_F12_Berlinetta_20122015", "confidence": 56.21, "box": {…} }`. Erreurs : `400` image manquante, `422` image illisible. |
 
 ### Base de données (MongoDB, base `spotit`)
@@ -660,6 +803,7 @@ Le grand dataset n'est **pas** dans le dépôt (trop lourd) : télécharge-le su
   - `backend/.env` n'apparaît pas ;
   - les fichiers régénérés par Flutter (`windows/`, `linux/`, `macos/`, `analysis_options.yaml`) ne sont pas ajoutés.
 - **Messages de commit** : courts, en anglais, qui disent ce qui a été fait (ex. `Add car detection frame and UI updates`).
+- **Avec Docker** : après une modification du code, relance `docker compose up --build` pour reconstruire les conteneurs.
 - **Code propre** : pas de code mort ni de copier-coller ; les parties communes sont regroupées (widgets partagés dans `spot_it_widgets.dart`, vérification d'image partagée dans `imageUpload.js`).
 
 ---

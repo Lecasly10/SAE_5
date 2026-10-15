@@ -1,0 +1,59 @@
+name: spotit
+
+services:
+  mongo:
+    image: mongo:7
+    volumes:
+      - mongo-data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  ai:
+    build:
+      context: .
+      dockerfile: ai/Dockerfile
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5000/health', timeout=5)"]
+      interval: 10s
+      timeout: 10s
+      retries: 18
+      start_period: 60s
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    environment:
+      MONGODB_URI: ${MONGODB_URI:-mongodb://mongo:27017/spotit}
+      JWT_SECRET: ${JWT_SECRET:-dev-only-secret-change-me}
+      PORT: 3000
+      AI_URL: http://ai:5000
+    ports:
+      - "3000:3000"
+    depends_on:
+      mongo:
+        condition: service_healthy
+      ai:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:3000/api/health').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  app:
+    build:
+      context: ./flutter_application_1
+      args:
+        API_HOST: ${API_HOST:-http://localhost:3000}
+    ports:
+      - "${APP_PORT:-8080}:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+
+volumes:
+  mongo-data:

@@ -9,6 +9,7 @@ const predictRoutes = require('./routes/predict');
 const app = express();
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
+app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
 app.use('/api/auth', authRoutes);
 app.use('/api/cars', carRoutes);
 app.use('/api/predict', predictRoutes);

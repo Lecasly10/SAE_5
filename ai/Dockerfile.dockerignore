@@ -1,0 +1,8 @@
+*
+!requirements.txt
+!ai/server.py
+!ai/src
+!ai/models
+ai/models/evaluation
+ai/models/confusion_matrix.png
+**/__pycache__

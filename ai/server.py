@@ -17,6 +17,11 @@ predictor = CarPredictor(
 detector = CarDetector(model_path=AI_DIR / "models/detector/detect.tflite")
 
 
+@app.get("/health")
+def health():
+    return jsonify(status="ok")
+
+
 @app.post("/predict")
 def predict():
     data = request.get_data()
