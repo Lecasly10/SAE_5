@@ -7,11 +7,14 @@ ENV PYTHONUNBUFFERED=1 \
 WORKDIR /app
 
 COPY requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt gunicorn
+RUN pip install --no-cache-dir -r requirements.txt
 
-COPY ai/server.py ./server.py
-COPY ai/src ./src
-COPY ai/models ./models
+COPY main.py server.py ./
+COPY src ./src
+COPY models ./models
+
+RUN useradd --create-home spotit
+USER spotit
 
 EXPOSE 5000
 

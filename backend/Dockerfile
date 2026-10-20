@@ -2,13 +2,12 @@ FROM node:22-slim
 
 WORKDIR /app
 
-COPY package.json package-lock.json* ./
-RUN npm install --omit=dev
+COPY package.json package-lock.json ./
+RUN npm ci --omit=dev
 
-COPY backend ./backend
+COPY . .
 
-WORKDIR /app/backend
-
+USER node
 EXPOSE 3000
 
 CMD ["node", "server.js"]

@@ -1,101 +1,576 @@
 {
-  "images": 186,
-  "accuracy": 0.7956989247311828,
+  "images": 2040,
+  "accuracy": 0.6715686274509803,
   "top_k": 3,
-  "top_k_accuracy": 0.967741935483871,
-  "loss": 0.6138412356376648,
+  "top_k_accuracy": 0.8137254901960784,
   "classes": [
     {
-      "classe": "CITROEN_2CV_19491990",
+      "classe": "alpine_a110_2017_present",
+      "images": 23,
+      "precision": 0.6521739130434783,
+      "rappel": 0.6521739130434783,
+      "f1": 0.6521739130434783
+    },
+    {
+      "classe": "autre",
+      "images": 150,
+      "precision": 0.525,
+      "rappel": 0.28,
+      "f1": 0.3652173913043478
+    },
+    {
+      "classe": "bugatti_chiron_2016_present",
+      "images": 13,
+      "precision": 0.5238095238095238,
+      "rappel": 0.8461538461538461,
+      "f1": 0.6470588235294118
+    },
+    {
+      "classe": "bugatti_veyron_2005_2015",
+      "images": 40,
+      "precision": 0.8,
+      "rappel": 0.6,
+      "f1": 0.6857142857142857
+    },
+    {
+      "classe": "citroen_2cv_1949_1990",
       "images": 25,
-      "precision": 0.8620689655172413,
-      "rappel": 1.0,
-      "f1": 0.9259259259259259
+      "precision": 0.7857142857142857,
+      "rappel": 0.88,
+      "f1": 0.830188679245283
     },
     {
-      "classe": "FERRARI_F12_Berlinetta_20122015",
-      "images": 30,
-      "precision": 0.8235294117647058,
-      "rappel": 0.4666666666666667,
-      "f1": 0.5957446808510638
+      "classe": "citroen_berlingo_2008_2018",
+      "images": 27,
+      "precision": 0.88,
+      "rappel": 0.8148148148148148,
+      "f1": 0.8461538461538461
     },
     {
-      "classe": "FIAT_500_Abarth_2008Present",
+      "classe": "citroen_c1_2005_2012",
+      "images": 22,
+      "precision": 0.9,
+      "rappel": 0.8181818181818182,
+      "f1": 0.8571428571428572
+    },
+    {
+      "classe": "citroen_c1_2014_present",
+      "images": 21,
+      "precision": 0.8181818181818182,
+      "rappel": 0.8571428571428571,
+      "f1": 0.8372093023255814
+    },
+    {
+      "classe": "citroen_c3_2002_2009",
+      "images": 21,
+      "precision": 0.5,
+      "rappel": 0.8571428571428571,
+      "f1": 0.631578947368421
+    },
+    {
+      "classe": "citroen_c3_2009_2016",
+      "images": 26,
+      "precision": 0.6,
+      "rappel": 0.46153846153846156,
+      "f1": 0.5217391304347826
+    },
+    {
+      "classe": "citroen_c3_2016_present",
+      "images": 15,
+      "precision": 0.6428571428571429,
+      "rappel": 0.6,
+      "f1": 0.6206896551724138
+    },
+    {
+      "classe": "citroen_c3_aircross_2017_present",
+      "images": 14,
+      "precision": 0.8571428571428571,
+      "rappel": 0.42857142857142855,
+      "f1": 0.5714285714285714
+    },
+    {
+      "classe": "citroen_c4_2010_2013",
+      "images": 16,
+      "precision": 0.9,
+      "rappel": 0.5625,
+      "f1": 0.6923076923076923
+    },
+    {
+      "classe": "citroen_c4_picasso_2013_2016",
+      "images": 34,
+      "precision": 0.6216216216216216,
+      "rappel": 0.6764705882352942,
+      "f1": 0.6478873239436619
+    },
+    {
+      "classe": "citroen_c5_2001_2008",
+      "images": 38,
+      "precision": 0.673469387755102,
+      "rappel": 0.868421052631579,
+      "f1": 0.7586206896551724
+    },
+    {
+      "classe": "citroen_c5_2008_2017",
+      "images": 40,
+      "precision": 0.7435897435897436,
+      "rappel": 0.725,
+      "f1": 0.7341772151898733
+    },
+    {
+      "classe": "citroen_c5_aircross_2018_present",
+      "images": 15,
+      "precision": 0.7333333333333333,
+      "rappel": 0.7333333333333333,
+      "f1": 0.7333333333333333
+    },
+    {
+      "classe": "citroen_ds4_2010_present",
+      "images": 20,
+      "precision": 0.7333333333333333,
+      "rappel": 0.55,
+      "f1": 0.6285714285714286
+    },
+    {
+      "classe": "citroen_ds5_2011_present",
+      "images": 19,
+      "precision": 0.8,
+      "rappel": 0.8421052631578947,
+      "f1": 0.8205128205128205
+    },
+    {
+      "classe": "dacia_dokker_2012_present",
       "images": 29,
-      "precision": 0.96,
-      "rappel": 0.8275862068965517,
-      "f1": 0.888888888888889
+      "precision": 0.8518518518518519,
+      "rappel": 0.7931034482758621,
+      "f1": 0.8214285714285715
     },
     {
-      "classe": "FORD_Mustang_20142017",
+      "classe": "dacia_duster_2010_2017",
+      "images": 32,
+      "precision": 0.9259259259259259,
+      "rappel": 0.78125,
+      "f1": 0.847457627118644
+    },
+    {
+      "classe": "dacia_duster_2021_present",
+      "images": 14,
+      "precision": 0.6111111111111112,
+      "rappel": 0.7857142857142857,
+      "f1": 0.6875000000000001
+    },
+    {
+      "classe": "dacia_lodgy_2012_present",
+      "images": 17,
+      "precision": 0.9,
+      "rappel": 0.5294117647058824,
+      "f1": 0.6666666666666667
+    },
+    {
+      "classe": "dacia_sandero_2012_2020",
+      "images": 40,
+      "precision": 0.5925925925925926,
+      "rappel": 0.8,
+      "f1": 0.6808510638297872
+    },
+    {
+      "classe": "dacia_spring_2021_present",
+      "images": 16,
+      "precision": 0.7142857142857143,
+      "rappel": 0.625,
+      "f1": 0.6666666666666666
+    },
+    {
+      "classe": "ds_automobiles_ds_3_2009_2016",
+      "images": 40,
+      "precision": 0.717948717948718,
+      "rappel": 0.7,
+      "f1": 0.708860759493671
+    },
+    {
+      "classe": "ds_automobiles_ds_3_crossback_2018_present",
+      "images": 17,
+      "precision": 0.7647058823529411,
+      "rappel": 0.7647058823529411,
+      "f1": 0.7647058823529412
+    },
+    {
+      "classe": "ds_automobiles_ds_7_2017_present",
+      "images": 34,
+      "precision": 0.5625,
+      "rappel": 0.5294117647058824,
+      "f1": 0.5454545454545455
+    },
+    {
+      "classe": "ferrari_f12_berlinetta_2012_2015",
+      "images": 30,
+      "precision": 0.54,
+      "rappel": 0.9,
+      "f1": 0.675
+    },
+    {
+      "classe": "fiat_500_abarth_2008_present",
+      "images": 29,
+      "precision": 0.7878787878787878,
+      "rappel": 0.896551724137931,
+      "f1": 0.8387096774193549
+    },
+    {
+      "classe": "ford_mustang_2014_2017",
       "images": 35,
-      "precision": 0.6304347826086957,
-      "rappel": 0.8285714285714286,
-      "f1": 0.7160493827160495
+      "precision": 0.9565217391304348,
+      "rappel": 0.6285714285714286,
+      "f1": 0.7586206896551724
     },
     {
-      "classe": "JEEP_Grand_Cherokee_20132020",
+      "classe": "jeep_grand_cherokee_2013_2020",
       "images": 39,
-      "precision": 0.7551020408163265,
+      "precision": 0.74,
       "rappel": 0.9487179487179487,
-      "f1": 0.8409090909090908
+      "f1": 0.8314606741573033
     },
     {
-      "classe": "TOYOTA_Hilux_Double_Cab_2020Present",
+      "classe": "peugeot_2008_2019_present",
+      "images": 24,
+      "precision": 0.782608695652174,
+      "rappel": 0.75,
+      "f1": 0.7659574468085107
+    },
+    {
+      "classe": "peugeot_205_1983_1998",
+      "images": 40,
+      "precision": 0.813953488372093,
+      "rappel": 0.875,
+      "f1": 0.8433734939759036
+    },
+    {
+      "classe": "peugeot_206_1998_2012",
+      "images": 29,
+      "precision": 0.7222222222222222,
+      "rappel": 0.4482758620689655,
+      "f1": 0.5531914893617021
+    },
+    {
+      "classe": "peugeot_207_2006_2014",
+      "images": 40,
+      "precision": 0.65,
+      "rappel": 0.65,
+      "f1": 0.65
+    },
+    {
+      "classe": "peugeot_208_2012_2019",
+      "images": 40,
+      "precision": 0.5535714285714286,
+      "rappel": 0.775,
+      "f1": 0.6458333333333333
+    },
+    {
+      "classe": "peugeot_208_2019_present",
+      "images": 13,
+      "precision": 0.7777777777777778,
+      "rappel": 0.5384615384615384,
+      "f1": 0.6363636363636364
+    },
+    {
+      "classe": "peugeot_3008_2009_2016",
+      "images": 21,
+      "precision": 0.7333333333333333,
+      "rappel": 0.5238095238095238,
+      "f1": 0.611111111111111
+    },
+    {
+      "classe": "peugeot_3008_2016_present",
+      "images": 34,
+      "precision": 0.5897435897435898,
+      "rappel": 0.6764705882352942,
+      "f1": 0.6301369863013699
+    },
+    {
+      "classe": "peugeot_307_2001_2008",
+      "images": 40,
+      "precision": 0.5526315789473685,
+      "rappel": 0.525,
+      "f1": 0.5384615384615385
+    },
+    {
+      "classe": "peugeot_308_2008_2015",
+      "images": 40,
+      "precision": 0.625,
+      "rappel": 0.75,
+      "f1": 0.6818181818181818
+    },
+    {
+      "classe": "peugeot_308_2013_2021",
+      "images": 40,
+      "precision": 0.6571428571428571,
+      "rappel": 0.575,
+      "f1": 0.6133333333333333
+    },
+    {
+      "classe": "peugeot_308_2021_present",
+      "images": 20,
+      "precision": 0.5483870967741935,
+      "rappel": 0.85,
+      "f1": 0.6666666666666665
+    },
+    {
+      "classe": "peugeot_407_2004_2010",
+      "images": 33,
+      "precision": 0.6666666666666666,
+      "rappel": 0.6060606060606061,
+      "f1": 0.6349206349206349
+    },
+    {
+      "classe": "peugeot_408_2022_present",
+      "images": 15,
+      "precision": 0.5238095238095238,
+      "rappel": 0.7333333333333333,
+      "f1": 0.611111111111111
+    },
+    {
+      "classe": "peugeot_5008_2016_present",
+      "images": 23,
+      "precision": 0.39285714285714285,
+      "rappel": 0.9565217391304348,
+      "f1": 0.5569620253164557
+    },
+    {
+      "classe": "peugeot_508_2010_2018",
+      "images": 40,
+      "precision": 0.5111111111111111,
+      "rappel": 0.575,
+      "f1": 0.5411764705882353
+    },
+    {
+      "classe": "peugeot_508_2018_present",
+      "images": 24,
+      "precision": 0.6956521739130435,
+      "rappel": 0.6666666666666666,
+      "f1": 0.6808510638297872
+    },
+    {
+      "classe": "peugeot_rcz_2009_2015",
+      "images": 37,
+      "precision": 0.7741935483870968,
+      "rappel": 0.6486486486486487,
+      "f1": 0.7058823529411764
+    },
+    {
+      "classe": "renault_5_1972_1984",
+      "images": 15,
+      "precision": 0.9090909090909091,
+      "rappel": 0.6666666666666666,
+      "f1": 0.7692307692307692
+    },
+    {
+      "classe": "renault_arkana_2019_present",
+      "images": 30,
+      "precision": 0.7567567567567568,
+      "rappel": 0.9333333333333333,
+      "f1": 0.835820895522388
+    },
+    {
+      "classe": "renault_captur_2013_2019",
+      "images": 40,
+      "precision": 0.7142857142857143,
+      "rappel": 0.625,
+      "f1": 0.6666666666666666
+    },
+    {
+      "classe": "renault_captur_2019_present",
+      "images": 15,
+      "precision": 0.625,
+      "rappel": 0.6666666666666666,
+      "f1": 0.6451612903225806
+    },
+    {
+      "classe": "renault_clio_2006_2013",
+      "images": 40,
+      "precision": 0.8529411764705882,
+      "rappel": 0.725,
+      "f1": 0.7837837837837837
+    },
+    {
+      "classe": "renault_clio_2012_2019",
+      "images": 40,
+      "precision": 0.5818181818181818,
+      "rappel": 0.8,
+      "f1": 0.6736842105263158
+    },
+    {
+      "classe": "renault_clio_2019_present",
+      "images": 14,
+      "precision": 0.8333333333333334,
+      "rappel": 0.7142857142857143,
+      "f1": 0.7692307692307692
+    },
+    {
+      "classe": "renault_espace_2014_2019",
+      "images": 17,
+      "precision": 0.6666666666666666,
+      "rappel": 0.47058823529411764,
+      "f1": 0.5517241379310345
+    },
+    {
+      "classe": "renault_kadjar_2015_present",
+      "images": 25,
+      "precision": 1.0,
+      "rappel": 0.48,
+      "f1": 0.6486486486486487
+    },
+    {
+      "classe": "renault_kangoo_2020_present",
+      "images": 21,
+      "precision": 0.6666666666666666,
+      "rappel": 0.8571428571428571,
+      "f1": 0.75
+    },
+    {
+      "classe": "renault_megane_2008_2017",
+      "images": 40,
+      "precision": 0.56,
+      "rappel": 0.7,
+      "f1": 0.6222222222222222
+    },
+    {
+      "classe": "renault_megane_2015_2020",
+      "images": 40,
+      "precision": 0.46511627906976744,
+      "rappel": 0.5,
+      "f1": 0.4819277108433735
+    },
+    {
+      "classe": "renault_megane_e_tech_2021_present",
+      "images": 19,
+      "precision": 0.6363636363636364,
+      "rappel": 0.7368421052631579,
+      "f1": 0.6829268292682926
+    },
+    {
+      "classe": "renault_scenic_2009_2013",
+      "images": 40,
+      "precision": 0.7804878048780488,
+      "rappel": 0.8,
+      "f1": 0.7901234567901235
+    },
+    {
+      "classe": "renault_talisman_2016_2019",
+      "images": 30,
+      "precision": 0.5142857142857142,
+      "rappel": 0.6,
+      "f1": 0.5538461538461538
+    },
+    {
+      "classe": "renault_twingo_2011_2014",
+      "images": 20,
+      "precision": 0.8125,
+      "rappel": 0.65,
+      "f1": 0.7222222222222223
+    },
+    {
+      "classe": "renault_twingo_2014_present",
+      "images": 40,
+      "precision": 0.7027027027027027,
+      "rappel": 0.65,
+      "f1": 0.6753246753246753
+    },
+    {
+      "classe": "renault_zoe_2013_present",
+      "images": 22,
+      "precision": 0.8571428571428571,
+      "rappel": 0.5454545454545454,
+      "f1": 0.6666666666666665
+    },
+    {
+      "classe": "toyota_hilux_double_cab_2020_present",
       "images": 28,
-      "precision": 0.95,
-      "rappel": 0.6785714285714286,
-      "f1": 0.7916666666666667
+      "precision": 0.96,
+      "rappel": 0.8571428571428571,
+      "f1": 0.9056603773584904
     }
   ],
-  "confusion_matrix": [
+  "recognition": {
+    "min_confidence": 38.0,
+    "min_margin": 24.0,
+    "answers": 1127,
+    "answer_precision": 0.8970718722271517,
+    "cars_found": 0.5349206349206349,
+    "other_wrongly_answered": 0.14666666666666667
+  },
+  "top_confusions": [
     [
-      25,
-      0,
-      0,
-      0,
-      0,
-      0
+      "autre",
+      "ferrari_f12_berlinetta_2012_2015",
+      7
     ],
     [
-      2,
-      14,
-      1,
-      10,
-      3,
-      0
+      "bugatti_veyron_2005_2015",
+      "ferrari_f12_berlinetta_2012_2015",
+      7
     ],
     [
-      0,
-      1,
-      24,
-      0,
-      3,
-      1
+      "peugeot_3008_2016_present",
+      "peugeot_5008_2016_present",
+      7
     ],
     [
-      1,
-      2,
-      0,
-      29,
-      3,
-      0
+      "autre",
+      "peugeot_308_2008_2015",
+      6
     ],
     [
-      0,
-      0,
-      0,
-      2,
-      37,
-      0
+      "autre",
+      "renault_talisman_2016_2019",
+      6
     ],
     [
-      1,
-      0,
-      0,
-      5,
-      3,
-      19
+      "peugeot_206_1998_2012",
+      "peugeot_307_2001_2008",
+      6
+    ],
+    [
+      "autre",
+      "citroen_c3_2002_2009",
+      5
+    ],
+    [
+      "autre",
+      "citroen_c5_2001_2008",
+      5
+    ],
+    [
+      "autre",
+      "peugeot_205_1983_1998",
+      5
+    ],
+    [
+      "autre",
+      "peugeot_3008_2016_present",
+      5
+    ],
+    [
+      "autre",
+      "peugeot_508_2010_2018",
+      5
+    ],
+    [
+      "citroen_c3_2009_2016",
+      "peugeot_208_2012_2019",
+      5
+    ],
+    [
+      "autre",
+      "citroen_c4_picasso_2013_2016",
+      4
+    ],
+    [
+      "autre",
+      "citroen_c5_2008_2017",
+      4
+    ],
+    [
+      "autre",
+      "renault_megane_2008_2017",
+      4
     ]
   ]
 }

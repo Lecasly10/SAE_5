@@ -1,0 +1,790 @@
+{
+  "cars": [
+    {
+      "id": "renault_clio_2012_2019",
+      "brand": "Renault",
+      "model": "Clio",
+      "from_year": 2012,
+      "to_year": 2019,
+      "sources": [
+        "RENAULT_Clio_5_Doors_20162019",
+        "RENAULT_Clio__5_doors_20122016",
+        "RENAULT_Clio_Estate_20132016",
+        "RENAULT_Clio_Estate_20162019",
+        "RENAULT_Clio_GT_5_Doors_2013Present",
+        "RENAULT_Clio_RS_2013Present"
+      ]
+    },
+    {
+      "id": "renault_clio_2006_2013",
+      "brand": "Renault",
+      "model": "Clio",
+      "from_year": 2006,
+      "to_year": 2013,
+      "sources": [
+        "RENAULT_Clio_3_Doors_20062009",
+        "RENAULT_Clio_3_Doors_20092012",
+        "RENAULT_Clio_5_Doors_20062009",
+        "RENAULT_Clio_5_Doors_20092012",
+        "RENAULT_Clio_RS_20062009",
+        "RENAULT_Clio_RS_20092013"
+      ]
+    },
+    {
+      "id": "renault_clio_2019_present",
+      "brand": "Renault",
+      "model": "Clio",
+      "from_year": 2019,
+      "to_year": null,
+      "sources": [
+        "RENAULT_Clio_2019Present"
+      ]
+    },
+    {
+      "id": "renault_twingo_2014_present",
+      "brand": "Renault",
+      "model": "Twingo",
+      "from_year": 2014,
+      "to_year": null,
+      "sources": [
+        "RENAULT_Twingo_2014Present",
+        "RENAULT_Twingo_2019Present",
+        "RENAULT_Twingo_GT_20162019"
+      ]
+    },
+    {
+      "id": "renault_twingo_2011_2014",
+      "brand": "Renault",
+      "model": "Twingo",
+      "from_year": 2011,
+      "to_year": 2014,
+      "sources": [
+        "RENAULT_Twingo_20112014",
+        "RENAULT_Twingo_RS_20112013"
+      ]
+    },
+    {
+      "id": "renault_captur_2013_2019",
+      "brand": "Renault",
+      "model": "Captur",
+      "from_year": 2013,
+      "to_year": 2019,
+      "sources": [
+        "RENAULT_Captur_20132017",
+        "RENAULT_Captur_20172019"
+      ]
+    },
+    {
+      "id": "renault_captur_2019_present",
+      "brand": "Renault",
+      "model": "Captur",
+      "from_year": 2019,
+      "to_year": null,
+      "sources": [
+        "RENAULT_Captur_2019Present"
+      ]
+    },
+    {
+      "id": "renault_megane_2015_2020",
+      "brand": "Renault",
+      "model": "Mégane",
+      "from_year": 2015,
+      "to_year": 2020,
+      "sources": [
+        "RENAULT_Megane_5_Doors_20152020",
+        "RENAULT_Megane_Estate_20162020",
+        "RENAULT_Megane_RS__20182020",
+        "RENAULT_Megane_Sedan_20162020",
+        "2015_Renault_Megane_GT_5_Doors"
+      ]
+    },
+    {
+      "id": "renault_megane_2008_2017",
+      "brand": "Renault",
+      "model": "Mégane",
+      "from_year": 2008,
+      "to_year": 2017,
+      "sources": [
+        "RENAULT_Megane_Coupe_20082015",
+        "RENAULT_Megane_Coupe__Cabrio_20102013",
+        "RENAULT_Megane_Estate_20092014",
+        "RENAULT_Megane_RS_Coupe_20092013",
+        "RENAULT_Megane_RS_Coupe_20142017"
+      ]
+    },
+    {
+      "id": "renault_megane_e_tech_2021_present",
+      "brand": "Renault",
+      "model": "Mégane E-Tech",
+      "from_year": 2021,
+      "to_year": null,
+      "sources": [
+        "RENAULT_Megane_ETech_2021Present"
+      ]
+    },
+    {
+      "id": "renault_scenic_2009_2013",
+      "brand": "Renault",
+      "model": "Scénic",
+      "from_year": 2009,
+      "to_year": 2013,
+      "sources": [
+        "RENAULT_Scenic_20092013",
+        "RENAULT_Grand_Scenic_20092013"
+      ]
+    },
+    {
+      "id": "renault_zoe_2013_present",
+      "brand": "Renault",
+      "model": "Zoé",
+      "from_year": 2013,
+      "to_year": null,
+      "sources": [
+        "RENAULT_ZOE_20132019",
+        "RENAULT_ZOE_2019Present"
+      ]
+    },
+    {
+      "id": "renault_kadjar_2015_present",
+      "brand": "Renault",
+      "model": "Kadjar",
+      "from_year": 2015,
+      "to_year": null,
+      "sources": [
+        "RENAULT_Kadjar_20152018",
+        "RENAULT_Kadjar_2018Present"
+      ]
+    },
+    {
+      "id": "renault_kangoo_2020_present",
+      "brand": "Renault",
+      "model": "Kangoo",
+      "from_year": 2020,
+      "to_year": null,
+      "sources": [
+        "RENAULT_Kangoo_2020Present"
+      ]
+    },
+    {
+      "id": "renault_espace_2014_2019",
+      "brand": "Renault",
+      "model": "Espace",
+      "from_year": 2014,
+      "to_year": 2019,
+      "sources": [
+        "RENAULT_Espace_20142019"
+      ]
+    },
+    {
+      "id": "renault_talisman_2016_2019",
+      "brand": "Renault",
+      "model": "Talisman",
+      "from_year": 2016,
+      "to_year": 2019,
+      "sources": [
+        "RENAULT_Talisman_20162019",
+        "RENAULT_Talisman_Estate_20162019"
+      ]
+    },
+    {
+      "id": "renault_arkana_2019_present",
+      "brand": "Renault",
+      "model": "Arkana",
+      "from_year": 2019,
+      "to_year": null,
+      "sources": [
+        "RENAULT_Arkana_2019Present",
+        "RENAULT_Arkana_EU_2021Present"
+      ]
+    },
+    {
+      "id": "renault_5_1972_1984",
+      "brand": "Renault",
+      "model": "5",
+      "from_year": 1972,
+      "to_year": 1984,
+      "sources": [
+        "RENAULT_5_3_Doors_19721984",
+        "RENAULT_5_Turbo_19801984"
+      ]
+    },
+    {
+      "id": "peugeot_208_2012_2019",
+      "brand": "Peugeot",
+      "model": "208",
+      "from_year": 2012,
+      "to_year": 2019,
+      "sources": [
+        "PEUGEOT_208_3_doors_20122015",
+        "PEUGEOT_208_3_doors_20152018",
+        "PEUGEOT_208_5_doors_20122015",
+        "PEUGEOT_208_5_doors_20152019",
+        "PEUGEOT_208_XY_20132015"
+      ]
+    },
+    {
+      "id": "peugeot_208_2019_present",
+      "brand": "Peugeot",
+      "model": "208",
+      "from_year": 2019,
+      "to_year": null,
+      "sources": [
+        "PEUGEOT_208_5_doors_2019Present"
+      ]
+    },
+    {
+      "id": "peugeot_207_2006_2014",
+      "brand": "Peugeot",
+      "model": "207",
+      "from_year": 2006,
+      "to_year": 2014,
+      "sources": [
+        "PEUGEOT_207_3_Doors_20062009",
+        "PEUGEOT_207_5_doors_20062009",
+        "PEUGEOT_207__3_doors_20092012",
+        "PEUGEOT_207__5_doors_20092012",
+        "PEUGEOT_207_CC_20072009",
+        "PEUGEOT_207_CC_20092014",
+        "PEUGEOT_207_RC_20072009",
+        "PEUGEOT_207_SW_Outdoor_20082012",
+        "2007_Peugeot_207_SW"
+      ]
+    },
+    {
+      "id": "peugeot_206_1998_2012",
+      "brand": "Peugeot",
+      "model": "206",
+      "from_year": 1998,
+      "to_year": 2012,
+      "sources": [
+        "PEUGEOT_206_3_Doors_19982002",
+        "PEUGEOT_206_3_Doors_20022010",
+        "PEUGEOT_206_5_doors_20092012",
+        "PEUGEOT_206_CC_20012007",
+        "PEUGEOT_206_SW_20022007"
+      ]
+    },
+    {
+      "id": "peugeot_205_1983_1998",
+      "brand": "Peugeot",
+      "model": "205",
+      "from_year": 1983,
+      "to_year": 1998,
+      "sources": [
+        "PEUGEOT_205_3_doors_19841998",
+        "PEUGEOT_205_5_doors_19831998",
+        "PEUGEOT_205_CTI_19861994",
+        "PEUGEOT_205_GTI_19841994",
+        "PEUGEOT_205_T16_19841985"
+      ]
+    },
+    {
+      "id": "peugeot_307_2001_2008",
+      "brand": "Peugeot",
+      "model": "307",
+      "from_year": 2001,
+      "to_year": 2008,
+      "sources": [
+        "PEUGEOT_307_5_Doors_20012005",
+        "PEUGEOT_307_5_Doors_20052008",
+        "PEUGEOT_307_Break_20022005",
+        "PEUGEOT_307_Break_20052008",
+        "PEUGEOT_307_CC_20032005",
+        "PEUGEOT_307_CC_20052008",
+        "PEUGEOT_307_SW_20022005",
+        "PEUGEOT_307_SW_20052008"
+      ]
+    },
+    {
+      "id": "peugeot_308_2008_2015",
+      "brand": "Peugeot",
+      "model": "308",
+      "from_year": 2008,
+      "to_year": 2015,
+      "sources": [
+        "PEUGEOT_308_3_Doors_20082013",
+        "PEUGEOT_308_5_Doors_20082013",
+        "PEUGEOT_308_CC_20082011",
+        "PEUGEOT_308_CC_20112015",
+        "PEUGEOT_308_SW_20082013"
+      ]
+    },
+    {
+      "id": "peugeot_308_2013_2021",
+      "brand": "Peugeot",
+      "model": "308",
+      "from_year": 2013,
+      "to_year": 2021,
+      "sources": [
+        "PEUGEOT_308__5_doors_20132017",
+        "PEUGEOT_308_5_Doors_20172021",
+        "PEUGEOT_308_GT_20142017",
+        "PEUGEOT_308_GTi_20152017",
+        "PEUGEOT_308_SW_GT_20142017"
+      ]
+    },
+    {
+      "id": "peugeot_308_2021_present",
+      "brand": "Peugeot",
+      "model": "308",
+      "from_year": 2021,
+      "to_year": null,
+      "sources": [
+        "PEUGEOT_308_2021Present",
+        "PEUGEOT_308_SW_2021Present"
+      ]
+    },
+    {
+      "id": "peugeot_3008_2009_2016",
+      "brand": "Peugeot",
+      "model": "3008",
+      "from_year": 2009,
+      "to_year": 2016,
+      "sources": [
+        "PEUGEOT_3008_20092013",
+        "PEUGEOT_3008_20132016"
+      ]
+    },
+    {
+      "id": "peugeot_3008_2016_present",
+      "brand": "Peugeot",
+      "model": "3008",
+      "from_year": 2016,
+      "to_year": null,
+      "sources": [
+        "PEUGEOT_3008_20162020",
+        "PEUGEOT_3008_2020Present"
+      ]
+    },
+    {
+      "id": "peugeot_5008_2016_present",
+      "brand": "Peugeot",
+      "model": "5008",
+      "from_year": 2016,
+      "to_year": null,
+      "sources": [
+        "PEUGEOT_5008_20162020",
+        "PEUGEOT_5008_2020Present"
+      ]
+    },
+    {
+      "id": "peugeot_2008_2019_present",
+      "brand": "Peugeot",
+      "model": "2008",
+      "from_year": 2019,
+      "to_year": null,
+      "sources": [
+        "PEUGEOT_2008_2019Present"
+      ]
+    },
+    {
+      "id": "peugeot_508_2010_2018",
+      "brand": "Peugeot",
+      "model": "508",
+      "from_year": 2010,
+      "to_year": 2018,
+      "sources": [
+        "PEUGEOT_508_Berline_20102014",
+        "PEUGEOT_508_SW_20102014",
+        "PEUGEOT_508_20142018",
+        "PEUGEOT_508_SW_20142018",
+        "PEUGEOT_508_RXH_20142018",
+        "PEUGEOT_Peugeot_508_RXH_20112014"
+      ]
+    },
+    {
+      "id": "peugeot_508_2018_present",
+      "brand": "Peugeot",
+      "model": "508",
+      "from_year": 2018,
+      "to_year": null,
+      "sources": [
+        "2019_Peugeot_508",
+        "2023_Peugeot_508",
+        "2023_Peugeot_508_SW",
+        "PEUGEOT_508_PSE_2020Present"
+      ]
+    },
+    {
+      "id": "peugeot_rcz_2009_2015",
+      "brand": "Peugeot",
+      "model": "RCZ",
+      "from_year": 2009,
+      "to_year": 2015,
+      "sources": [
+        "PEUGEOT_RCZ_20092013",
+        "PEUGEOT_RCZ_20132015",
+        "PEUGEOT_RCZ_R_20132015"
+      ]
+    },
+    {
+      "id": "peugeot_407_2004_2010",
+      "brand": "Peugeot",
+      "model": "407",
+      "from_year": 2004,
+      "to_year": 2010,
+      "sources": [
+        "PEUGEOT_407_20042010",
+        "PEUGEOT_407_Coupe_20052008",
+        "PEUGEOT_407_SW_20042010"
+      ]
+    },
+    {
+      "id": "peugeot_408_2022_present",
+      "brand": "Peugeot",
+      "model": "408",
+      "from_year": 2022,
+      "to_year": null,
+      "sources": [
+        "PEUGEOT_408_2022Present"
+      ]
+    },
+    {
+      "id": "citroen_c3_2002_2009",
+      "brand": "Citroën",
+      "model": "C3",
+      "from_year": 2002,
+      "to_year": 2009,
+      "sources": [
+        "CITROEN_C3_20022005",
+        "CITROEN_C3_20052009"
+      ]
+    },
+    {
+      "id": "citroen_c3_2009_2016",
+      "brand": "Citroën",
+      "model": "C3",
+      "from_year": 2009,
+      "to_year": 2016,
+      "sources": [
+        "CITROEN_C3_20092013",
+        "CITROEN_C3_20132016"
+      ]
+    },
+    {
+      "id": "citroen_c3_2016_present",
+      "brand": "Citroën",
+      "model": "C3",
+      "from_year": 2016,
+      "to_year": null,
+      "sources": [
+        "CITROEN_C3_20162019",
+        "CITROEN_C3_2019Present"
+      ]
+    },
+    {
+      "id": "citroen_c3_aircross_2017_present",
+      "brand": "Citroën",
+      "model": "C3 Aircross",
+      "from_year": 2017,
+      "to_year": null,
+      "sources": [
+        "CITROEN_C3_Aircross_20172021",
+        "CITROEN_C3_Aircross_2021Present"
+      ]
+    },
+    {
+      "id": "citroen_c4_2010_2013",
+      "brand": "Citroën",
+      "model": "C4",
+      "from_year": 2010,
+      "to_year": 2013,
+      "sources": [
+        "CITROEN_C4_Hatchback_20102013"
+      ]
+    },
+    {
+      "id": "citroen_c4_picasso_2013_2016",
+      "brand": "Citroën",
+      "model": "C4 Picasso",
+      "from_year": 2013,
+      "to_year": 2016,
+      "sources": [
+        "CITROEN_C4_Picasso_20132016",
+        "CITROEN_Grand_C4_Picasso_20132016"
+      ]
+    },
+    {
+      "id": "citroen_c5_2001_2008",
+      "brand": "Citroën",
+      "model": "C5",
+      "from_year": 2001,
+      "to_year": 2008,
+      "sources": [
+        "CITROEN_C5_Estate_20012004",
+        "CITROEN_C5_Estate_20042008",
+        "CITROEN_C5_Liftback_20012004",
+        "CITROEN_C5_Liftback_20042008"
+      ]
+    },
+    {
+      "id": "citroen_c5_2008_2017",
+      "brand": "Citroën",
+      "model": "C5",
+      "from_year": 2008,
+      "to_year": 2017,
+      "sources": [
+        "CITROEN_C5_Sedan_20082011",
+        "CITROEN_C5_Sedan_20102017",
+        "CITROEN_C5_Tourer_20082010"
+      ]
+    },
+    {
+      "id": "citroen_c5_aircross_2018_present",
+      "brand": "Citroën",
+      "model": "C5 Aircross",
+      "from_year": 2018,
+      "to_year": null,
+      "sources": [
+        "2018_Citroen_C5_Aircross"
+      ]
+    },
+    {
+      "id": "citroen_c1_2005_2012",
+      "brand": "Citroën",
+      "model": "C1",
+      "from_year": 2005,
+      "to_year": 2012,
+      "sources": [
+        "CITROEN_C1_3_Doors_20052009",
+        "CITROEN_C1_5_Doors_20052009",
+        "CITROEN_C1_5_Doors_20092012"
+      ]
+    },
+    {
+      "id": "citroen_c1_2014_present",
+      "brand": "Citroën",
+      "model": "C1",
+      "from_year": 2014,
+      "to_year": null,
+      "sources": [
+        "CITROEN_C1_3_Doors_2014Present",
+        "CITROEN_C1_5_Doors_2014Present"
+      ]
+    },
+    {
+      "id": "citroen_berlingo_2008_2018",
+      "brand": "Citroën",
+      "model": "Berlingo",
+      "from_year": 2008,
+      "to_year": 2018,
+      "sources": [
+        "CITROEN_Berlingo_20082012",
+        "CITROEN_Berlingo_20122015",
+        "CITROEN_Berlingo_20152018"
+      ]
+    },
+    {
+      "id": "citroen_2cv_1949_1990",
+      "brand": "Citroën",
+      "model": "2CV",
+      "from_year": 1949,
+      "to_year": 1990,
+      "sources": [
+        "CITROEN_2CV_19491990"
+      ]
+    },
+    {
+      "id": "citroen_ds4_2010_present",
+      "brand": "Citroën",
+      "model": "DS4",
+      "from_year": 2010,
+      "to_year": null,
+      "sources": [
+        "CITROEN_DS4_2010Present"
+      ]
+    },
+    {
+      "id": "citroen_ds5_2011_present",
+      "brand": "Citroën",
+      "model": "DS5",
+      "from_year": 2011,
+      "to_year": null,
+      "sources": [
+        "CITROEN_DS5_2011Present"
+      ]
+    },
+    {
+      "id": "ds_automobiles_ds_3_2009_2016",
+      "brand": "DS Automobiles",
+      "model": "DS 3",
+      "from_year": 2009,
+      "to_year": 2016,
+      "sources": [
+        "CITROEN_DS_3_20092014",
+        "DS_AUTOMOBILES_DS_3_20142016",
+        "DS_AUTOMOBILES_DS_3_Cabrio_20132016"
+      ]
+    },
+    {
+      "id": "ds_automobiles_ds_3_crossback_2018_present",
+      "brand": "DS Automobiles",
+      "model": "DS 3 Crossback",
+      "from_year": 2018,
+      "to_year": null,
+      "sources": [
+        "DS_AUTOMOBILES_DS_3_Crossback_2018Present"
+      ]
+    },
+    {
+      "id": "ds_automobiles_ds_7_2017_present",
+      "brand": "DS Automobiles",
+      "model": "DS 7",
+      "from_year": 2017,
+      "to_year": null,
+      "sources": [
+        "DS_AUTOMOBILES_DS_7_Crossback_20172022",
+        "DS_AUTOMOBILES_DS_7__2022Present"
+      ]
+    },
+    {
+      "id": "dacia_duster_2010_2017",
+      "brand": "Dacia",
+      "model": "Duster",
+      "from_year": 2010,
+      "to_year": 2017,
+      "sources": [
+        "DACIA_Duster_20102013",
+        "DACIA_Duster_20132017"
+      ]
+    },
+    {
+      "id": "dacia_duster_2021_present",
+      "brand": "Dacia",
+      "model": "Duster",
+      "from_year": 2021,
+      "to_year": null,
+      "sources": [
+        "DACIA_Duster_2021Present"
+      ]
+    },
+    {
+      "id": "dacia_sandero_2012_2020",
+      "brand": "Dacia",
+      "model": "Sandero",
+      "from_year": 2012,
+      "to_year": 2020,
+      "sources": [
+        "DACIA_Sandero_2_20122016",
+        "DACIA_Sandero_20162020",
+        "DACIA_Sandero_Stepway_2_20122016",
+        "DACIA_Sandero_Stepway_20162020"
+      ]
+    },
+    {
+      "id": "dacia_dokker_2012_present",
+      "brand": "Dacia",
+      "model": "Dokker",
+      "from_year": 2012,
+      "to_year": null,
+      "sources": [
+        "DACIA_Dokker_2012Present",
+        "DACIA_Dokker_Van_2012Present"
+      ]
+    },
+    {
+      "id": "dacia_lodgy_2012_present",
+      "brand": "Dacia",
+      "model": "Lodgy",
+      "from_year": 2012,
+      "to_year": null,
+      "sources": [
+        "DACIA_Lodgy_2012Present"
+      ]
+    },
+    {
+      "id": "dacia_spring_2021_present",
+      "brand": "Dacia",
+      "model": "Spring",
+      "from_year": 2021,
+      "to_year": null,
+      "sources": [
+        "DACIA_Spring_Electric_2021Present"
+      ]
+    },
+    {
+      "id": "alpine_a110_2017_present",
+      "brand": "Alpine",
+      "model": "A110",
+      "from_year": 2017,
+      "to_year": null,
+      "sources": [
+        "ALPINE_A110_2017Present",
+        "2023_Alpine_A_110_R"
+      ]
+    },
+    {
+      "id": "bugatti_chiron_2016_present",
+      "brand": "Bugatti",
+      "model": "Chiron",
+      "from_year": 2016,
+      "to_year": null,
+      "sources": [
+        "BUGATTI_Chiron_2016Present"
+      ]
+    },
+    {
+      "id": "bugatti_veyron_2005_2015",
+      "brand": "Bugatti",
+      "model": "Veyron",
+      "from_year": 2005,
+      "to_year": 2015,
+      "sources": [
+        "BUGATTI_Veyron_20052011",
+        "BUGATTI_Veyron_Grand_Sport_20092015",
+        "BUGATTI_Veyron_Grand_Sport_Vitesse_20122015",
+        "BUGATTI_Veyron_Super_Sport_20102011"
+      ]
+    },
+    {
+      "id": "ferrari_f12_berlinetta_2012_2015",
+      "brand": "Ferrari",
+      "model": "F12 Berlinetta",
+      "from_year": 2012,
+      "to_year": 2015,
+      "sources": [
+        "FERRARI_F12_Berlinetta_20122015"
+      ]
+    },
+    {
+      "id": "fiat_500_abarth_2008_present",
+      "brand": "Fiat",
+      "model": "500 Abarth",
+      "from_year": 2008,
+      "to_year": null,
+      "sources": [
+        "FIAT_500_Abarth_2008Present"
+      ]
+    },
+    {
+      "id": "ford_mustang_2014_2017",
+      "brand": "Ford",
+      "model": "Mustang",
+      "from_year": 2014,
+      "to_year": 2017,
+      "sources": [
+        "FORD_Mustang_20142017"
+      ]
+    },
+    {
+      "id": "jeep_grand_cherokee_2013_2020",
+      "brand": "Jeep",
+      "model": "Grand Cherokee",
+      "from_year": 2013,
+      "to_year": 2020,
+      "sources": [
+        "JEEP_Grand_Cherokee_20132020"
+      ]
+    },
+    {
+      "id": "toyota_hilux_double_cab_2020_present",
+      "brand": "Toyota",
+      "model": "Hilux Double Cab",
+      "from_year": 2020,
+      "to_year": null,
+      "sources": [
+        "TOYOTA_Hilux_Double_Cab_2020Present"
+      ]
+    }
+  ]
+}

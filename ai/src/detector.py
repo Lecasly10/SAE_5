@@ -1,26 +1,20 @@
 import threading
-from pathlib import Path
 
 import numpy as np
 import tensorflow as tf
 
+from src.config import DETECTOR_PATH
+
 
 class CarDetector:
 
-    # Identifiants du modèle COCO : 2 = voiture, 7 = camion (pick-up).
+    # Identifiants des classes du dataset COCO : 2 = voiture, 7 = camion
     VEHICLE_CLASS_IDS = {2, 7}
 
-    def __init__(
-        self,
-        model_path="models/detector/detect.tflite",
-        min_score=0.4
-    ):
-        self.model_path = Path(model_path)
+    def __init__(self, model_path=DETECTOR_PATH, min_score=0.4):
         self.min_score = min_score
 
-        self.interpreter = tf.lite.Interpreter(
-            model_path=str(self.model_path)
-        )
+        self.interpreter = tf.lite.Interpreter(model_path=str(model_path))
         self.interpreter.allocate_tensors()
 
         self.input_details = self.interpreter.get_input_details()[0]
@@ -30,19 +24,11 @@ class CarDetector:
         self.lock = threading.Lock()
 
     def detect(self, image):
-        resized = image.convert("RGB").resize(
-            (self.input_size, self.input_size)
-        )
-        batch = np.expand_dims(
-            np.asarray(resized, dtype=np.uint8),
-            axis=0
-        )
+        resized = image.convert("RGB").resize((self.input_size, self.input_size))
+        batch = np.expand_dims(np.asarray(resized, dtype=np.uint8), axis=0)
 
         with self.lock:
-            self.interpreter.set_tensor(
-                self.input_details["index"],
-                batch
-            )
+            self.interpreter.set_tensor(self.input_details["index"], batch)
             self.interpreter.invoke()
 
             boxes, classes, scores = (

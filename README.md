@@ -108,12 +108,13 @@ Ouvre `.env` (Bloc-notes ou VS Code), **enlève le `#`** au début de la ligne q
 
 | Réglage | Valeur par défaut | À quoi ça sert |
 |---|---|---|
-| `JWT_SECRET` | `dev-only-secret-change-me` | Clé qui signe les connexions. Pour autre chose qu'un test local, mets une longue valeur aléatoire (voir le fichier `.env.example`). |
+| `JWT_SECRET` | clé aléatoire à chaque démarrage | Clé qui signe les connexions. Sans elle, tout le monde est déconnecté à chaque redémarrage. Mets une longue valeur aléatoire (voir `.env.example`) dès que tu veux garder les sessions. |
 | `MONGODB_URI` | base locale lancée par Docker | Mets ton adresse **MongoDB Atlas** (avec `/spotit` avant le `?`) pour utiliser la base partagée de l'équipe. Voir [section 6](#6-configurer-la-base-de-données-mongodb-atlas). |
 | `APP_PORT` | `8080` | Port de l'application dans le navigateur. Mets `8081` si le 8080 est déjà pris. |
 | `API_HOST` | `http://localhost:3000` | Adresse du serveur vue par le navigateur. À changer seulement pour ouvrir l'application depuis un autre ordinateur. |
+| `CORS_ORIGIN` | toutes les origines | Adresses autorisées à appeler l'API, séparées par des virgules (par exemple `http://localhost:8080`). |
 
-> ℹ️ Ne confonds pas avec `backend/.env` : celui-là sert uniquement à l'[installation manuelle](#4-installation-pas-à-pas--windows-de-zéro) pour développer. Docker ne le lit pas.
+Le même fichier `.env` sert aussi à l'[installation manuelle](#4-installation-pas-à-pas--windows-de-zéro) (le backend le lit à la racine du projet).
 
 ### Ce que Docker lance
 
@@ -181,7 +182,7 @@ Imagine un Pokédex, mais avec de vraies voitures :
 
 L'idée est née parce que plusieurs membres de l'équipe sont passionnés d'automobile, et que l'un d'eux photographie des voitures de collection (« carspotting »).
 
-**Pour l'instant, l'IA connaît 6 voitures** : Citroën 2CV, Ferrari F12 Berlinetta, Fiat 500 Abarth, Ford Mustang, Jeep Grand Cherokee et Toyota Hilux Double Cab. Si tu scannes une autre voiture, elle te répondra quand même l'une des 6 (voir [Limites connues](#14-limites-connues-et-suite)).
+**Pour l'instant, l'IA connaît 68 voitures** : surtout des voitures françaises (Renault, Peugeot, Citroën, DS, Dacia, Alpine, Bugatti), plus la Ferrari F12, la Fiat 500 Abarth, la Ford Mustang, la Jeep Grand Cherokee et le Toyota Hilux. La liste complète est dans `ai/models/cars.json`. Si l'IA n'est pas sûre d'elle, elle répond « voiture non reconnue » au lieu de deviner (voir [Limites connues](#14-limites-connues-et-suite)).
 
 ---
 
@@ -232,10 +233,18 @@ sequenceDiagram
 ### Les deux modèles d'IA
 
 1. **Le détecteur** (`ai/models/detector/detect.tflite`) : un modèle *SSD MobileNet* déjà entraîné sur la base d'images COCO. Il sait trouver des voitures dans une photo et renvoie un rectangle. C'est lui qui permet de dessiner le **cadre rouge**.
-2. **Le classifieur** (`ai/models/spotit_mobilenet.keras`) : un modèle *MobileNetV3Small* entraîné par l'équipe sur 6 voitures (technique du *transfer learning* : on réutilise un modèle qui sait déjà reconnaître des formes et on lui apprend seulement à choisir entre nos 6 voitures). C'est lui qui donne la **marque, le modèle et la confiance**.
+2. **Le classifieur** (`ai/models/spotit_mobilenet.keras`) : un modèle *MobileNetV3Large* entraîné par l'équipe sur 68 voitures plus une classe « autre » (technique du *transfer learning* : on réutilise un modèle qui sait déjà reconnaître des formes et on lui apprend à choisir entre nos voitures). C'est lui qui donne la **marque, le modèle et la confiance**. Les années de production viennent de la fiche de la voiture (`ai/models/cars.json`).
 
 #### La « confiance » en clair
-La confiance n'est **pas** « la probabilité d'avoir raison ». C'est la part de préférence du modèle pour cette voiture **par rapport aux 5 autres**. Si deux voitures se ressemblent (Ferrari F12 et Ford Mustang), le modèle hésite et la confiance se partage : une bonne réponse peut donc n'avoir que 40 à 60 %. Avec 6 voitures, répondre au hasard donnerait environ 17 %.
+La confiance n'est **pas** « la probabilité d'avoir raison ». C'est la part de préférence du modèle pour cette voiture **par rapport aux 68 autres**. Si deux voitures se ressemblent (Peugeot 3008 et 5008), le modèle hésite et la confiance se partage.
+
+#### « Voiture non reconnue »
+L'IA ne répond que si elle remplit **trois conditions** (réglées dans `ai/models/recognition.json`) :
+- sa meilleure réponse n'est pas la classe « autre » (les voitures hors liste) ;
+- sa confiance est d'au moins **38 %** ;
+- elle a **24 points** d'avance sur sa 2ᵉ réponse (sinon deux voitures sont à égalité).
+
+Sinon l'application affiche « Voiture non reconnue » avec les 3 voitures les plus proches, ou « Aucune voiture détectée » quand le détecteur ne voit rien. Ces seuils sont calculés automatiquement à la fin de l'entraînement pour que l'IA ait raison environ 9 fois sur 10 quand elle répond.
 
 La jauge de l'application est verte à partir de 70 %, orange à partir de 40 %, rouge en dessous.
 
@@ -262,7 +271,7 @@ La jauge de l'application est verte à partir de 70 %, orange à partir de 40 %,
 | *VS Code* (facultatif) | Éditeur de code | — |
 
 ### Comptes et accès
-- **Accès à la base MongoDB du groupe** : demande le fichier `backend/.env` à un membre de l'équipe (il contient des mots de passe et n'est jamais sur GitHub).
+- **Accès à la base MongoDB du groupe** : demande le fichier `.env` à un membre de l'équipe (il contient des mots de passe et n'est jamais sur GitHub).
   *Sans ça, tu peux créer ta propre base gratuite : voir [section 6](#6-configurer-la-base-de-données-mongodb-atlas).*
 
 ---
@@ -349,7 +358,7 @@ On crée un « environnement virtuel » : un dossier à part où s'installent le
 py -3.13 -m venv ai\.venv
 ```
 ```powershell
-ai\.venv\Scripts\python.exe -m pip install -r requirements.txt
+ai\.venv\Scripts\python.exe -m pip install -r ai\requirements.txt
 ```
 ⏳ C'est long : TensorFlow seul pèse environ 335 Mo, compte 5 à 10 minutes en tout. Ça ne se fait qu'**une seule fois**.
 
@@ -357,10 +366,14 @@ ai\.venv\Scripts\python.exe -m pip install -r requirements.txt
 
 ### Étape 6 — Installer le backend (Node.js)
 
-Toujours à la racine du projet :
-
+```powershell
+cd backend
+```
 ```powershell
 npm install
+```
+```powershell
+cd ..
 ```
 
 ### Étape 7 — Créer le fichier de configuration `.env`
@@ -370,9 +383,9 @@ npm install
 Ce fichier contient les mots de passe : il reste **sur ton ordinateur** et n'est jamais envoyé sur GitHub.
 
 ```powershell
-Copy-Item backend\.env.example backend\.env
+Copy-Item .env.example .env
 ```
-Ouvre `backend\.env` (avec le Bloc-notes ou VS Code) et remplis-le :
+Ouvre `.env` (avec le Bloc-notes ou VS Code), enlève le `#` devant les lignes dont tu as besoin et remplis-les :
 
 ```
 MONGODB_URI=mongodb+srv://UTILISATEUR:MOTDEPASSE@spotitdb.qbodabt.mongodb.net/spotit?retryWrites=true&w=majority
@@ -423,9 +436,9 @@ sudo apt install -y git curl unzip xz-utils python3 python3-venv nodejs npm
 git clone https://github.com/Lecasly10/SAE_5.git
 cd SAE_5
 python3 -m venv ai/.venv
-ai/.venv/bin/python -m pip install -r requirements.txt
-npm install
-cp backend/.env.example backend/.env      # puis remplis backend/.env (voir étape 7)
+ai/.venv/bin/python -m pip install -r ai/requirements.txt
+(cd backend && npm install)
+cp .env.example .env      # puis remplis .env (voir étape 7)
 cd flutter_application_1 && flutter pub get && cd ..
 ```
 
@@ -455,7 +468,7 @@ Pour créer **ta propre base gratuite** :
 3. Menu **Database Access** → *Add New Database User* : choisis un nom d'utilisateur et un mot de passe (note-les).
 4. Menu **Network Access** → *Add IP Address* → **Add Current IP Address** (ou `0.0.0.0/0` pour autoriser tout le monde, acceptable pour un projet de cours mais pas en production).
 5. Menu **Database** → bouton **Connect** → **Drivers** : copie l'adresse qui ressemble à `mongodb+srv://utilisateur:<password>@cluster0.xxxxx.mongodb.net/`.
-6. Colle-la dans `backend/.env` (`MONGODB_URI`) en :
+6. Colle-la dans `.env` (`MONGODB_URI`) en :
    - remplaçant `<password>` par ton mot de passe ;
    - ajoutant le nom de la base `spotit` juste avant le `?`.
 
@@ -494,7 +507,7 @@ node server.js
 ```
 Tu dois voir :
 ```
-MongoDB OK
+MongoDB connecté
 Serveur sur le port 3000
 ```
 
@@ -528,7 +541,7 @@ Get-NetTCPConnection -LocalPort 3000,5000 -State Listen | ForEach-Object { Stop-
 
 ### Test de l'application (parcours complet)
 
-1. **Sans compte** : clique sur **Insérer une photo** et choisis `ai/images/f12.jpg` (ou une image de `ai/dataset_small/test/`).
+1. **Sans compte** : clique sur **Insérer une photo** et choisis `ai/images/f12.jpg` (ou une photo de voiture trouvée sur Internet).
    - Dans l'application web, le bouton « Prendre une photo » ouvre le même sélecteur de fichiers ; sur téléphone il ouvre l'appareil photo.
 2. Clique sur **Analyser la photo**.
    - Un **cadre rouge** se dessine sur la voiture.
@@ -542,7 +555,7 @@ Get-NetTCPConnection -LocalPort 3000,5000 -State Listen | ForEach-Object { Stop-
 
 ### Tester chaque partie séparément (utile en cas de problème)
 
-**Service IA** — doit renvoyer un JSON avec `label`, `confidence` et `box` :
+**Service IA** — doit renvoyer un JSON avec `recognized`, `confidence`, `car`, `suggestions` et `box` :
 ```powershell
 curl.exe -X POST --data-binary "@ai/images/f12.jpg" http://localhost:5000/predict
 ```
@@ -555,8 +568,19 @@ curl.exe -X POST http://localhost:3000/api/auth/login -H "Content-Type: applicat
 **Chaîne complète sans compte** — le backend demande à l'IA et renvoie la marque, le modèle, les années et la confiance (voir l'API en [section 11](#11-référence-technique-api-base-de-données-ia)).
 
 ### Photos de test
-- `ai/images/` : 3 photos d'exemple (`f12.jpg`, `mx5.jpg`, `z4.jpg`). `mx5.jpg` et `z4.jpg` ne sont **pas** parmi les 6 voitures connues : l'IA se trompera (c'est attendu, voir les limites).
-- `ai/dataset_small/test/<voiture>/` : 186 photos de test des 6 voitures.
+- `ai/images/` : 3 photos d'exemple. `f12.jpg` est reconnue (Ferrari F12). `mx5.jpg` n'est pas dans la liste : l'IA répond « voiture non reconnue ». `z4.jpg` (BMW Z4) n'est pas dans la liste non plus, mais l'IA la prend à tort pour une Peugeot 308 : c'est une limite connue (voir section 14).
+- `ai/dataset_small/test/<voiture>/` : photos de test, créées par `python main.py prepare` (voir [Réentraîner ou évaluer le modèle](#réentraîner-ou-évaluer-le-modèle)). Le dossier n'est pas dans le dépôt.
+
+### Tests automatiques
+```powershell
+cd backend
+npm test
+```
+Teste le backend (validation, erreurs, limitation des requêtes, appel à l'IA). Pour l'IA (fiches, préparation du dataset, seuils), dans le dossier du projet :
+```powershell
+docker run --rm -v "${PWD}/ai:/app" -w /app spotit-ai python -m unittest discover -s tests -t .
+```
+(l'image `spotit-ai` existe après un `docker compose up --build`). Pour l'application Flutter : `flutter analyze` puis `flutter test` dans `flutter_application_1`.
 
 ### Vérifier la qualité du code Flutter
 ```powershell
@@ -619,14 +643,14 @@ Les erreurs ci-dessous sont soit **rencontrées pendant le projet**, soit **trè
 | Le texte s'affiche avec une police différente | Les polices (Google Fonts) se téléchargent depuis Internet | Vérifie ta connexion Internet |
 | « Prendre une photo » ouvre un sélecteur de fichiers | C'est normal dans un navigateur (pas d'appareil photo ici) | Sur un téléphone, il ouvrira l'appareil photo |
 | Pas de **cadre rouge** | Le détecteur n'a pas trouvé de voiture (photo d'intérieur, très rapprochée, schéma) | Normal : il trouve une voiture sur environ 82 % des photos de test. Essaie une photo de l'extérieur de la voiture |
-| La voiture est mal reconnue (ou **confiance faible**) | L'IA ne connaît que 6 voitures et en répond toujours une ; elle hésite entre voitures qui se ressemblent | Ce n'est pas un bug : voir [Limites connues](#14-limites-connues-et-suite) |
+| La voiture est mal reconnue (ou **confiance faible**) | L'IA ne connaît que certaines voitures et hésite entre celles qui se ressemblent (3008 et 5008, 207 et 206…) | Ce n'est pas un bug : voir [Limites connues](#14-limites-connues-et-suite) |
 
 ### Git
 
 | Message ou symptôme | Cause | Solution |
 |---|---|---|
 | `git status` montre plein de fichiers modifiés dans `windows/`, `linux/`, `macos/` ou `analysis_options.yaml` | Flutter les régénère tout seul | Ne les ajoute **pas** au commit. Pour les annuler : `git restore flutter_application_1/analysis_options.yaml flutter_application_1/linux flutter_application_1/macos flutter_application_1/windows` |
-| `backend/.env` apparaît dans `git status` | Il ne devrait jamais y apparaître (il est ignoré) | **Ne le commite pas.** Vérifie que `.gitignore` est intact |
+| `.env` apparaît dans `git status` | Il ne devrait jamais y apparaître (il est ignoré) | **Ne le commite pas.** Vérifie que `.gitignore` est intact |
 | `CONFLICT (…)` pendant une fusion | Deux personnes ont modifié le même fichier | Ouvre le fichier, garde les bonnes parties (supprime les lignes `<<<<<<<`, `=======`, `>>>>>>>`), puis `git add` et `git commit` |
 
 ---
@@ -636,19 +660,24 @@ Les erreurs ci-dessous sont soit **rencontrées pendant le projet**, soit **trè
 ```
 SAE_5/
 ├── README.md                    ← ce fichier
-├── package.json                 ← dépendances du backend (Node.js)
-├── requirements.txt             ← dépendances Python (IA + service Flask)
-├── .gitignore
 ├── docker-compose.yml           ← lance tout avec Docker (une commande)
-├── .env.example                 ← réglages facultatifs pour Docker
+├── .env.example                 ← modèle du fichier .env (réglages facultatifs)
+├── .gitignore
+├── .gitattributes               ← fins de ligne identiques sur tous les ordinateurs
 ├── docs/screenshots/            ← captures d'écran de ce README
 │
 ├── backend/                     ← LE BACKEND (Node.js / Express)
-│   ├── server.js                ← point d'entrée : connexion Mongo + routes
-│   ├── Dockerfile               ← construit le conteneur du backend
-│   ├── .env.example             ← modèle du fichier de configuration
+│   ├── server.js                ← démarrage : connexion Mongo puis écoute du port
+│   ├── app.js                   ← l'application Express (sécurité, routes, erreurs)
+│   ├── config.js                ← réglages lus dans l'environnement
+│   ├── errors.js                ← erreur HTTP (code + message)
+│   ├── package.json             ← dépendances et scripts (npm start, npm test)
+│   ├── Dockerfile
 │   ├── middleware/
-│   │   └── requireAuth.js       ← vérifie le token de connexion
+│   │   ├── requireAuth.js       ← vérifie le token de connexion
+│   │   ├── uploadedImage.js     ← vérifie l'image reçue (type, taille)
+│   │   ├── rateLimits.js        ← limite le nombre de requêtes
+│   │   └── errorHandler.js      ← transforme les erreurs en réponses JSON
 │   ├── models/
 │   │   ├── User.js              ← schéma d'un utilisateur
 │   │   └── Car.js               ← schéma d'une voiture de la bibliothèque
@@ -656,49 +685,49 @@ SAE_5/
 │   │   ├── auth.js              ← inscription et connexion
 │   │   ├── cars.js              ← bibliothèque (ajouter, lister, image, supprimer)
 │   │   └── predict.js           ← reconnaissance d'une photo sans compte
-│   └── services/
-│       ├── imageUpload.js       ← vérifie l'image reçue (type, taille)
-│       └── recognition.js       ← appelle l'IA, met en forme marque/modèle/années
+│   ├── services/
+│   │   └── recognition.js       ← appelle l'IA, met en forme marque/modèle/années
+│   └── tests/                   ← tests automatiques (npm test)
 │
 ├── ai/                          ← L'INTELLIGENCE ARTIFICIELLE (Python)
 │   ├── server.py                ← service Flask appelé par le backend
-│   ├── Dockerfile               ← construit le conteneur de l'IA
-│   ├── main.py                  ← menu pour analyser/préparer/entraîner/tester
+│   ├── main.py                  ← commandes : analyser, préparer, entraîner, évaluer, tester
+│   ├── requirements.txt         ← dépendances Python
+│   ├── Dockerfile
 │   ├── images/                  ← photos d'exemple
-│   ├── dataset_small/           ← 920 images (6 voitures : entraînement + test)
 │   ├── models/
-│   │   ├── spotit_mobilenet.keras   ← classifieur entraîné (6 voitures)
-│   │   ├── classes.json             ← noms des 6 voitures
+│   │   ├── spotit_mobilenet.keras   ← classifieur entraîné
+│   │   ├── classes.json             ← classes du modèle, dans l'ordre de ses sorties
+│   │   ├── cars.json                ← fiches : marque, modèle, années, dossiers du dataset
+│   │   ├── recognition.json         ← seuils du « voiture non reconnue »
 │   │   ├── detector/detect.tflite   ← détecteur de voitures (cadre rouge)
-│   │   └── evaluation/              ← résultats d'évaluation (matrice, erreurs…)
-│   └── src/
-│       ├── predictor.py         ← classe CarPredictor : quelle voiture ?
-│       ├── detector.py          ← classe CarDetector : où est la voiture ?
-│       ├── trainer.py           ← entraînement du modèle
-│       ├── evaluate.py          ← évaluation du modèle sauvegardé
-│       ├── dataset_analyzer.py  ← compte les images par voiture
-│       └── dataset_preparer.py  ← crée dataset_small à partir du grand dataset
+│   │   └── evaluation/              ← résultats d'évaluation (metrics.json…)
+│   ├── src/
+│   │   ├── config.py            ← chemins, taille des images, classe « autre »
+│   │   ├── catalog.py           ← lit les fiches (cars.json)
+│   │   ├── recognition.py       ← décide « reconnue ou non » et calcule les seuils
+│   │   ├── predictor.py         ← quelle voiture ?
+│   │   ├── detector.py          ← où est la voiture ?
+│   │   ├── trainer.py           ← entraînement du modèle
+│   │   ├── evaluate.py          ← évaluation du modèle sauvegardé
+│   │   ├── images.py            ← liste les images d'un dossier
+│   │   ├── dataset_analyzer.py  ← compte les images par voiture
+│   │   └── dataset_preparer.py  ← crée dataset_small (voitures regroupées + « autre »)
+│   └── tests/                   ← tests automatiques
 │
 └── flutter_application_1/       ← L'APPLICATION (Flutter / Dart)
     ├── pubspec.yaml             ← dépendances de l'application
     ├── Dockerfile               ← compile l'application en site web (nginx)
     ├── nginx.conf               ← réglages du serveur web de l'application
+    ├── test/                    ← tests de l'application
     └── lib/
-        ├── main.dart            ← page d'accueil : photo, analyse, viseur
-        ├── car_library_page.dart    ← bibliothèque (grille de voitures)
-        ├── car_reveal_dialog.dart   ← popup après un scan (ajouter / se connecter / fermer)
-        ├── car_card_dialog.dart     ← fiche d'une voiture + suppression
-        ├── car_showcase_dialog.dart ← popup animé commun (titre, stats, confiance)
-        ├── framed_image.dart    ← image avec le cadre rouge dessiné dessus
-        ├── car_image.dart       ← chargement d'une photo de la bibliothèque
-        ├── recognition.dart     ← résultat de l'IA (marque, modèle, années, confiance, cadre)
-        ├── scanned_car.dart     ← une voiture de la bibliothèque
-        ├── car_service.dart     ← appels au backend (reconnaissance, bibliothèque)
-        ├── auth_service.dart    ← connexion, inscription, session, adresse du serveur
-        ├── settings_page.dart   ← page du compte
-        ├── spot_it_widgets.dart ← widgets partagés (page, en-tête, boutons, confirmation)
-        ├── toast.dart           ← petites bulles de message
-        └── spot_it_theme.dart   ← couleurs de l'application
+        ├── main.dart            ← démarrage de l'application
+        ├── models/              ← recognition.dart (résultat de l'IA), scanned_car.dart
+        ├── services/            ← auth_service.dart (compte), car_service.dart (backend)
+        ├── theme/               ← spot_it_theme.dart (couleurs)
+        ├── pages/               ← home_page.dart, car_library_page.dart, settings_page.dart
+        ├── dialogs/             ← popups : résultat, non reconnue, fiche d'une voiture
+        └── widgets/             ← viseur, boutons, image avec cadre, bulles de message
 ```
 
 ---
@@ -711,23 +740,23 @@ Les routes marquées 🔒 demandent l'en-tête `Authorization: Bearer <token>` (
 
 | Méthode | Route | Rôle | Réponses |
 |---|---|---|---|
-| `POST` | `/api/auth/register` | Crée un compte (`name`, `email`, `password`) | `201` utilisateur · `400` données invalides ou e-mail déjà pris |
-| `POST` | `/api/auth/login` | Connexion (`email`, `password`) | `200` `{ token, name, email }` (token valable 7 jours) · `401` |
-| `POST` | `/api/predict` | Reconnaît la voiture d'une photo, **sans compte** | `200` `{ brand, model, years, confidence, box }` · `400` image invalide · `503` IA indisponible |
+| `POST` | `/api/auth/register` | Crée un compte (`name`, `email`, `password` de 8 caractères minimum) | `201` utilisateur · `400` données invalides · `409` e-mail déjà pris · `429` trop de tentatives |
+| `POST` | `/api/auth/login` | Connexion (`email`, `password`) | `200` `{ token, name, email }` (token valable 7 jours) · `400` · `401` · `429` |
+| `POST` | `/api/predict` | Reconnaît la voiture d'une photo, **sans compte** | `200` `{ recognized, confidence, box, brand, model, years }` si reconnue, sinon `{ recognized: false, reason, confidence, box, suggestions }` · `400` image invalide · `503` IA indisponible |
 | `GET` | `/api/cars` 🔒 | Liste tes voitures | `200` liste · `401` |
-| `POST` | `/api/cars` 🔒 | Reconnaît **et enregistre** la voiture | `201` voiture · `400` · `503` · `500` |
+| `POST` | `/api/cars` 🔒 | Reconnaît **et enregistre** la voiture | `201` voiture · `400` · `422` voiture non reconnue (rien n'est enregistré) · `503` · `500` |
 | `GET` | `/api/cars/:id/image` 🔒 | Renvoie la photo d'une de tes voitures | `200` image · `404` |
 | `DELETE` | `/api/cars/:id` 🔒 | Supprime une de tes voitures | `204` · `404` |
 | `GET` | `/api/health` | Vérifie que le serveur tourne (utilisé par Docker) | `200` |
 
-Le champ `box` est le rectangle de la voiture, en proportions de l'image (0 à 1) : `{ "x": 0.16, "y": 0.37, "width": 0.60, "height": 0.43 }`. Il vaut `null` si aucune voiture n'a été détectée.
+Le champ `box` est le rectangle de la voiture, en proportions de l'image (0 à 1) : `{ "x": 0.16, "y": 0.37, "width": 0.60, "height": 0.43 }`. Il vaut `null` si aucune voiture n'a été détectée. Quand la voiture n'est pas reconnue, `reason` vaut `unknown` (l'IA n'est pas assez sûre) ou `no_car` (rien de détecté) et `suggestions` contient les 3 voitures les plus proches `{ brand, model, years, confidence }`.
 
 ### API du service IA (`http://localhost:5000`)
 
 | Méthode | Route | Rôle |
 |---|---|---|
 | `GET` | `/health` | Vérifie que le service tourne (utilisé par Docker). |
-| `POST` | `/predict` | Reçoit les octets d'une image, renvoie `{ "label": "FERRARI_F12_Berlinetta_20122015", "confidence": 56.21, "box": {…} }`. Erreurs : `400` image manquante, `422` image illisible. |
+| `POST` | `/predict` | Reçoit les octets d'une image, renvoie `{ "recognized": true, "reason": null, "confidence": 96.1, "car": { "id": "ferrari_f12_berlinetta_2012_2015", "brand": "Ferrari", "model": "F12 Berlinetta", "from_year": 2012, "to_year": 2015 }, "suggestions": [ … ], "box": {…} }`. `to_year` vaut `null` pour une voiture encore produite. Erreurs : `400` image manquante, `422` image illisible. |
 
 ### Base de données (MongoDB, base `spotit`)
 
@@ -746,65 +775,69 @@ Le champ `box` est le rectangle de la voiture, en proportions de l'image (0 à 1
 
 ### L'IA en détail
 
-- **Classes** : 6 voitures (`ai/models/classes.json`). Données : sous-ensemble du dataset Kaggle [*Car Model Variants and Images*](https://www.kaggle.com/datasets/eimadevyni/car-model-variants-and-images-dataset) — 920 images dans `ai/dataset_small` (734 pour l'entraînement, 186 pour le test).
-- **Classifieur** : MobileNetV3Small (poids ImageNet, couches gelées), images en 224 × 224, *data augmentation* (miroir, rotation, zoom), 10 passes d'entraînement.
-- **Résultats mesurés sur les 186 images de test** (`ai/models/evaluation/metrics.json`) :
+- **Classes** : 68 voitures + « autre » (69 classes). Données : sous-ensemble du dataset Kaggle [*Car Model Variants and Images*](https://www.kaggle.com/datasets/eimadevyni/car-model-variants-and-images-dataset) (≈ 3 800 modèles). Une voiture de l'application regroupe plusieurs dossiers du dataset qui sont la même génération (par exemple Clio IV : 5 portes, break, GT, RS), pour avoir assez d'images. Les regroupements sont écrits dans `ai/models/cars.json`.
+- **Images** : 150 au maximum par voiture pour l'entraînement (50 au minimum) et 40 pour le test ; la classe « autre » contient 600 images d'entraînement et 150 de test, prises dans des voitures absentes de la liste.
+- **Classifieur** : MobileNetV3Large (poids ImageNet), images en 224 × 224, *data augmentation* (miroir, rotation, zoom, décalage, contraste), entraînement en deux temps (nouvelle tête, puis affinage des dernières couches), 15 % des images d'entraînement gardées pour régler les seuils.
+- **Résultats mesurés sur 2040 photos de test** (`ai/models/evaluation/metrics.json`) :
 
 | Mesure | Valeur |
 |---|---|
-| Bonne voiture en 1ʳᵉ proposition | **79,6 %** |
-| Bonne voiture dans les 3 premières | **96,8 %** |
+| Bonne voiture en 1ʳᵉ proposition (parmi 69 classes) | **67,2 %** |
+| Bonne voiture dans les 3 premières | **81,4 %** |
+| Réponses justes **quand l'IA répond** (seuils 38 % / 24 points) | **89,7 %** |
+| Voitures de la liste trouvées **et** justes | 53,5 % |
+| Voitures hors liste prises à tort pour une voiture connue | 14,7 % |
 
-| Voiture | Part des photos retrouvées |
-|---|---|
-| Citroën 2CV | 100 % |
-| Jeep Grand Cherokee | 95 % |
-| Ford Mustang | 83 % |
-| Fiat 500 Abarth | 83 % |
-| Toyota Hilux | 68 % |
-| Ferrari F12 | 47 % *(souvent confondue avec la Mustang)* |
+Pour les 6 voitures de la première version, la part de photos retrouvées est maintenant : Citroën 2CV 88 %, Ferrari F12 90 % (avant : 47 %), Fiat 500 Abarth 90 %, Jeep Grand Cherokee 95 %, Toyota Hilux 86 % (avant : 68 %), Ford Mustang 63 % (avant : 83 %). Le détail de chaque voiture est dans `ai/models/evaluation/metrics_by_class.csv`.
 
 - **Détecteur** : trouve une voiture (ou un pick-up) sur environ 82 % des 172 photos de test au format JPEG, avec un seuil de score de 0,4 (`ai/src/detector.py`).
 
 #### Réentraîner ou évaluer le modèle
 
-Dans le dossier `ai`, le menu de `main.py` propose :
+Le grand dataset n'est **pas** dans le dépôt (≈ 6 Go) : télécharge-le sur Kaggle (lien ci-dessus) et décompresse-le pour obtenir un dossier contenant `train/` et `test/` (par exemple `ai/dataset/`).
+
+Le plus simple est de passer par Docker (rien à installer). Depuis la racine du projet :
 
 ```powershell
-cd ai
-.venv\Scripts\python.exe main.py
+docker run --rm -v "${PWD}/ai:/app" -v "${PWD}/archive:/dataset" -w /app spotit-ai python main.py prepare --source /dataset
+docker run --rm -v "${PWD}/ai:/app" -w /app spotit-ai python main.py train
+docker run --rm -v "${PWD}/ai:/app" -w /app spotit-ai python main.py evaluate
 ```
-| Choix | Action | Besoin |
+(remplace `archive` par le dossier du grand dataset). ⚠️ L'entraînement utilise tout le processeur pendant environ **20 minutes** : l'ordinateur chauffe et les ventilateurs tournent à fond, c'est normal.
+
+| Commande | Action | Besoin |
 |---|---|---|
-| 1 | Analyser le dataset (nombre d'images par voiture) | le **grand dataset** (≈ 6 Go) dans `ai/dataset/` |
-| 2 | Préparer `dataset_small` | le grand dataset |
-| 3 | **Entraîner** le modèle (remplace `models/spotit_mobilenet.keras`) | `dataset_small` (déjà dans le dépôt) |
-| 4 | Tester l'image `images/f12.jpg` | — |
+| `python main.py analyze --source …` | Compte les images par voiture du grand dataset | le grand dataset |
+| `python main.py prepare --source …` | Crée `dataset_small` à partir de `cars.json` (remplace l'ancien) | le grand dataset |
+| `python main.py train` | **Entraîne** le modèle, calcule les seuils, écrit `spotit_mobilenet.keras`, `classes.json`, `recognition.json` | `dataset_small` |
+| `python main.py evaluate` | Évalue le modèle sauvegardé (métriques, erreurs, grosses confusions) dans `models/evaluation/` | `dataset_small` |
+| `python main.py predict` | Tente l'image `images/f12.jpg` | — |
+| `python main.py` | Menu interactif avec les mêmes choix | — |
 
-Pour évaluer le modèle sauvegardé sans le réentraîner (génère matrice de confusion, erreurs, métriques dans `models/evaluation/`) :
-```powershell
-.venv\Scripts\python.exe src\evaluate.py
-```
-Le grand dataset n'est **pas** dans le dépôt (trop lourd) : télécharge-le sur Kaggle (lien ci-dessus) et place-le dans `ai/dataset/` (dossiers `train/` et `test/`).
+**Ajouter une voiture** : ajoute une fiche dans `ai/models/cars.json` (`id`, `brand`, `model`, `from_year`, `to_year` (`null` si encore produite), et la liste des dossiers du dataset dans `sources`), puis refais `prepare`, `train`, `evaluate`.
 
 ### Sécurité
-- Les mots de passe sont **hachés** (bcrypt) ; les connexions utilisent un **token JWT** signé par `JWT_SECRET`.
+- Les mots de passe sont **hachés** (bcrypt, 8 caractères minimum). Les connexions utilisent un **token JWT** signé par `JWT_SECRET` ; sans cette variable, une clé aléatoire est créée à chaque démarrage.
+- Les données reçues sont vérifiées (types, format de l'e-mail, taille et type des images) avant d'être utilisées, ce qui évite les injections dans les requêtes MongoDB.
+- Les connexions et les analyses de photos sont **limitées en nombre** (protection contre les essais en boucle).
+- Le backend ajoute des en-têtes de sécurité (`helmet`) et accepte toutes les origines par défaut ; `CORS_ORIGIN` permet de les restreindre.
 - Chaque utilisateur ne voit et ne supprime **que ses propres voitures**.
-- Le fichier `backend/.env` ne doit **jamais** être commité (il est dans `.gitignore`).
-- ⚠️ Points à durcir avant une vraie mise en production : la route publique `/api/predict` n'a pas de limitation de débit, les requêtes sont acceptées de toute origine (CORS ouvert), et le backend/IA ne tournent qu'en local (pas de HTTPS).
+- Les conteneurs du backend et de l'IA ne tournent pas en administrateur.
+- Le fichier `.env` ne doit **jamais** être commité (il est dans `.gitignore`).
+- Pour une vraie mise en production il resterait à ajouter : HTTPS, une limitation de débit derrière un proxy, la suppression du port MongoDB exposé et la rotation des clés.
 
 ---
 
 ## 12. Travailler sur le projet (Git, bonnes pratiques)
 
 - **Branches** : `main` (version de référence), `backend-mongodb` (application + bibliothèque en ligne), `test_mobilenet_python_thomas` (travail sur le modèle), `flutter_dev` (ancienne version de l'application), `ia-integration` (fusion application + IA).
-- **Récupérer les dernières modifications** : `git pull`, puis, si besoin, relance `npm install`, `ai\.venv\Scripts\python.exe -m pip install -r requirements.txt` et `flutter pub get`.
+- **Récupérer les dernières modifications** : `git pull`, puis, si besoin, relance `npm install` dans `backend`, `ai\.venv\Scripts\python.exe -m pip install -r ai\requirements.txt` et `flutter pub get`.
 - **Avant chaque `git add`/commit**, lance `git status` et vérifie :
-  - `backend/.env` n'apparaît pas ;
+  - `.env` n'apparaît pas ;
   - les fichiers régénérés par Flutter (`windows/`, `linux/`, `macos/`, `analysis_options.yaml`) ne sont pas ajoutés.
 - **Messages de commit** : courts, en anglais, qui disent ce qui a été fait (ex. `Add car detection frame and UI updates`).
 - **Avec Docker** : après une modification du code, relance `docker compose up --build` pour reconstruire les conteneurs.
-- **Code propre** : pas de code mort ni de copier-coller ; les parties communes sont regroupées (widgets partagés dans `spot_it_widgets.dart`, vérification d'image partagée dans `imageUpload.js`).
+- **Code propre** : pas de code mort ni de copier-coller ; les parties communes sont regroupées (widgets partagés dans `widgets/spot_it_widgets.dart`, vérification d'image dans `backend/middleware/uploadedImage.js`, chemins de l'IA dans `ai/src/config.py`).
 
 ---
 
@@ -816,8 +849,8 @@ Le grand dataset n'est **pas** dans le dépôt (trop lourd) : télécharge-le su
 | Modèle pré-entraîné de reconnaissance (MobileNet, SSD…) | ✅ MobileNetV3 + SSD MobileNet |
 | Cadres autour des objets détectés et noms | ✅ cadre rouge + marque et modèle |
 | Pourcentage de confiance | ✅ jauge colorée |
-| Base de données de catégories | 🟡 6 voitures (liste dans `classes.json`) |
-| Ajouter de nouvelles catégories | 🟡 possible en réentraînant (menu `main.py`), pas encore depuis l'application |
+| Base de données de catégories | 🟡 68 voitures (fiches dans `cars.json`) |
+| Ajouter de nouvelles catégories | 🟡 possible en réentraînant (fiche dans `cars.json` puis `main.py`), pas encore depuis l'application |
 | Apprentissage personnalisé avec les images de l'utilisateur | ❌ à faire |
 | Interface intuitive + historique des reconnaissances | ✅ bibliothèque personnelle avec fiches |
 | Sauvegarder les résultats | ✅ photo, résultat et cadre enregistrés |
@@ -831,22 +864,22 @@ Le grand dataset n'est **pas** dans le dépôt (trop lourd) : télécharge-le su
 ## 14. Limites connues et suite
 
 **Limites actuelles**
-- L'IA ne connaît que **6 voitures** et répond **toujours** l'une d'elles, même pour une autre voiture : une Mazda MX-5 est prise pour une Fiat 500 Abarth à 79 %. Il faut ajouter un **seuil de confiance** (« voiture non reconnue »).
+- L'IA ne connaît que **68 voitures**. Les voitures hors liste sont refusées « non reconnue » dans la plupart des cas, mais pas tous : environ 14,7 % des voitures hors liste sont prises pour une voiture connue (une BMW Z4 est prise pour une Peugeot 308).
+- Elle hésite entre voitures qui se ressemblent (Peugeot 3008 et 5008, 206 et 307…) : 67,2 % de bonnes réponses en 1ʳᵉ proposition, 53,5 % des voitures trouvées avec les seuils actuels. Plusieurs voitures n'ont que 50 à 100 photos d'entraînement.
 - La confiance paraît parfois basse même sur une bonne réponse (voir [section 2](#la--confiance--en-clair)).
 - Le détecteur rate certaines photos (intérieur, très rapproché) : alors pas de cadre.
 - La connexion n'est gardée qu'**en mémoire** : on doit se reconnecter à chaque redémarrage de l'application.
 - Le bouton « Ajouter » relance l'IA côté serveur (analyse en double volontaire : on ne fait pas confiance à un résultat envoyé par l'application).
-- Pas de tests automatiques dans le dépôt.
+- Les tests automatiques couvrent les fiches, la préparation du dataset, les seuils, le serveur IA, le backend et la lecture des réponses dans l'application ; il n'y a pas encore de test des écrans.
 - Le backend et l'IA ne tournent qu'en local.
 
 **Pistes pour la suite**
-1. Seuil de confiance et message « voiture non reconnue ».
+1. Plus de photos par voiture et plus de voitures hors liste dans « autre » pour mieux refuser ; entraîner sur une carte graphique (beaucoup plus rapide).
 2. Raretés et points par voiture (« Ferrari = légendaire »), fiche enrichie, filtres, score total.
 3. Garder la connexion sur l'appareil (`shared_preferences`).
-4. Plus de voitures dans le modèle, et **apprentissage personnalisé**.
-5. Piste pour la confiance : à l'entraînement les images sont réduites avec la méthode « bilinear », à la prédiction avec « nearest » (à uniformiser et à tester).
-6. Faire tourner l'IA **sur le téléphone** (TensorFlow Lite) et tester sur Android.
-7. Héberger le backend et l'IA en ligne.
+4. **Apprentissage personnalisé** : garder les photos « non reconnues » (avec accord de l'utilisateur), les faire valider par l'équipe, puis réentraîner régulièrement.
+5. Faire tourner l'IA **sur le téléphone** (TensorFlow Lite) et tester sur Android.
+6. Héberger le backend et l'IA en ligne.
 
 ---
 
@@ -877,5 +910,5 @@ Le grand dataset n'est **pas** dans le dépôt (trop lourd) : télécharge-le su
 - **Équipe** : Matteo LAURI, Evan STILLE, Thomas FREY, Victorien DENOYELLE. Enseignante référente : Lydia Boudjeloud-Assala.
 - **Images d'entraînement** : sous-ensemble du dataset Kaggle *Car Model Variants and Images* (les images appartiennent à leurs auteurs ; usage pédagogique).
 - **Détecteur d'objets** : modèle *SSD MobileNet v1* quantifié, entraîné sur COCO, publié par TensorFlow (licence Apache 2.0).
-- **Classifieur** : MobileNetV3Small (Keras), poids pré-entraînés ImageNet.
+- **Classifieur** : MobileNetV3Large (Keras), poids pré-entraînés ImageNet.
 - Projet pédagogique, réalisé pour la SAE 5.01. Utilisation de l'IA dans le développement documentée dans les rapports hebdomadaires de l'équipe.
