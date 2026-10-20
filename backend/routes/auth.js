@@ -2,26 +2,59 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const config = require('../config');
+const { HttpError } = require('../errors');
+
 const router = express.Router();
 
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const MIN_PASSWORD_LENGTH = 8;
+// bcrypt ignore tout ce qui dépasse 72 octets
+const MAX_PASSWORD_BYTES = 72;
+
+const cleanEmail = (value) => (typeof value === 'string' ? value.trim().toLowerCase() : '');
+
 router.post('/register', async (req, res) => {
+  const { name, email, password } = req.body ?? {};
+  const cleanName = typeof name === 'string' ? name.trim() : '';
+  const mail = cleanEmail(email);
+
+  if (!cleanName || cleanName.length > 60) throw new HttpError(400, 'Nom invalide');
+  if (!EMAIL_PATTERN.test(mail)) throw new HttpError(400, 'Email invalide');
+  if (
+    typeof password !== 'string' ||
+    password.length < MIN_PASSWORD_LENGTH ||
+    Buffer.byteLength(password) > MAX_PASSWORD_BYTES
+  ) {
+    throw new HttpError(400, `Mot de passe : ${MIN_PASSWORD_LENGTH} caractères minimum`);
+  }
+
   try {
-    const { name, email, password } = req.body;
-    const hashed = await bcrypt.hash(password, 10);
-    const user = await User.create({ name, email, password: hashed });
+    const user = await User.create({
+      name: cleanName,
+      email: mail,
+      password: await bcrypt.hash(password, 10),
+    });
     res.status(201).json({ id: user._id, name: user.name, email: user.email });
   } catch (err) {
-    res.status(400).json({ error: 'Email déjà utilisé ou données invalides' });
+    if (err.code === 11000) throw new HttpError(409, 'Email déjà utilisé');
+    throw err;
   }
 });
 
 router.post('/login', async (req, res) => {
-  const { email, password } = req.body;
-  const user = await User.findOne({ email });
-  if (!user || !(await bcrypt.compare(password, user.password))) {
-    return res.status(401).json({ error: 'Email ou mot de passe incorrect' });
+  const { email, password } = req.body ?? {};
+  const mail = cleanEmail(email);
+  if (!mail || typeof password !== 'string') {
+    throw new HttpError(400, 'Email et mot de passe requis');
   }
-  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
+
+  const user = await User.findOne({ email: mail });
+  if (!user || !(await bcrypt.compare(password, user.password))) {
+    throw new HttpError(401, 'Email ou mot de passe incorrect');
+  }
+
+  const token = jwt.sign({ id: user._id }, config.jwtSecret, { expiresIn: '7d' });
   res.json({ token, name: user.name, email: user.email });
 });
 

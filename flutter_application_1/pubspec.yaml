@@ -1,5 +1,5 @@
 name: spot_it
-description: Flutter implementation of the Spot'It Figma home screen.
+description: "Application Spot'It pour photographier une voiture et la reconnaître."
 publish_to: "none"
 version: 1.0.0+1
 

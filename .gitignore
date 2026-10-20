@@ -1,12 +1,7 @@
-# Dépendances Node.js (backend)
 node_modules/
-package-lock.json
-
-# Variables d'environnement (secrets - jamais sur Git)
 .env
-backend/.env
 
-# Flutter / Dart
+# Flutter
 **/build/
 **/.dart_tool/
 **/.flutter-plugins
@@ -14,19 +9,21 @@ backend/.env
 **/.pub-cache/
 **/.pub/
 
-# Environnement virtuel Python
-ai/.venv/
-
-# Datasets (beaucoup trop volumineux pour Git)
-ai/dataset/
-ai/dataset_small/
-
-# Cache Python
+# Python
+.venv/
 __pycache__/
 *.pyc
-*.pyo
 
-# IDE / OS
+# Images d'entrainement et resultats d'evaluation regeneres
+ai/dataset/
+ai/dataset_small/
+ai/models/evaluation/errors.csv
+ai/models/evaluation/error_examples.png
+ai/models/evaluation/confusion_matrix.png
+archive/
+archive.zip
+
+# Editeurs et systeme
 .vscode/
 .idea/
 .DS_Store

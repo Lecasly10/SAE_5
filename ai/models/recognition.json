@@ -1,0 +1,11 @@
+{
+  "min_confidence": 38.0,
+  "min_margin": 24.0,
+  "calibration": {
+    "target_precision": 0.9,
+    "images": 1170,
+    "accepted": 636,
+    "precision": 0.9009,
+    "found": 0.5271
+  }
+}
