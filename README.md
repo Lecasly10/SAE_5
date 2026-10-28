@@ -52,9 +52,7 @@ Installer Docker Desktop  →  télécharger le projet  →  docker compose up -
 ### Étape B — Télécharger le projet
 
 **Sans Git (le plus simple)** : clique sur ce lien pour télécharger le projet, puis fais un clic droit sur le fichier → **Extraire tout…** :
-https://github.com/Lecasly10/SAE_5/archive/refs/heads/ia-integration.zip
-
-*(Quand la version sera sur `main`, le lien sera `https://github.com/Lecasly10/SAE_5/archive/refs/heads/main.zip`.)*
+https://github.com/Lecasly10/SAE_5/archive/refs/heads/main.zip
 
 **Avec Git** :
 ```powershell
@@ -63,7 +61,6 @@ git clone https://github.com/Lecasly10/SAE_5.git
 ```powershell
 cd SAE_5
 ```
-> Si la version Docker n'est pas encore sur `main` : `git switch ia-integration`
 
 Ensuite, **ouvre PowerShell dans le dossier du projet** : dans l'Explorateur de fichiers, ouvre le dossier (celui où se trouve `docker-compose.yml`), fais un clic droit dans un espace vide → **« Ouvrir dans le Terminal »**.
 
@@ -356,8 +353,6 @@ git clone https://github.com/Lecasly10/SAE_5.git
 ```powershell
 cd SAE_5
 ```
-
-> Si cette version du projet n'est pas encore sur la branche `main`, passe sur la branche d'intégration : `git switch ia-integration`
 
 Toutes les commandes suivantes se lancent **depuis ce dossier `SAE_5`** (appelé « racine du projet »), sauf indication contraire.
 
@@ -673,6 +668,7 @@ Les erreurs ci-dessous sont soit **rencontrées pendant le projet**, soit **trè
 ```
 SAE_5/
 ├── README.md                    ← ce fichier
+├── rapports/                    ← rapports de chaque semaine (PDF)
 ├── docker-compose.yml           ← lance tout avec Docker (une commande)
 ├── .env.example                 ← modèle du fichier .env (réglages facultatifs)
 ├── .gitignore
@@ -893,7 +889,7 @@ docker run --rm -v "${PWD}/ai:/app" -w /app spotit-ai python main.py evaluate
 
 ## 12. Travailler sur le projet (Git, bonnes pratiques)
 
-- **Branches** : `main` (version de référence), `backend-mongodb` (application + bibliothèque en ligne), `test_mobilenet_python_thomas` (travail sur le modèle), `flutter_dev` (ancienne version de l'application), `ia-integration` (fusion application + IA).
+- **Branches** : `main` (version de référence, avec l'application, l'IA et les rapports), `backend-mongodb` (application + bibliothèque en ligne), `test_mobilenet_python_thomas` (travail sur le modèle), `flutter_dev` (ancienne version de l'application), `ia-integration` (fusion application + IA).
 - **Récupérer les dernières modifications** : `git pull`, puis, si besoin, relance `npm install` dans `backend`, `ai\.venv\Scripts\python.exe -m pip install -r ai\requirements.txt` et `flutter pub get`.
 - **Avant chaque `git add`/commit**, lance `git status` et vérifie :
   - `.env` n'apparaît pas ;
