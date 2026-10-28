@@ -1,5 +1,6 @@
 import unittest
 
+from src.catalog import CarCatalog
 from src.config import AI_DIR
 
 # Charge le vrai modèle : ce test est un peu plus long que les autres
@@ -22,10 +23,16 @@ class ServerTest(unittest.TestCase):
     def test_lists_every_car_sorted_by_brand(self):
         cars = self.client.get("/cars").get_json()
 
-        self.assertEqual(len(cars), 1002)
+        self.assertEqual(len(cars), len(list(CarCatalog.load())))
         self.assertEqual(cars, sorted(cars, key=lambda car: (car["brand"], car["model"], car["from_year"])))
-        self.assertIn({"id": "ferrari_f12_berlinetta_2012_2015", "brand": "Ferrari", "model": "F12 Berlinetta",
+        self.assertIn({"id": "ferrari_f12_berlinetta", "brand": "Ferrari", "model": "F12 Berlinetta",
                        "from_year": 2012, "to_year": 2015}, cars)
+
+    def test_suggestions_are_distinct_cars(self):
+        suggestions = post_image(self.client, "z4.jpg").get_json()["suggestions"]
+        ids = [car["id"] for car in suggestions]
+
+        self.assertEqual(len(ids), len(set(ids)))
 
     def test_known_car_is_recognized(self):
         answer = post_image(self.client, "f12.jpg").get_json()

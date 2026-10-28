@@ -1,4 +1,5 @@
 import json
+from collections import defaultdict
 from dataclasses import dataclass
 
 from src.config import CARS_PATH
@@ -12,6 +13,8 @@ class Car:
     from_year: int
     to_year: int | None
     sources: tuple[str, ...]
+    # Anciens identifiants de cette voiture (une par génération auparavant)
+    aliases: tuple[str, ...] = ()
 
     def to_dict(self):
         return {
@@ -35,11 +38,12 @@ class CarCatalog:
     def __init__(self, cars):
         self.cars = list(cars)
 
-        ids = [car.id for car in self.cars]
+        ids = [name for car in self.cars for name in (car.id, *car.aliases)]
         if len(set(ids)) != len(ids):
             raise ValueError("Les identifiants de cars.json doivent être uniques.")
 
-        self.by_id = {car.id: car for car in self.cars}
+        # Un ancien identifiant mène à la voiture qui l'a remplacé
+        self.by_id = {name: car for car in self.cars for name in (car.id, *car.aliases)}
 
     @classmethod
     def load(cls, path=CARS_PATH):
@@ -51,6 +55,7 @@ class CarCatalog:
                 from_year=entry["from_year"],
                 to_year=entry["to_year"],
                 sources=tuple(entry["sources"]),
+                aliases=tuple(entry.get("aliases", ())),
             )
             for entry in load_entries(path)
         )
@@ -63,3 +68,11 @@ class CarCatalog:
 
     def get(self, car_id):
         return self.by_id[car_id]
+
+    def merge(self, ranked):
+        """Additionne les confiances des classes qui sont la même voiture (une
+        par génération dans un ancien modèle). « autre » reste à part."""
+        totals = defaultdict(float)
+        for label, confidence in ranked:
+            totals[self.by_id[label].id if label in self.by_id else label] += confidence
+        return sorted(totals.items(), key=lambda item: item[1], reverse=True)

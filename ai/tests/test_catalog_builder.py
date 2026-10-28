@@ -36,19 +36,20 @@ class CatalogBuilderTest(unittest.TestCase):
             writer.writerows(self.rows)
         return build_catalog(path, self.root / "train", min_images, known)
 
-    def test_merges_body_styles_of_one_generation(self):
+    def test_merges_every_generation_and_body_style_of_a_model(self):
         self.add("RENAULT", "RENAULT Clio 5 Doors", range(2012, 2017), "RENAULT_Clio_5_Doors", "20122016")
         self.add("RENAULT", "RENAULT Clio Estate", range(2013, 2017), "RENAULT_Clio_Estate", "20132016")
-        self.add("RENAULT", "RENAULT Clio RS", range(2013, 2024), "RENAULT_Clio_RS", "2013Present")
+        self.add("RENAULT", "RENAULT Clio RS", range(2005, 2013), "RENAULT_Clio_RS", "20052012")
+        self.add("RENAULT", "RENAULT Clio", range(2019, 2024), "RENAULT_Clio", "2019Present")
 
         [clio] = self.build()
 
-        self.assertEqual(clio["id"], "renault_clio_2012_2016")
+        self.assertEqual(clio["id"], "renault_clio")
         self.assertEqual((clio["brand"], clio["model"]), ("Renault", "Clio"))
-        self.assertEqual((clio["from_year"], clio["to_year"]), (2012, 2016))
-        self.assertEqual(len(clio["sources"]), 3)
+        self.assertEqual((clio["from_year"], clio["to_year"]), (2005, None))
+        self.assertEqual(len(clio["sources"]), 4)
 
-    def test_keeps_generations_and_models_apart(self):
+    def test_keeps_different_models_apart(self):
         self.add("PEUGEOT", "PEUGEOT 206", range(1998, 2010), "PEUGEOT_206", "19982009")
         self.add("PEUGEOT", "PEUGEOT 207", range(2006, 2013), "PEUGEOT_207", "20062012")
         self.add("PEUGEOT", "PEUGEOT 208", range(2012, 2020), "PEUGEOT_208", "20122019")
@@ -56,34 +57,34 @@ class CatalogBuilderTest(unittest.TestCase):
 
         ids = [car["id"] for car in self.build()]
 
-        self.assertEqual(ids, [
-            "peugeot_206_1998_2009",
-            "peugeot_207_2006_2012",
-            "peugeot_208_2012_2019",
-            "peugeot_208_2019_present",
-        ])
+        self.assertEqual(ids, ["peugeot_206", "peugeot_207", "peugeot_208"])
 
-    def test_merges_dataset_duplicates_of_one_generation(self):
-        self.add("BMW", "BMW 3 Series E90", range(2008, 2012), "BMW_3_Series_E90", "20082011")
-        self.add("BMW", "BMW 3 Series Touring E91", range(2008, 2013), "BMW_3_Series_Touring_E91", "20082012")
+    def test_generation_codes_and_versions_are_the_same_car(self):
+        self.add("BMW", "BMW 3 Series Touring E46", range(2001, 2006), "BMW_3_Series_Touring_E46", "20012005")
+        self.add("BMW", "BMW 3 Series E90", range(2005, 2009), "BMW_3_Series_E90", "20052008")
+        self.add("BMW", "BMW M4 Competition Convertible M xDrive", range(2021, 2024),
+                 "BMW_M4_Competition_Convertible_M_xDrive", "2021Present")
+        self.add("BMW", "BMW M4 F83", range(2014, 2021), "BMW_M4_F83", "20142020")
+        self.add("PORSCHE", "PORSCHE 911 Carrera 4S 991", range(2012, 2021), "PORSCHE_911_Carrera_4S_991", "20122020")
+        self.add("PORSCHE", "PORSCHE 911 Turbo S 997", range(2009, 2013), "PORSCHE_911_Turbo_S_997", "20092012")
+        self.add("VOLKSWAGEN", "VOLKSWAGEN Golf VII GTE", range(2014, 2021), "VOLKSWAGEN_Golf_VII_GTE", "20142020")
+        self.add("VOLKSWAGEN", "VOLKSWAGEN Golf VI", range(2008, 2013), "VOLKSWAGEN_Golf_VI", "20082012")
+        self.add("AUDI", "AUDI RS 3 Sportback", range(2015, 2018), "AUDI_RS_3_Sportback", "20152017")
+        self.add("AUDI", "AUDI S3", range(2013, 2017), "AUDI_S3", "20132016")
+        self.add("AUDI", "AUDI A3", range(2012, 2017), "AUDI_A3", "20122016")
         self.add("MERCEDESBENZ", "MERCEDES BENZ GLK", range(2008, 2013), "MERCEDES_BENZ_GLK", "20082012", images=20)
         self.add("MERCEDESBENZ", "MERCEDES BENZ GLK-Klasse X204", range(2009, 2013), "MERCEDES_BENZ_GLKKlasse_X204", "20092012")
-        self.add("VOLKSWAGEN", "VOLKSWAGEN Passat Variant", range(2014, 2020), "VOLKSWAGEN_Passat_Variant", "20142019")
-        self.add("VOLKSWAGEN", "VOLKSWAGEN Passat", range(2014, 2020), "VOLKSWAGEN_Passat", "20142019")
 
         cars = {car["id"]: len(car["sources"]) for car in self.build()}
 
         self.assertEqual(cars, {
-            "bmw_3_series_e90_2008_2012": 2,
-            "mercedes_benz_glk_2008_2012": 2,
-            "volkswagen_passat_2014_2019": 2,
+            "audi_a3": 3,
+            "bmw_3_series": 2,
+            "bmw_m4": 2,
+            "mercedes_benz_glk": 2,
+            "porsche_911": 2,
+            "volkswagen_golf": 2,
         })
-
-    def test_keeps_generations_with_different_chassis_apart(self):
-        self.add("BMW", "BMW 3 Series Touring E46", range(2001, 2006), "BMW_3_Series_Touring_E46", "20012005")
-        self.add("BMW", "BMW 3 Series E90", range(2005, 2009), "BMW_3_Series_E90", "20052008")
-
-        self.assertEqual(len(self.build()), 2)
 
     def test_keeps_models_that_only_share_a_word(self):
         self.add("CITROEN", "CITROEN Grand C3 Picasso", range(2009, 2014), "CITROEN_Grand_C3_Picasso", "20092013")
@@ -113,18 +114,32 @@ class CatalogBuilderTest(unittest.TestCase):
 
         self.assertEqual(self.build(min_images=1), [])
 
-    def test_keeps_known_cars_and_their_folders(self):
+    def test_old_cars_become_aliases_of_their_model(self):
         self.add("PEUGEOT", "PEUGEOT 206", range(1998, 2010), "PEUGEOT_206", "19982009")
-        self.add("PEUGEOT", "PEUGEOT 308", range(2008, 2014), "PEUGEOT_308", "20082013")
-        known = {
-            "id": "peugeot_206_1998_2012", "brand": "Peugeot", "model": "206",
-            "from_year": 1998, "to_year": 2012, "sources": ["PEUGEOT_206_19982009"],
-        }
+        self.add("PEUGEOT", "PEUGEOT 206 SW", range(2001, 2008), "PEUGEOT_206_SW", "20012007")
+        known = [
+            {"id": "peugeot_206_1998_2009", "brand": "Peugeot", "model": "206",
+             "from_year": 1998, "to_year": 2009, "sources": ["PEUGEOT_206_19982009"]},
+            {"id": "peugeot_206", "brand": "Peugeot", "model": "206", "from_year": 1998,
+             "to_year": 2009, "sources": ["PEUGEOT_206_19982009"], "aliases": ["peugeot_206_old"]},
+        ]
 
-        cars = self.build(known=[known])
+        [car] = self.build(known=known)
 
-        self.assertEqual([car["id"] for car in cars], ["peugeot_206_1998_2012", "peugeot_308_2008_2013"])
-        self.assertIs(cars[0], known)
+        self.assertEqual(car["id"], "peugeot_206")
+        self.assertEqual(car["aliases"], ["peugeot_206_1998_2009", "peugeot_206_old"])
+
+    def test_known_folders_without_years_are_kept(self):
+        folder = self.root / "train" / "CITROEN_2CV"
+        folder.mkdir(parents=True)
+        for index in range(10):
+            (folder / f"{index}.jpg").write_bytes(b"x")
+        known = [{"id": "citroen_2cv_1949_1990", "brand": "Citroën", "model": "2CV",
+                  "from_year": 1949, "to_year": 1990, "sources": ["CITROEN_2CV"]}]
+
+        [car] = self.build(known=known)
+
+        self.assertEqual((car["id"], car["sources"]), ("citro_n_2cv", ["CITROEN_2CV"]))
 
     def test_brand_names_are_readable(self):
         self.assertEqual(brand_name("RENAULT"), "Renault")
@@ -136,6 +151,9 @@ class CatalogBuilderTest(unittest.TestCase):
         self.assertEqual(base_model("ALFAROMEO", "ALFA ROMEO Giulia Sedan"), "Giulia")
         self.assertEqual(base_model("BMW", "BMW 3 Series Touring"), "3 Series")
         self.assertEqual(base_model("RENAULT", "RENAULT Megane RS 5 Doors"), "Megane")
+        self.assertEqual(base_model("PORSCHE", "PORSCHE 911 Carrera 4 991"), "911")
+        self.assertEqual(base_model("BMW", "BMW X5 M"), "X5")
+        self.assertEqual(base_model("PEUGEOT", "PEUGEOT 3008"), "3008")
 
 
 if __name__ == "__main__":

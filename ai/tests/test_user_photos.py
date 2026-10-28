@@ -59,7 +59,7 @@ class CollectUserPhotosTest(unittest.TestCase):
         self.tmp = tempfile.TemporaryDirectory()
         self.addCleanup(self.tmp.cleanup)
         self.destination = Path(self.tmp.name)
-        self.catalog = CarCatalog([Car("clio", "Renault", "Clio", 2019, None, ("x",))])
+        self.catalog = CarCatalog([Car("clio", "Renault", "Clio", 2019, None, ("x",), ("clio_2019",))])
 
     def collect(self, cars=(), corrections=(), consenting=(ALICE,), box=None):
         db = FakeDb(list(cars), list(corrections), consenting)
@@ -97,6 +97,11 @@ class CollectUserPhotosTest(unittest.TestCase):
 
         self.assertEqual(added, 0)
         self.assertEqual(self.saved(), ["old.jpg"])
+
+    def test_photos_saved_under_an_old_id_go_to_the_current_car(self):
+        self.collect(cars=[photo("a", car_id="clio_2019")])
+
+        self.assertTrue((self.destination / "clio" / "a.jpg").exists())
 
     def test_forgets_photos_when_consent_is_withdrawn(self):
         self.collect(cars=[photo("a")])

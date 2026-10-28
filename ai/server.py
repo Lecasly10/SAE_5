@@ -55,7 +55,7 @@ def predict():
         return jsonify(error="Image illisible"), 422
 
     box = detector.detect(image)
-    ranked = predictor.predict(crop_to_box(image, box) if box else image)
+    ranked = catalog.merge(predictor.predict(crop_to_box(image, box) if box else image))
 
     decision = decide(ranked, thresholds, has_box=box is not None)
 

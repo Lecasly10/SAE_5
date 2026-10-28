@@ -26,21 +26,30 @@ BRAND_NAMES = {
     "TATAMOTORS": "Tata",
 }
 
-# Carrosseries et finitions d'un même modèle : 5 portes, break, RS...
+# Carrosseries, finitions et versions d'un même modèle : 5 portes, break, RS,
+# xDrive, Carrera 4S, Turbo S, GTS...
 VARIANT_WORDS = re.compile(
     r"\b(\d\s*doors?|estate|sedan|saloon|coupe|cabrio|cabriolet|convertible|wagon|"
     r"hatch|hatchback|sw|tourer|touring|sportback|break|lwb|swb|gt|gti|rs|st|4x4|"
     r"limousine|van|variant|avant|tmodell|kombi|sportwagon|sports|shooting|brake|"
     r"spider|spyder|roadster|targa|hardtop|gran|lci|facelift|single|double|crew|"
-    r"extended|cab)\b",
+    r"extended|cab|competition|xdrive|sdrive|quattro|4matic|4motion|awd|volante|"
+    r"carrera(?:\s+4s?|\s+s)?|turbo(?:\s+s)?|4s|gt2|gt3|gts|gtc|gtd|gte|alltrack|"
+    r"speed|supersports|shelby|stingray|amg|cs|csl|diesel|e-?hybrid|type\s*-?r|si|us|"
+    r"tdi|allroad|v8|v10|v12|performance|rwd)\b",
     re.IGNORECASE,
 )
 YEARS_FOLDER = re.compile(r"\d{8}|\d{4}Present")
-# Code de châssis en fin de nom : "3 Series E90" et "3 Series E91" sont la même voiture
-CHASSIS_CODE = re.compile(r"\s+[A-Z]{1,2}\d{1,3}[A-Z]?$")
-
-# Deux variantes sorties à 2 ans d'écart au plus font partie de la même génération
-GENERATION_SPAN = 2
+# Codes de génération et lettres de version : "3 Series E90" et "3 Series F30",
+# "911 997" et "911 991", "Golf VI" et "Golf VII", "X5" et "X5 M" sont la même voiture
+GENERATION_CODES = (
+    re.compile(r"\s+[A-Z]{1,2}\s?\d{1,3}[A-Z]?$"),
+    re.compile(r"(?<=\s)9\d{2,3}\b"),
+    re.compile(r"\b(?:II|III|IV|VI|VII|VIII|IX)\b"),
+    re.compile(r"(?<=\w)\s+[MSL]$"),
+)
+# Versions sportives d'Audi : "RS 3" et "S3" sont des A3
+AUDI_SPORT = re.compile(r"\bR?S\s*(\d)\b")
 
 
 @dataclass(frozen=True)
@@ -61,20 +70,29 @@ def brand_name(raw):
     return raw.capitalize()
 
 
+def clean_model(model):
+    """Nom commun à toutes les versions et générations d'un modèle :
+    "911 Carrera 4S 991" donne "911", "3 Series Touring E91" donne "3 Series"."""
+    text = VARIANT_WORDS.sub(" ", model)
+    for code in GENERATION_CODES:
+        text = code.sub(" ", " ".join(text.split()))
+    return " ".join(text.split()) or model.strip()
+
+
 def base_model(raw_brand, raw_model):
-    """Nom du modèle sans la marque ni la carrosserie : "ALFA ROMEO Giulia
-    Sedan" donne "Giulia"."""
+    """Nom du modèle sans la marque, la carrosserie ni la génération :
+    "ALFA ROMEO Giulia Sedan" donne "Giulia"."""
     brand = r"[\s-]*".join(re.escape(letter) for letter in raw_brand)
     model = re.sub(rf"^(?:{brand}\s*)+", "", raw_model, flags=re.IGNORECASE)
-    base = " ".join(VARIANT_WORDS.sub(" ", model).split())
-    return base or model.strip()
+    if brand_name(raw_brand) == "Audi":
+        model = AUDI_SPORT.sub(r"A\1", model)
+    return clean_model(model)
 
 
 def model_key(model):
     """Clé qui rassemble les noms d'un même modèle : "GLK-Klasse X204" et "GLK",
     "C-Class" et "CClass"."""
-    text = CHASSIS_CODE.sub("", model)
-    text = re.sub(r"(klasse|class)\b", "", text, flags=re.IGNORECASE)
+    text = re.sub(r"(klasse|class)\b", "", clean_model(model), flags=re.IGNORECASE)
     return re.sub(r"[^a-z0-9]", "", text.lower()) or model.lower()
 
 
@@ -107,56 +125,86 @@ def read_variants(csv_path, train_dir):
     return list(variants.values())
 
 
-def group_generations(variants):
-    models = defaultdict(list)
-    for variant in variants:
-        models[(variant.brand, model_key(variant.model))].append(variant)
+def group_models(variants, known):
+    """Regroupe les dossiers d'une même marque et d'un même modèle, toutes
+    générations confondues. Les dossiers d'une voiture déjà connue restent
+    ensemble."""
+    parent = {}
 
-    generations = []
-    for same_model in models.values():
-        current = []
-        for variant in sorted(same_model, key=lambda v: (v.from_year, v.folder)):
-            if current and variant.from_year - current[0].from_year > GENERATION_SPAN:
-                generations.append(current)
-                current = []
-            current.append(variant)
-        generations.append(current)
+    def root(item):
+        parent.setdefault(item, item)
+        while parent[item] != item:
+            parent[item] = parent[parent[item]]
+            item = parent[item]
+        return item
 
-    return generations
+    def join(first, second):
+        parent[root(first)] = root(second)
+
+    for variant in variants.values():
+        join(variant.folder, (variant.brand, model_key(variant.model)))
+    for car in known:
+        for name in car["sources"]:
+            join(name, (car["brand"], model_key(car["model"])))
+
+    groups = defaultdict(list)
+    for folder, variant in variants.items():
+        groups[root(folder)].append(variant)
+    return list(groups.values())
 
 
 def slug(text):
     return re.sub(r"[^a-z0-9]+", "_", text.lower()).strip("_")
 
 
-def describe(generation):
-    first = generation[0]
-    model = max(generation, key=lambda v: v.images).model
-    ended = [v.to_year for v in generation if v.to_year is not None]
-    to_year = max(ended) if ended else None
+def describe(group):
+    biggest = max(group, key=lambda v: v.images)
+    model = clean_model(biggest.model)
+    ended = [v.to_year for v in group]
 
     return {
-        "id": slug(f"{first.brand} {model} {first.from_year} {to_year or 'present'}"),
-        "brand": first.brand,
+        "id": slug(f"{biggest.brand} {model}"),
+        "brand": biggest.brand,
         "model": model,
-        "from_year": first.from_year,
-        "to_year": to_year,
-        "sources": sorted(v.folder for v in generation),
+        "from_year": min(v.from_year for v in group),
+        "to_year": None if None in ended else max(ended),
+        "sources": sorted(v.folder for v in group),
+    }
+
+
+def known_variants(known, train_dir):
+    """Dossiers des voitures déjà connues, dont ceux absents du CSV."""
+    return {
+        name: Variant(name, car["brand"], car["model"], car["from_year"], car["to_year"],
+                      len(list_images(Path(train_dir) / name)))
+        for car in known
+        for name in car["sources"]
+        if (Path(train_dir) / name).is_dir()
     }
 
 
 def build_catalog(csv_path, train_dir, min_images, known=()):
-    """Ajoute aux voitures déjà connues chaque génération du dataset qui a
-    assez d'images et dont aucun dossier n'est déjà utilisé."""
-    cars = list(known)
-    used = {name for car in cars for name in car["sources"]}
+    """Une voiture par marque et modèle, quelle que soit la génération, si elle
+    a assez d'images. Les identifiants des voitures déjà connues qu'elle
+    remplace sont gardés dans « aliases », pour retrouver les anciennes photos."""
+    variants = known_variants(known, train_dir)
+    variants.update((v.folder, v) for v in read_variants(csv_path, train_dir))
+    cars = {}
 
-    for generation in group_generations(read_variants(csv_path, train_dir)):
-        enough = sum(v.images for v in generation) >= min_images
-        if enough and not used & {v.folder for v in generation}:
-            cars.append(describe(generation))
+    for group in group_models(variants, known):
+        if sum(v.images for v in group) < min_images:
+            continue
+        car = describe(group)
+        if car["id"] in cars:
+            car["id"] = f"{car['id']}_{car['from_year']}"
+        folders = set(car["sources"])
+        car["aliases"] = sorted(
+            {old for known_car in known if folders & set(known_car["sources"])
+             for old in (known_car["id"], *known_car.get("aliases", ()))} - {car["id"]}
+        )
+        cars[car["id"]] = car
 
-    return sorted(cars, key=lambda car: car["id"])
+    return sorted(cars.values(), key=lambda car: car["id"])
 
 
 def save_catalog(cars, path=CARS_PATH):

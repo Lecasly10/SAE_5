@@ -31,9 +31,10 @@ def collect_user_photos(db, catalog, detector, destination=USER_PHOTOS_DIR):
 
     for document in confirmed_photos(db):
         car_id = document["carId"]
-        path = destination / car_id / f"{document['_id']}.jpg"
         if car_id not in catalog:
             continue
+        # Une photo enregistrée sous un ancien identifiant va à la voiture actuelle
+        path = destination / catalog.get(car_id).id / f"{document['_id']}.jpg"
         kept.add(path)
         if path.exists():
             continue
