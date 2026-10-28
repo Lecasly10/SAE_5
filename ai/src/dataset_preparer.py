@@ -1,11 +1,21 @@
+import os
 import random
 import shutil
 from pathlib import Path
 
-from src.config import DATASET_DIR, OTHER_CLASS, SMALL_DATASET_DIR
+from src.config import DATASET_DIR, OTHER_CLASS, SMALL_DATASET_DIR, USER_PHOTOS_DIR
 from src.images import list_images
 
 MIN_TRAIN_IMAGES = 50
+
+
+def link_or_copy(source, destination):
+    """Un lien physique ne prend pas de place sur le disque. Copie seulement si
+    les deux dossiers ne sont pas sur le même disque."""
+    try:
+        os.link(source, destination)
+    except OSError:
+        shutil.copy2(source, destination)
 
 
 def family(folder_name):
@@ -22,23 +32,28 @@ def family(folder_name):
 class DatasetPreparer:
     """Construit dataset_small à partir du grand dataset et de cars.json :
     une voiture = un dossier regroupant plusieurs dossiers du grand dataset,
-    plus une classe « autre » faite de voitures absentes de la liste."""
+    plus une classe « autre » faite de voitures absentes de la liste.
+
+    max_train=None garde toutes les photos. Les photos de test non tirées et
+    les photos confirmées dans l'application vont aussi à l'entraînement."""
 
     def __init__(
         self,
         catalog,
         source=DATASET_DIR,
         destination=SMALL_DATASET_DIR,
-        max_train=150,
-        max_test=40,
-        other_train=600,
-        other_test=150,
+        user_photos=USER_PHOTOS_DIR,
+        max_train=None,
+        max_test=60,
+        other_train=2000,
+        other_test=300,
         min_train=MIN_TRAIN_IMAGES,
         seed=42,
     ):
         self.catalog = catalog
         self.source = Path(source)
         self.destination = Path(destination)
+        self.user_photos = Path(user_photos)
         self.max_train = max_train
         self.max_test = max_test
         self.other_train = other_train
@@ -54,13 +69,13 @@ class DatasetPreparer:
             shutil.rmtree(self.destination)
 
         for car in self.catalog:
-            for split, limit in (("train", self.max_train), ("test", self.max_test)):
-                files = [
-                    image
-                    for name in car.sources
-                    for image in list_images(self.source / split / name)
-                ]
-                self.copy_class(split, car.id, self.sample(files, limit))
+            test_pool = self.dataset_images(car, "test")
+            test = self.sample(test_pool, self.max_test)
+            unused_test = sorted(set(test_pool) - set(test))
+            train = self.sample(self.dataset_images(car, "train") + unused_test, self.max_train)
+
+            self.copy_class("train", car.id, train + self.user_images(car))
+            self.copy_class("test", car.id, test)
 
         self.prepare_other_class()
 
@@ -90,8 +105,19 @@ class DatasetPreparer:
                 + "\n".join(too_small)
             )
 
+    def dataset_images(self, car, split):
+        return [
+            image
+            for name in car.sources
+            for image in list_images(self.source / split / name)
+        ]
+
+    def user_images(self, car):
+        folder = self.user_photos / car.id
+        return list_images(folder) if folder.is_dir() else []
+
     def sample(self, files, limit):
-        if len(files) <= limit:
+        if limit is None or len(files) <= limit:
             return files
         return sorted(self.random.sample(files, limit))
 
@@ -126,6 +152,6 @@ class DatasetPreparer:
             destination = target / file.name
             if destination.exists():
                 destination = target / f"{index}_{file.name}"
-            shutil.copy2(file, destination)
+            link_or_copy(file, destination)
 
         print(f"{split} - {class_name}: {len(files)} images")

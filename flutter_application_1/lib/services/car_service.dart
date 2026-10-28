@@ -1,124 +1,65 @@
-import 'dart:convert';
 import 'dart:typed_data';
-
-import 'package:http/http.dart' as http;
-import 'package:image_picker/image_picker.dart';
 
 import '../models/recognition.dart';
 import '../models/scanned_car.dart';
-import 'auth_service.dart';
+import 'api.dart';
 
 class CarService {
-  static const String _apiUrl = '${AuthService.host}/api';
-  static const String _baseUrl = '$_apiUrl/cars';
-
   static final Map<String, Uint8List> _imageCache = {};
+  static List<Recognition>? _catalog;
 
-  static Map<String, String> get _authHeaders => {
-        'Authorization': 'Bearer ${AuthService.token}',
-      };
-
-  static Future<T> _guard<T>(Future<T> Function() request) async {
-    try {
-      return await request();
-    } on http.ClientException {
-      throw Exception('Serveur injoignable. Vérifiez votre connexion.');
-    }
+  /// [carId] : voiture choisie par l'utilisateur quand l'IA s'est trompée.
+  static Future<ScannedCar> upload(Uint8List bytes, {String? carId}) async {
+    final json = await Api.json(
+      'POST',
+      '/cars',
+      body: {...Api.imageBody(bytes), if (carId != null) 'carId': carId},
+      expect: 201,
+    );
+    final car = ScannedCar.fromJson(json as Map<String, dynamic>);
+    _imageCache[car.id] = bytes;
+    return car;
   }
 
-  static String _errorOf(http.Response res) {
-    try {
-      return jsonDecode(res.body)['error'] as String;
-    } catch (_) {
-      return 'Erreur du serveur (${res.statusCode})';
-    }
+  static Future<ScanResult> recognize(Uint8List bytes) async {
+    final json = await Api.json('POST', '/predict', body: Api.imageBody(bytes));
+    return ScanResult.fromJson(json as Map<String, dynamic>);
   }
 
-  static http.Response _expect(http.Response res, int status) {
-    if (res.statusCode != status) throw Exception(_errorOf(res));
-    return res;
+  /// Toutes les voitures que l'IA connaît, pour choisir la bonne à la main.
+  static Future<List<Recognition>> catalog() async {
+    return _catalog ??= ((await Api.json('GET', '/catalog')) as List)
+        .map((json) => Recognition.fromJson(
+            {...json as Map<String, dynamic>, 'confidence': 0}))
+        .toList();
   }
 
-  static Future<http.Response> _postImage(
-    String url,
-    XFile image,
-    Uint8List bytes, {
-    Map<String, String> headers = const {},
-  }) {
-    return http.post(
-      Uri.parse(url),
-      headers: {...headers, 'Content-Type': 'application/json'},
-      body: jsonEncode({
-        'image': base64Encode(bytes),
-        'contentType': _contentType(image),
-      }),
+  /// Envoie une photo dont l'utilisateur a confirmé la voiture : elle servira
+  /// au prochain entraînement de l'IA.
+  static Future<void> sendTrainingPhoto(Uint8List bytes, String carId) {
+    return Api.send(
+      'POST',
+      '/training-photos',
+      body: {...Api.imageBody(bytes), 'carId': carId},
+      expect: 201,
     );
   }
 
-  static Future<ScannedCar> upload(XFile image, Uint8List bytes) {
-    return _guard(() async {
-      final res = _expect(
-        await _postImage(_baseUrl, image, bytes, headers: _authHeaders),
-        201,
-      );
-      final car = ScannedCar.fromJson(jsonDecode(res.body));
-      _imageCache[car.id] = bytes;
-      return car;
-    });
+  static Future<List<ScannedCar>> list() async {
+    return ((await Api.json('GET', '/cars')) as List)
+        .map((json) => ScannedCar.fromJson(json as Map<String, dynamic>))
+        .toList();
   }
 
-  static Future<ScanResult> recognize(XFile image, Uint8List bytes) {
-    return _guard(() async {
-      final res = _expect(
-        await _postImage('$_apiUrl/predict', image, bytes),
-        200,
-      );
-      return ScanResult.fromJson(jsonDecode(res.body));
-    });
+  static Future<Uint8List> image(String id) async {
+    return _imageCache[id] ??=
+        (await Api.send('GET', '/cars/$id/image')).bodyBytes;
   }
 
-  static Future<List<ScannedCar>> list() {
-    return _guard(() async {
-      final res = _expect(
-        await http.get(Uri.parse(_baseUrl), headers: _authHeaders),
-        200,
-      );
-      return (jsonDecode(res.body) as List)
-          .map((json) => ScannedCar.fromJson(json as Map<String, dynamic>))
-          .toList();
-    });
-  }
-
-  static Future<Uint8List> image(String id) {
-    final cached = _imageCache[id];
-    if (cached != null) return Future.value(cached);
-    return _guard(() async {
-      final res = _expect(
-        await http.get(Uri.parse('$_baseUrl/$id/image'), headers: _authHeaders),
-        200,
-      );
-      return _imageCache[id] = res.bodyBytes;
-    });
-  }
-
-  static Future<void> delete(String id) {
-    return _guard(() async {
-      _expect(
-        await http.delete(Uri.parse('$_baseUrl/$id'), headers: _authHeaders),
-        204,
-      );
-      _imageCache.remove(id);
-    });
+  static Future<void> delete(String id) async {
+    await Api.send('DELETE', '/cars/$id', expect: 204);
+    _imageCache.remove(id);
   }
 
   static void clearCache() => _imageCache.clear();
-
-  static String _contentType(XFile image) {
-    final mime = image.mimeType;
-    if (mime != null && mime.startsWith('image/')) return mime;
-    final name = image.name.toLowerCase();
-    if (name.endsWith('.png')) return 'image/png';
-    if (name.endsWith('.webp')) return 'image/webp';
-    return 'image/jpeg';
-  }
 }

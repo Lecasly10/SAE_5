@@ -36,11 +36,14 @@ class CarDetector:
                 for detail in self.output_details[:3]
             )
 
-        for box, class_id, score in zip(boxes, classes, scores):
-            if score >= self.min_score and int(class_id) in self.VEHICLE_CLASS_IDS:
-                return self.to_relative_box(box)
+        vehicles = [
+            self.to_relative_box(box)
+            for box, class_id, score in zip(boxes, classes, scores)
+            if score >= self.min_score and int(class_id) in self.VEHICLE_CLASS_IDS
+        ]
 
-        return None
+        # La voiture au premier plan est la plus grande sur la photo
+        return max(vehicles, key=lambda box: box["width"] * box["height"], default=None)
 
     @staticmethod
     def to_relative_box(box):

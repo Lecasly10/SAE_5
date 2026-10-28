@@ -17,19 +17,18 @@ from src.config import (
     CLASSES_PATH,
     EVALUATION_DIR,
     IMG_SIZE,
+    METRICS_PATH,
     MODEL_PATH,
     OTHER_CLASS,
     SMALL_DATASET_DIR,
 )
-from src.recognition import Thresholds
+from src.recognition import Thresholds, top_two
 
 TEST_DIR = SMALL_DATASET_DIR / "test"
 BATCH_SIZE = 16
 TOP_K = 3
 MAX_ERROR_IMAGES = 12
 MAX_CONFUSIONS = 15
-# Au-delà, la matrice de confusion n'est plus lisible
-MAX_CLASSES_FOR_MATRIX = 25
 
 
 def load_class_names():
@@ -98,13 +97,8 @@ def answer_stats(scores, y_true, y_pred, class_names):
     thresholds = Thresholds.load()
     names = np.array(class_names)
 
-    best = scores[np.arange(len(y_true)), y_pred] * 100
-    second = np.sort(scores, axis=1)[:, -2] * 100
-    answered = (
-        (names[y_pred] != OTHER_CLASS)
-        & (best >= thresholds.min_confidence)
-        & (best - second >= thresholds.min_margin)
-    )
+    _, best, second = top_two(scores)
+    answered = thresholds.accepts(names[y_pred] != OTHER_CLASS, best, second)
     is_car = names[y_true] != OTHER_CLASS
     correct = y_pred == y_true
 
@@ -138,28 +132,6 @@ def write_errors(image_paths, y_true, y_pred, scores, top_indices, class_names):
                 row[f"top{rank}_classe"] = class_names[class_index]
                 row[f"top{rank}_score_pct"] = round(float(scores[index, class_index]) * 100, 2)
             writer.writerow(row)
-
-
-def save_confusion_matrix(matrix, class_names):
-    path = EVALUATION_DIR / "confusion_matrix.png"
-    size = len(class_names)
-    if size > MAX_CLASSES_FOR_MATRIX:
-        path.unlink(missing_ok=True)
-        return
-
-    fig, ax = plt.subplots(figsize=(max(10, size), max(8, size)))
-    chart = ax.imshow(matrix, cmap="Blues")
-    fig.colorbar(chart, ax=ax)
-    ax.set_xticks(range(size), labels=class_names, rotation=45, ha="right")
-    ax.set_yticks(range(size), labels=class_names)
-    ax.set(xlabel="Classe prédite", ylabel="Classe réelle", title="Matrice de confusion")
-    for i in range(size):
-        for j in range(size):
-            ax.text(j, i, str(matrix[i, j]), ha="center", va="center",
-                    color="white" if matrix[i, j] > matrix.max() / 2 else "black")
-    fig.tight_layout()
-    fig.savefig(path, dpi=160)
-    plt.close(fig)
 
 
 def save_error_gallery(image_paths, y_true, y_pred, scores, top_indices, class_names):
@@ -205,7 +177,7 @@ def main():
     report = dict(images=len(y_true), accuracy=accuracy, top_k=TOP_K,
                   top_k_accuracy=top_k_accuracy, classes=classes,
                   recognition=answers, top_confusions=confusions)
-    with open(EVALUATION_DIR / "metrics.json", "w", encoding="utf-8") as file:
+    with open(METRICS_PATH, "w", encoding="utf-8") as file:
         json.dump(report, file, ensure_ascii=False, indent=2)
     with open(EVALUATION_DIR / "metrics_by_class.csv", "w", newline="", encoding="utf-8") as file:
         writer = csv.DictWriter(file, fieldnames=list(classes[0]))
@@ -213,7 +185,6 @@ def main():
         writer.writerows(classes)
 
     write_errors(image_paths, y_true, y_pred, scores, top_indices, class_names)
-    save_confusion_matrix(matrix, class_names)
     save_error_gallery(image_paths, y_true, y_pred, scores, top_indices, class_names)
 
     print(f"\nImages de test : {len(y_true)}")

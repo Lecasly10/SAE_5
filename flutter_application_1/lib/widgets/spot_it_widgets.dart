@@ -214,6 +214,7 @@ Future<bool> showConfirmDialog(
   BuildContext context, {
   required String title,
   required String message,
+  String confirmLabel = 'Supprimer',
 }) async {
   final confirmed = await showDialog<bool>(
     context: context,
@@ -234,7 +235,7 @@ Future<bool> showConfirmDialog(
         TextButton(
           onPressed: () => Navigator.pop(context, true),
           style: TextButton.styleFrom(foregroundColor: SpotItColors.danger),
-          child: const Text('Supprimer'),
+          child: Text(confirmLabel),
         ),
       ],
     ),

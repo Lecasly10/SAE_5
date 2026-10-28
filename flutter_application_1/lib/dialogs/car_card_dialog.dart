@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../models/scanned_car.dart';
+import '../services/api.dart';
 import '../services/car_service.dart';
 import '../theme/spot_it_theme.dart';
 import '../widgets/car_image.dart';
@@ -47,11 +48,7 @@ class _CarCardDialogState extends State<_CarCardDialog> {
     } catch (e) {
       if (!mounted) return;
       setState(() => _deleting = false);
-      showSpotItToast(
-        context,
-        e.toString().replaceFirst('Exception: ', ''),
-        isError: true,
-      );
+      showSpotItToast(context, errorMessage(e), isError: true);
     }
   }
 
@@ -62,6 +59,8 @@ class _CarCardDialogState extends State<_CarCardDialog> {
       label: 'FICHE VOITURE',
       recognition: car.recognition,
       discoveredOn: car.scannedDate,
+      // Confiance nulle : voiture choisie dans la liste par l'utilisateur
+      showConfidence: car.recognition.confidence > 0,
       image: CarImage(
         carId: car.id,
         fit: BoxFit.contain,

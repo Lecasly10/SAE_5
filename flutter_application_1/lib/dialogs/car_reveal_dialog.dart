@@ -8,30 +8,46 @@ import '../widgets/framed_image.dart';
 import '../widgets/spot_it_widgets.dart';
 import 'car_showcase_dialog.dart';
 
-enum AnalysisChoice { addToLibrary, login }
+enum AnalysisChoice { addToLibrary, login, wrongCar }
 
 Future<AnalysisChoice?> showCarRevealDialog(
   BuildContext context, {
   required Uint8List bytes,
   required Recognition recognition,
+  DetectionBox? box,
+  bool corrected = false,
 }) {
   return showShowcaseDialog<AnalysisChoice>(context, (context) {
     final loggedIn = AuthService.isLoggedIn;
     return CarShowcaseDialog(
-      label: 'NOUVELLE VOITURE',
+      label: corrected ? 'VOITURE CORRIGÉE' : 'NOUVELLE VOITURE',
       recognition: recognition,
-      image: FramedImage(bytes: bytes, box: recognition.box),
-      actions: ShowcaseActions(
-        primary: SpotItPrimaryButton(
-          icon: loggedIn ? Icons.add_circle_outline : Icons.login,
-          label: loggedIn
-              ? 'Ajouter à la bibliothèque'
-              : 'Se connecter pour sauvegarder',
-          onPressed: () => Navigator.pop(
-            context,
-            loggedIn ? AnalysisChoice.addToLibrary : AnalysisChoice.login,
+      showConfidence: !corrected,
+      image: FramedImage(bytes: bytes, box: box ?? recognition.box),
+      actions: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ShowcaseActions(
+            primary: SpotItPrimaryButton(
+              icon: loggedIn ? Icons.add_circle_outline : Icons.login,
+              label: loggedIn
+                  ? 'Ajouter à la bibliothèque'
+                  : 'Se connecter pour sauvegarder',
+              onPressed: () => Navigator.pop(
+                context,
+                loggedIn ? AnalysisChoice.addToLibrary : AnalysisChoice.login,
+              ),
+            ),
           ),
-        ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, AnalysisChoice.wrongCar),
+            child: Text(
+              corrected
+                  ? 'Choisir une autre voiture'
+                  : "Ce n'est pas la bonne voiture ?",
+            ),
+          ),
+        ],
       ),
     );
   });

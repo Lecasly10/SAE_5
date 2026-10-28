@@ -17,9 +17,9 @@ __pycache__/
 # Images d'entrainement et resultats d'evaluation regeneres
 ai/dataset/
 ai/dataset_small/
+ai/dataset_user/
 ai/models/evaluation/errors.csv
 ai/models/evaluation/error_examples.png
-ai/models/evaluation/confusion_matrix.png
 archive/
 archive.zip
 

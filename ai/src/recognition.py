@@ -26,6 +26,11 @@ class Thresholds:
             min_margin=float(data["min_margin"]),
         )
 
+    def accepts(self, is_car, best, second):
+        """Vrai si l'IA peut donner sa réponse. Marche avec des nombres comme
+        avec des tableaux numpy (une valeur par image)."""
+        return is_car & (best >= self.min_confidence) & (best - second >= self.min_margin)
+
     def save(self, path, stats):
         with open(path, "w", encoding="utf-8") as file:
             json.dump(
@@ -54,18 +59,21 @@ def decide(ranked, thresholds, has_box):
     best_class, best_confidence = ranked[0]
     second_confidence = ranked[1][1] if len(ranked) > 1 else 0.0
 
-    accepted = (
-        best_class != OTHER_CLASS
-        and best_confidence >= thresholds.min_confidence
-        and best_confidence - second_confidence >= thresholds.min_margin
-    )
-    if accepted:
+    if thresholds.accepts(best_class != OTHER_CLASS, best_confidence, second_confidence):
         return Decision(recognized=True)
 
     return Decision(
         recognized=False,
         reason=REASON_UNKNOWN if has_box else REASON_NO_CAR,
     )
+
+
+def top_two(scores):
+    """Classe prédite, puis meilleure et deuxième confiance (en %) de chaque
+    image. scores : probabilités (images, classes)."""
+    scores = np.asarray(scores)
+    second = np.partition(scores, -2, axis=1)[:, -2]
+    return scores.argmax(axis=1), scores.max(axis=1) * 100, second * 100
 
 
 def choose_thresholds(
@@ -81,20 +89,15 @@ def choose_thresholds(
 
     scores : probabilités (images, classes), labels : classes réelles.
     """
-    scores = np.asarray(scores)
     labels = np.asarray(labels)
-
-    order = np.argsort(-scores, axis=1)
-    predicted = order[:, 0]
-    best = np.take_along_axis(scores, order[:, :1], axis=1)[:, 0] * 100
-    second = np.take_along_axis(scores, order[:, 1:2], axis=1)[:, 0] * 100
+    predicted, best, second = top_two(scores)
     is_car = predicted != other_index
     is_correct = predicted == labels
 
     candidates = []
     for min_confidence in confidence_grid:
         for min_margin in margin_grid:
-            accepted = is_car & (best >= min_confidence) & (best - second >= min_margin)
+            accepted = Thresholds(min_confidence, min_margin).accepts(is_car, best, second)
             count = int(accepted.sum())
             correct = int((accepted & is_correct).sum())
             precision = correct / count if count else 0.0

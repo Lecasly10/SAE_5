@@ -4,23 +4,18 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const config = require('../config');
 const { HttpError } = require('../errors');
+const { cleanEmail, readEmail, readName } = require('../validation');
 
 const router = express.Router();
 
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MIN_PASSWORD_LENGTH = 8;
 // bcrypt ignore tout ce qui dépasse 72 octets
 const MAX_PASSWORD_BYTES = 72;
 
-const cleanEmail = (value) => (typeof value === 'string' ? value.trim().toLowerCase() : '');
-
 router.post('/register', async (req, res) => {
   const { name, email, password } = req.body ?? {};
-  const cleanName = typeof name === 'string' ? name.trim() : '';
-  const mail = cleanEmail(email);
-
-  if (!cleanName || cleanName.length > 60) throw new HttpError(400, 'Nom invalide');
-  if (!EMAIL_PATTERN.test(mail)) throw new HttpError(400, 'Email invalide');
+  const cleanName = readName(name);
+  const mail = readEmail(email);
   if (
     typeof password !== 'string' ||
     password.length < MIN_PASSWORD_LENGTH ||
@@ -55,7 +50,7 @@ router.post('/login', async (req, res) => {
   }
 
   const token = jwt.sign({ id: user._id }, config.jwtSecret, { expiresIn: '7d' });
-  res.json({ token, name: user.name, email: user.email });
+  res.json({ token, name: user.name, email: user.email, trainingConsent: user.trainingConsent });
 });
 
 module.exports = router;

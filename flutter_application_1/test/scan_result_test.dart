@@ -61,4 +61,42 @@ void main() {
     expect(result.reason, NoMatchReason.noCar);
     expect(result.box, isNull);
   });
+
+  test("l'identifiant de chaque voiture est gardé pour entraîner l'IA", () {
+    final result = ScanResult.fromJson({
+      'recognized': true,
+      'confidence': 72,
+      'carId': 'peugeot_208_2019_present',
+      'brand': 'Peugeot',
+      'model': '208',
+      'years': '2019 – aujourd’hui',
+      'box': null,
+      'suggestions': [
+        {
+          'carId': 'peugeot_2008_2019_present',
+          'brand': 'Peugeot',
+          'model': '2008',
+          'years': '2019 – aujourd’hui',
+          'confidence': 9
+        },
+      ],
+    });
+
+    expect(result.recognition!.carId, 'peugeot_208_2019_present');
+    expect(result.suggestions.single.carId, 'peugeot_2008_2019_present');
+  });
+
+  test('la recherche de voiture accepte plusieurs mots dans le désordre', () {
+    const m4 = Recognition(
+      brand: 'BMW',
+      model: 'M4 G82',
+      years: '2020 – aujourd’hui',
+      confidence: 0,
+    );
+
+    expect(m4.matches(''), isTrue);
+    expect(m4.matches('bmw m4'), isTrue);
+    expect(m4.matches('  G82   2020 bmw '), isTrue);
+    expect(m4.matches('bmw m3'), isFalse);
+  });
 }

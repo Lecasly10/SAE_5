@@ -6,8 +6,10 @@ ENV PYTHONUNBUFFERED=1 \
 
 WORKDIR /app
 
-COPY requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
+ARG REQUIREMENTS=requirements.txt
+
+COPY requirements*.txt ./
+RUN pip install --no-cache-dir -r ${REQUIREMENTS}
 
 COPY main.py server.py ./
 COPY src ./src

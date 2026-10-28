@@ -23,6 +23,11 @@ class Car:
         }
 
 
+def load_entries(path=CARS_PATH):
+    with open(path, "r", encoding="utf-8") as file:
+        return json.load(file)["cars"]
+
+
 class CarCatalog:
     """Liste des voitures reconnues. Chaque voiture regroupe un ou plusieurs
     dossiers du grand dataset (voir cars.json)."""
@@ -38,9 +43,6 @@ class CarCatalog:
 
     @classmethod
     def load(cls, path=CARS_PATH):
-        with open(path, "r", encoding="utf-8") as file:
-            entries = json.load(file)["cars"]
-
         return cls(
             Car(
                 id=entry["id"],
@@ -50,7 +52,7 @@ class CarCatalog:
                 to_year=entry["to_year"],
                 sources=tuple(entry["sources"]),
             )
-            for entry in entries
+            for entry in load_entries(path)
         )
 
     def __iter__(self):

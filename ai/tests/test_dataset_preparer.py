@@ -27,6 +27,7 @@ class DatasetPreparerTest(unittest.TestCase):
         root = Path(self.tmp.name)
         self.source = root / "source"
         self.destination = root / "destination"
+        self.user_photos = root / "user"
         self.addCleanup(self.tmp.cleanup)
 
         # La préparation affiche sa progression, inutile dans les tests
@@ -49,7 +50,7 @@ class DatasetPreparerTest(unittest.TestCase):
 
     def preparer(self, **options):
         return DatasetPreparer(
-            self.catalog, self.source, self.destination,
+            self.catalog, self.source, self.destination, self.user_photos,
             min_train=5, other_train=10, other_test=10, **options,
         )
 
@@ -58,6 +59,15 @@ class DatasetPreparerTest(unittest.TestCase):
 
         self.assertEqual(count_images(self.destination, "train", "clio"), 8)
         self.assertEqual(count_images(self.destination, "test", "clio"), 3)
+
+    def test_unused_test_photos_and_user_photos_go_to_training(self):
+        make_images(self.user_photos, ".", "clio", 2)
+
+        self.preparer(max_test=1).prepare()
+
+        # 12 photos d'entraînement + 3 photos de test non tirées + 2 de l'application
+        self.assertEqual(count_images(self.destination, "train", "clio"), 17)
+        self.assertEqual(count_images(self.destination, "test", "clio"), 1)
 
     def test_other_class_skips_known_families(self):
         self.preparer(max_train=50, max_test=50).prepare()
@@ -87,6 +97,19 @@ class DatasetPreparerTest(unittest.TestCase):
         self.preparer().prepare()
 
         self.assertFalse((self.destination / "train" / "ancienne_voiture").exists())
+
+    def test_links_images_instead_of_copying(self):
+        self.preparer().prepare()
+
+        source = self.source / "train" / "RENAULT_Clio_2019Present" / "RENAULT_Clio_2019Present_0.jpg"
+        linked = self.destination / "train" / "clio" / source.name
+        self.assertTrue(linked.samefile(source))
+
+    @mock.patch("src.dataset_preparer.os.link", side_effect=OSError)
+    def test_copies_when_links_are_impossible(self, _):
+        self.preparer().prepare()
+
+        self.assertEqual(count_images(self.destination, "train", "clio"), 12)
 
     def test_family_handles_both_folder_styles(self):
         self.assertEqual(family("RENAULT_Clio_2019Present"), ("renault", "clio"))

@@ -22,6 +22,24 @@ services:
       retries: 18
       start_period: 60s
 
+  trainer:
+    profiles: [train]
+    build:
+      context: ./ai
+      args:
+        REQUIREMENTS: requirements-gpu.txt
+    image: spotit-ai-gpu
+    working_dir: /app
+    entrypoint: ["python", "main.py"]
+    environment:
+      # TensorFlow ne trouve pas cuSOLVER tout seul dans les paquets pip de NVIDIA
+      LD_LIBRARY_PATH: /usr/local/lib/python3.13/site-packages/nvidia/cusolver/lib
+      MONGODB_URI: ${MONGODB_URI:-mongodb://mongo:27017/spotit}
+    volumes:
+      - ./ai:/app
+      - ./archive:/dataset:ro
+    gpus: all
+
   backend:
     build: ./backend
     restart: unless-stopped

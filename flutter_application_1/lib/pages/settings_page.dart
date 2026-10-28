@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../services/api.dart';
 import '../services/auth_service.dart';
 import '../services/car_service.dart';
 import '../theme/spot_it_theme.dart';
@@ -24,11 +25,8 @@ class _SettingsPageState extends State<SettingsPage> {
   final _passwordController = TextEditingController();
 
   _AuthMode _mode = _AuthMode.login;
-  bool _isConnected = AuthService.isLoggedIn;
   bool _isEditing = false;
   bool _obscurePassword = true;
-  String _savedName = AuthService.name ?? '';
-  String _savedEmail = AuthService.email ?? '';
 
   @override
   void dispose() {
@@ -38,50 +36,55 @@ class _SettingsPageState extends State<SettingsPage> {
     super.dispose();
   }
 
+  /// Lance une action sur le serveur, rafraîchit la page puis affiche
+  /// [done], ou l'erreur. Renvoie vrai si tout s'est bien passé.
+  Future<bool> _call(Future<void> Function() action, {String? done}) async {
+    try {
+      await action();
+    } catch (e) {
+      if (mounted) showSpotItToast(context, errorMessage(e), isError: true);
+      return false;
+    }
+    if (!mounted) return false;
+    setState(() {});
+    if (done != null) showSpotItToast(context, done);
+    return true;
+  }
+
   Future<void> _submitAuth() async {
     if (!(_authFormKey.currentState?.validate() ?? false)) return;
-    try {
-      final result = _mode == _AuthMode.login
-          ? await AuthService.login(
-              _emailController.text.trim(), _passwordController.text)
-          : await AuthService.register(_nameController.text.trim(),
-              _emailController.text.trim(), _passwordController.text);
-      if (!mounted) return;
-      setState(() {
-        _savedName = result['name'];
-        _savedEmail = result['email'];
-        _isConnected = true;
-        _isEditing = false;
-        _passwordController.clear();
-      });
-    } catch (e) {
-      if (!mounted) return;
-      showSpotItToast(context, e.toString().replaceFirst('Exception: ', ''),
-          isError: true);
+    final email = _emailController.text.trim();
+    final password = _passwordController.text;
+    final ok = await _call(() => _mode == _AuthMode.login
+        ? AuthService.login(email, password)
+        : AuthService.register(_nameController.text.trim(), email, password));
+    if (ok) {
+      _isEditing = false;
+      _passwordController.clear();
     }
   }
 
   void _startEditing() {
-    _nameController.text = _savedName;
-    _emailController.text = _savedEmail;
+    _nameController.text = AuthService.name ?? '';
+    _emailController.text = AuthService.email ?? '';
     setState(() => _isEditing = true);
   }
 
-  void _saveProfile() {
+  Future<void> _saveProfile() async {
     if (!(_profileFormKey.currentState?.validate() ?? false)) return;
-    setState(() {
-      _savedName = _nameController.text.trim();
-      _savedEmail = _emailController.text.trim();
-      _isEditing = false;
-    });
-    showSpotItToast(context, 'Informations mises à jour');
+    final ok = await _call(
+      () => AuthService.updateAccount(
+        name: _nameController.text.trim(),
+        email: _emailController.text.trim(),
+      ),
+      done: 'Informations mises à jour',
+    );
+    if (ok) setState(() => _isEditing = false);
   }
 
-  void _logout() {
-    AuthService.logout();
+  void _resetForm() {
     CarService.clearCache();
     setState(() {
-      _isConnected = false;
       _isEditing = false;
       _mode = _AuthMode.login;
       _nameController.clear();
@@ -90,18 +93,66 @@ class _SettingsPageState extends State<SettingsPage> {
     });
   }
 
+  void _logout() {
+    AuthService.logout();
+    _resetForm();
+  }
+
+  Future<void> _setTrainingConsent(bool value) async {
+    if (!value) {
+      final confirmed = await showConfirmDialog(
+        context,
+        title: 'Retirer votre accord ?',
+        confirmLabel: 'Retirer',
+        message:
+            "Les photos gardées pour entraîner l'IA seront supprimées. Vos voitures restent dans votre bibliothèque mais ne serviront plus à l'entraînement.",
+      );
+      if (!confirmed) return;
+    }
+    await _call(
+      () => AuthService.updateAccount(trainingConsent: value),
+      done: value ? "Merci ! Vos photos aideront l'IA" : 'Accord retiré',
+    );
+  }
+
+  void _showTrainingInfo() {
+    showDialog<void>(
+      context: context,
+      builder: (context) => SpotItDialog(
+        title: Text(
+          "Entraînement de l'IA avec vos photos",
+          style: GoogleFonts.outfit(fontWeight: FontWeight.w700),
+        ),
+        content: SingleChildScrollView(
+          child: Text(
+            kTrainingConsentText,
+            style: GoogleFonts.inter(
+              fontSize: 13,
+              height: 1.45,
+              color: SpotItColors.secondaryText,
+            ),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Fermer'),
+          ),
+        ],
+      ),
+    );
+  }
+
   Future<void> _deleteAccount() async {
     final confirmed = await showConfirmDialog(
       context,
       title: 'Supprimer le compte ?',
       message:
-          'Cette action est définitive. Toutes vos données seront supprimées.',
+          'Cette action est définitive. Votre compte, vos voitures et vos photos seront supprimés.',
     );
-    if (confirmed) {
-      _logout();
-      if (mounted) {
-        showSpotItToast(context, 'Compte supprimé');
-      }
+    if (confirmed &&
+        await _call(AuthService.deleteAccount, done: 'Compte supprimé')) {
+      _resetForm();
     }
   }
 
@@ -116,7 +167,9 @@ class _SettingsPageState extends State<SettingsPage> {
               padding: const EdgeInsets.fromLTRB(24, 12, 24, 32),
               child: AnimatedSwitcher(
                 duration: const Duration(milliseconds: 220),
-                child: _isConnected ? _buildConnectedView() : _buildAuthView(),
+                child: AuthService.isLoggedIn
+                    ? _buildConnectedView()
+                    : _buildAuthView(),
               ),
             ),
           ),
@@ -242,7 +295,7 @@ class _SettingsPageState extends State<SettingsPage> {
         const _AccountIcon(icon: Icons.person),
         const SizedBox(height: 16),
         Text(
-          _savedName,
+          AuthService.name ?? '',
           textAlign: TextAlign.center,
           style: GoogleFonts.outfit(
             fontSize: 24,
@@ -250,7 +303,7 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
         ),
         const SizedBox(height: 4),
-        _Caption(_savedEmail),
+        _Caption(AuthService.email ?? ''),
         const SizedBox(height: 28),
         _ProfileAction(
           icon: Icons.edit_outlined,
@@ -264,6 +317,14 @@ class _SettingsPageState extends State<SettingsPage> {
           title: 'Se déconnecter',
           subtitle: 'Revenir au mode non connecté',
           onTap: _logout,
+        ),
+        const SizedBox(height: 28),
+        _sectionTitle('Confidentialité'),
+        const SizedBox(height: 12),
+        _TrainingConsentTile(
+          value: AuthService.trainingConsent,
+          onChanged: _setTrainingConsent,
+          onMore: _showTrainingInfo,
         ),
         const SizedBox(height: 28),
         _sectionTitle('Zone sensible', color: SpotItColors.danger),
@@ -328,6 +389,86 @@ class _SettingsPageState extends State<SettingsPage> {
         side: const BorderSide(color: SpotItColors.border),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       );
+}
+
+const kTrainingConsentText =
+    "Si vous activez cette option, Spot'It conserve les photos que vous ajoutez "
+    "à votre bibliothèque ou que vous corrigez, avec le modèle de voiture "
+    "choisi. Elles servent uniquement à améliorer la reconnaissance des "
+    'voitures.\n\n'
+    "• Les photos sont recadrées sur la voiture avant l'entraînement.\n"
+    '• Elles ne sont jamais publiées, vendues ni partagées.\n'
+    "• Ce choix est facultatif : sans lui, l'application fonctionne de la "
+    'même façon.\n'
+    '• Vous pouvez retirer votre accord à tout moment depuis cette page. Les '
+    "photos gardées pour l'entraînement sont alors supprimées et ne servent "
+    "plus aux entraînements suivants (une IA déjà entraînée ne peut pas "
+    'oublier une photo).\n\n'
+    'Évitez les photos où l’on reconnaît des personnes.\n\n'
+    'Base légale : votre consentement (article 6.1.a du RGPD).';
+
+class _TrainingConsentTile extends StatelessWidget {
+  const _TrainingConsentTile({
+    required this.value,
+    required this.onChanged,
+    required this.onMore,
+  });
+
+  final bool value;
+  final ValueChanged<bool> onChanged;
+  final VoidCallback onMore;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(16, 12, 8, 6),
+      decoration: BoxDecoration(
+        color: SpotItColors.surface,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: SpotItColors.border),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  "Autoriser l'entraînement de l'IA avec mes photos",
+                  style: GoogleFonts.inter(
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              Switch(
+                value: value,
+                onChanged: onChanged,
+                activeThumbColor: SpotItColors.accent,
+              ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 8),
+            child: Text(
+              "Vos photos de voitures confirmées sont conservées pour "
+              "apprendre à l'IA à mieux les reconnaître. Facultatif, "
+              'modifiable à tout moment.',
+              style: GoogleFonts.inter(
+                fontSize: 11,
+                color: SpotItColors.secondaryText,
+              ),
+            ),
+          ),
+          TextButton(
+            onPressed: onMore,
+            style: TextButton.styleFrom(padding: EdgeInsets.zero),
+            child: const Text('En savoir plus'),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class _Caption extends StatelessWidget {

@@ -1,5 +1,6 @@
 dataset
 dataset_small
+dataset_user
 images
 tests
 models/evaluation

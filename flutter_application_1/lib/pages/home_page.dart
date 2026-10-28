@@ -6,6 +6,8 @@ import 'package:image_picker/image_picker.dart';
 import '../dialogs/car_reveal_dialog.dart';
 import '../dialogs/car_unrecognized_dialog.dart';
 import '../models/recognition.dart';
+import '../services/api.dart';
+import '../services/auth_service.dart';
 import '../services/car_service.dart';
 import '../theme/spot_it_theme.dart';
 import '../widgets/analyze_button.dart';
@@ -25,7 +27,6 @@ class SpotItHomePage extends StatefulWidget {
 
 class _SpotItHomePageState extends State<SpotItHomePage> {
   final ImagePicker _picker = ImagePicker();
-  XFile? _selectedImage;
   Uint8List? _selectedBytes;
   bool _analyzing = false;
   DetectionBox? _detectionBox;
@@ -42,10 +43,7 @@ class _SpotItHomePageState extends State<SpotItHomePage> {
       if (image == null) return;
       final bytes = await image.readAsBytes();
       if (!mounted) return;
-      setState(() {
-        _selectedImage = image;
-        _selectedBytes = bytes;
-      });
+      setState(() => _selectedBytes = bytes);
     } catch (_) {
       if (!mounted) return;
       showSpotItToast(
@@ -61,64 +59,112 @@ class _SpotItHomePageState extends State<SpotItHomePage> {
   void _clearImage() {
     HapticFeedback.selectionClick();
     setState(() {
-      _selectedImage = null;
       _selectedBytes = null;
       _detectionBox = null;
     });
   }
 
   Future<void> _analyze() async {
-    final image = _selectedImage;
     final bytes = _selectedBytes;
-    if (image == null || bytes == null || _analyzing) return;
+    if (bytes == null || _analyzing) return;
     HapticFeedback.mediumImpact();
 
     setState(() => _analyzing = true);
     try {
-      final result = await CarService.recognize(image, bytes);
+      final result = await CarService.recognize(bytes);
       if (!mounted) return;
       if (result.box != null) {
         setState(() => _detectionBox = result.box);
         await Future.delayed(const Duration(milliseconds: 1100));
         if (!mounted) return;
       }
-      final recognition = result.recognition;
-      if (recognition == null) {
-        await showUnrecognizedDialog(context, bytes: bytes, result: result);
-        if (!mounted) return;
-        _clearImage();
-        return;
+      var car = result.recognition;
+      var corrected = false;
+      if (car == null) {
+        car = await showUnrecognizedDialog(
+          context,
+          bytes: bytes,
+          result: result,
+        );
+        corrected = true;
       }
-      final choice = await showCarRevealDialog(
-        context,
-        bytes: bytes,
-        recognition: recognition,
-      );
-      if (!mounted) return;
 
-      switch (choice) {
-        case AnalysisChoice.addToLibrary:
-          await CarService.upload(image, bytes);
-          if (!mounted) return;
-          _clearImage();
-          showSpotItToast(
-            context,
-            'Voiture ajoutée à votre bibliothèque',
-            actionLabel: 'Voir',
-            onAction: _openLibrary,
-          );
-        case AnalysisChoice.login:
-          _openSettings();
-        case null:
-          _clearImage();
+      // La fenêtre est rouverte avec la voiture choisie tant que
+      // l'utilisateur corrige l'IA.
+      while (car != null) {
+        if (!mounted) return;
+        final choice = await showCarRevealDialog(
+          context,
+          bytes: bytes,
+          recognition: car,
+          box: result.box,
+          corrected: corrected,
+        );
+        if (!mounted) return;
+
+        switch (choice) {
+          case AnalysisChoice.addToLibrary:
+            // Une voiture de la bibliothèque sert déjà à l'entraînement
+            await CarService.upload(
+              bytes,
+              carId: corrected ? car.carId : null,
+            );
+            if (!mounted) return;
+            _clearImage();
+            showSpotItToast(
+              context,
+              'Voiture ajoutée à votre bibliothèque',
+              actionLabel: 'Voir',
+              onAction: _openLibrary,
+            );
+            return;
+          case AnalysisChoice.login:
+            _openSettings();
+            return;
+          case AnalysisChoice.wrongCar:
+            final shown = car.carId;
+            car = await showSuggestionsDialog(
+              context,
+              bytes: bytes,
+              title: 'Quelle est la bonne voiture ?',
+              message:
+                  "Touchez-la pour corriger l'IA, ou réessayez avec une autre photo.",
+              suggestions: result.suggestions
+                  .where((suggestion) => suggestion.carId != shown)
+                  .toList(),
+            );
+            corrected = true;
+          case null:
+            if (corrected) await _teach(bytes, car);
+            car = null;
+        }
       }
+      if (mounted) _clearImage();
     } catch (e) {
       if (!mounted) return;
-      showSpotItToast(context, e.toString().replaceFirst('Exception: ', ''),
-          isError: true);
+      showSpotItToast(context, errorMessage(e), isError: true);
     } finally {
       if (mounted) setState(() => _analyzing = false);
     }
+  }
+
+  /// Garde la photo corrigée pour le prochain entraînement de l'IA, si
+  /// l'utilisateur l'a autorisé dans les paramètres.
+  Future<void> _teach(Uint8List bytes, Recognition car) async {
+    final carId = car.carId;
+    if (carId == null || !AuthService.isLoggedIn) return;
+    if (!AuthService.trainingConsent) {
+      showSpotItToast(
+        context,
+        "Autorisez l'entraînement de l'IA pour qu'elle apprenne de vos corrections",
+        actionLabel: 'Paramètres',
+        onAction: _openSettings,
+      );
+      return;
+    }
+    await CarService.sendTrainingPhoto(bytes, carId);
+    if (!mounted) return;
+    showSpotItToast(context, "Merci ! Cette photo aidera l'IA à apprendre");
   }
 
   void _openLibrary() {

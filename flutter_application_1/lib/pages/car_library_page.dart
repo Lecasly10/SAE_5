@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../dialogs/car_card_dialog.dart';
 import '../models/scanned_car.dart';
+import '../services/api.dart';
 import '../services/auth_service.dart';
 import '../services/car_service.dart';
 import '../theme/spot_it_theme.dart';
@@ -40,7 +41,7 @@ class _CarLibraryPageState extends State<CarLibraryPage> {
       setState(() => _cars = cars);
     } catch (e) {
       if (!mounted) return;
-      setState(() => _error = e.toString().replaceFirst('Exception: ', ''));
+      setState(() => _error = errorMessage(e));
     } finally {
       if (mounted) setState(() => _loading = false);
     }

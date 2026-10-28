@@ -5,7 +5,7 @@ const { HttpError } = require('../errors');
 const requireAuth = require('../middleware/requireAuth');
 const uploadedImage = require('../middleware/uploadedImage');
 const { scanLimiter } = require('../middleware/rateLimits');
-const { recognizeCar } = require('../services/recognition');
+const { recognizeCar, chooseCar, isCarId } = require('../services/recognition');
 
 const router = express.Router();
 
@@ -26,17 +26,23 @@ const toJson = (car) => ({
 });
 
 router.post('/', scanLimiter, uploadedImage, async (req, res) => {
-  const { recognized, brand, model, years, confidence, box } = await recognizeCar(req.image.data);
-  if (!recognized) throw new HttpError(422, 'Voiture non reconnue, elle n’a pas été ajoutée');
+  const { carId: chosenId } = req.body;
+  if (chosenId !== undefined && !isCarId(chosenId)) throw new HttpError(400, 'Voiture invalide');
 
+  const scan = await recognizeCar(req.image.data);
+  const chosen = await chooseCar(scan, chosenId);
+  if (!chosen) throw new HttpError(422, 'Voiture non reconnue, elle n’a pas été ajoutée');
+
+  const { carId, brand, model, years, confidence } = chosen;
   const car = await Car.create({
     user: req.userId,
     image: req.image,
+    carId,
     brand,
     model,
     years,
     confidence,
-    box,
+    box: scan.box,
   });
   res.status(201).json(toJson(car));
 });

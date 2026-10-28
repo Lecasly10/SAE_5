@@ -25,12 +25,14 @@ class Recognition {
     required this.model,
     required this.years,
     required this.confidence,
+    this.carId,
     this.box,
   });
 
   factory Recognition.fromJson(Map<String, dynamic> json) {
     final box = json['box'] as Map<String, dynamic>?;
     return Recognition(
+      carId: json['carId'] as String?,
       brand: json['brand'] as String,
       model: json['model'] as String,
       years: json['years'] as String,
@@ -43,7 +45,21 @@ class Recognition {
   final String model;
   final String years;
   final int confidence;
+
+  /// Identifiant de la voiture dans la liste de l'IA, utilisé pour l'entraîner.
+  final String? carId;
   final DetectionBox? box;
+
+  /// Vrai si chaque mot recherché apparaît dans la marque, le modèle ou les
+  /// années, par exemple « bmw m4 » ou « clio 2019 ».
+  bool matches(String query) {
+    final text = '$brand $model $years'.toLowerCase();
+    return query
+        .toLowerCase()
+        .split(RegExp(r'\s+'))
+        .where((word) => word.isNotEmpty)
+        .every(text.contains);
+  }
 }
 
 enum NoMatchReason { noCar, unknown }
