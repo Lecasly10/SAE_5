@@ -1,0 +1,30 @@
+node_modules/
+.env
+
+# Flutter
+**/build/
+**/.dart_tool/
+**/.flutter-plugins
+**/.flutter-plugins-dependencies
+**/.pub-cache/
+**/.pub/
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Images d'entrainement et resultats d'evaluation regeneres
+ai/dataset/
+ai/dataset_small/
+ai/dataset_user/
+ai/models/evaluation/errors.csv
+ai/models/evaluation/error_examples.png
+archive/
+archive.zip
+
+# Editeurs et systeme
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
