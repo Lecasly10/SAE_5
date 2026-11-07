@@ -1,6 +1,9 @@
 dataset
 dataset_small
 dataset_user
+dataset_extra
+downloads
+training_backup
 images
 tests
 models/evaluation

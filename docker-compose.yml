@@ -35,9 +35,15 @@ services:
       # TensorFlow ne trouve pas cuSOLVER tout seul dans les paquets pip de NVIDIA
       LD_LIBRARY_PATH: /usr/local/lib/python3.13/site-packages/nvidia/cusolver/lib
       MONGODB_URI: ${MONGODB_URI:-mongodb://mongo:27017/spotit}
+      SPOTIT_DOWNLOADS_DIR: /datasets
+      SPOTIT_EXTRA_DIR: /datasets/extra
+      SPOTIT_SMALL_DIR: /datasets/small
     volumes:
       - ./ai:/app
       - ./archive:/dataset:ro
+      # DVM-Car, VMMRdb et dataset_small : plusieurs dizaines de Go, sur le
+      # disque choisi par SPOTIT_DATASETS (par exemple F:\spotit-datasets)
+      - ${SPOTIT_DATASETS:-./datasets}:/datasets
     gpus: all
 
   backend:

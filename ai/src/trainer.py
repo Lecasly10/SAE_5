@@ -16,6 +16,7 @@ from src.config import (
     OTHER_CLASS,
     SMALL_DATASET_DIR,
     THRESHOLDS_PATH,
+    TRAINING_BACKUP_DIR,
 )
 from src.recognition import choose_thresholds
 
@@ -86,10 +87,12 @@ class CarTrainer:
         validation_split=0.15,
         target_precision=0.9,
         augmented_share=0.5,
+        backup_dir=TRAINING_BACKUP_DIR,
         seed=42
     ):
         self.train_dir = train_dir
         self.test_dir = test_dir
+        self.backup_dir = Path(backup_dir)
 
         self.img_size = img_size
         self.batch_size = batch_size
@@ -246,13 +249,15 @@ class CarTrainer:
             ]
         )
 
-    def fit(self, epochs, patience):
+    def fit(self, epochs, patience, phase):
         return self.model.fit(
             self.train_dataset,
             epochs=epochs,
             validation_data=self.validation_dataset,
             class_weight=self.class_weights,
             callbacks=[
+                # Sauvegarde à chaque tour : relancer `train` reprend au dernier tour
+                tf.keras.callbacks.BackupAndRestore(str(self.backup_dir / phase)),
                 tf.keras.callbacks.EarlyStopping(
                     monitor="val_loss",
                     patience=patience,
@@ -275,16 +280,17 @@ class CarTrainer:
                 layer.trainable = False
 
     def train(self):
-        print("\n========== ENTRAÎNEMENT : NOUVELLE TÊTE ==========\n")
-
-        self.fit(self.head_epochs, patience=3)
+        # Un affinage déjà commencé repart de sa sauvegarde, sans refaire la tête
+        if not (self.backup_dir / "affinage").exists():
+            print("\n========== ENTRAÎNEMENT : NOUVELLE TÊTE ==========\n")
+            self.fit(self.head_epochs, patience=3, phase="tete")
 
         print("\n========== ENTRAÎNEMENT : AFFINAGE ==========\n")
 
         self.unfreeze_base_model()
         self.compile(learning_rate=5e-5)
 
-        return self.fit(self.fine_tune_epochs, patience=6)
+        return self.fit(self.fine_tune_epochs, patience=6, phase="affinage")
 
     def evaluate(self):
         results = self.model.evaluate(

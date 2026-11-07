@@ -18,6 +18,10 @@ __pycache__/
 ai/dataset/
 ai/dataset_small/
 ai/dataset_user/
+ai/dataset_extra/
+ai/downloads/
+ai/training_backup/
+datasets/
 ai/models/evaluation/errors.csv
 ai/models/evaluation/error_examples.png
 archive/

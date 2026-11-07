@@ -1,8 +1,15 @@
 import argparse
 import os
+import shutil
 from pathlib import Path
 
-from src.config import DATASET_DIR, SAMPLE_IMAGE
+from src.config import (
+    DATASET_DIR,
+    DOWNLOADS_DIR,
+    EXTRA_DATASET_DIR,
+    SAMPLE_IMAGE,
+    TRAINING_BACKUP_DIR,
+)
 
 # Les modules qui utilisent TensorFlow sont importés au dernier moment pour que
 # l'analyse et la préparation du dataset marchent sans TensorFlow installé.
@@ -25,9 +32,43 @@ def catalog(args):
         Path(args.source) / "train",
         MIN_TRAIN_IMAGES,
         known=load_entries(),
+        extra_dir=extra_dir(),
     )
     save_catalog(cars)
     print(f"{len(cars)} voitures de {len({car['brand'] for car in cars})} marques")
+
+
+def extra_dir():
+    """DVM-Car et VMMRdb convertis, s'ils existent."""
+    return EXTRA_DATASET_DIR if (EXTRA_DATASET_DIR / "train").is_dir() else None
+
+
+def extra(args):
+    import csv
+    import io
+    import zipfile
+
+    from src.detector import CarDetector
+    from src.extra_datasets import ExtraDataset, dvm_label, vmmr_label
+
+    downloads = Path(args.downloads)
+    dvm = downloads / "dvm" / "resized_DVM_v2.zip"
+    vmmr = downloads / "vmmr" / "VMMRdb.zip"
+
+    if dvm.exists():
+        # Photos refusées par le contrôle qualité des auteurs de DVM-Car
+        with zipfile.ZipFile(downloads / "dvm" / "tables_V2.0.zip") as tables:
+            rows = csv.reader(io.TextIOWrapper(tables.open("Image_table.csv"), encoding="utf-8"))
+            refused = {row[2].strip() for row in rows if row[4].strip() == "N"}
+
+        def label(name):
+            return None if name.rsplit("/", 1)[-1] in refused else dvm_label(name)
+
+        ExtraDataset("DVM", dvm, label, EXTRA_DATASET_DIR).convert()
+
+    if vmmr.exists():
+        # Photos prises dans la rue : la voiture est recadrée comme dans l'application
+        ExtraDataset("VMMR", vmmr, vmmr_label, EXTRA_DATASET_DIR, detector=CarDetector()).convert()
 
 
 def collect(args):
@@ -59,7 +100,9 @@ def prepare(args):
     from src.catalog import CarCatalog
     from src.dataset_preparer import DatasetPreparer
 
-    DatasetPreparer(CarCatalog.load(), source=args.source).prepare()
+    DatasetPreparer(CarCatalog.load(), source=args.source, extra=extra_dir()).prepare()
+    # Un entraînement commencé sur les anciennes photos ne peut pas reprendre
+    shutil.rmtree(TRAINING_BACKUP_DIR, ignore_errors=True)
 
 
 def train(args):
@@ -93,6 +136,7 @@ def predict(args):
 
 COMMANDS = {
     "analyze": ("Analyser le dataset", analyze),
+    "extra": ("Convertir DVM-Car et VMMRdb téléchargés", extra),
     "catalog": ("Créer la liste des voitures (cars.json)", catalog),
     "collect": ("Récupérer les photos confirmées dans l'application", collect),
     "prepare": ("Préparer dataset_small", prepare),
@@ -115,6 +159,11 @@ def build_parser():
             command.add_argument(
                 "--source", default=DATASET_DIR,
                 help="dossier du grand dataset, avec train/, test/ et data_full.csv",
+            )
+        if name == "extra":
+            command.add_argument(
+                "--downloads", default=DOWNLOADS_DIR,
+                help="dossier avec dvm/resized_DVM_v2.zip, dvm/tables_V2.0.zip et vmmr/VMMRdb.zip",
             )
         if name == "predict":
             command.add_argument("image", nargs="?", default=SAMPLE_IMAGE)

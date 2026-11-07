@@ -1,5 +1,6 @@
 import os
 import random
+import re
 import shutil
 from pathlib import Path
 
@@ -7,6 +8,9 @@ from src.config import DATASET_DIR, OTHER_CLASS, SMALL_DATASET_DIR, USER_PHOTOS_
 from src.images import list_images
 
 MIN_TRAIN_IMAGES = 50
+# Assez pour bien apprendre une voiture, sans que l'entraînement dure plus de
+# deux nuits avec DVM-Car et VMMRdb
+MAX_TRAIN_IMAGES = 500
 
 
 def link_or_copy(source, destination):
@@ -35,7 +39,8 @@ class DatasetPreparer:
     plus une classe « autre » faite de voitures absentes de la liste.
 
     max_train=None garde toutes les photos. Les photos de test non tirées et
-    les photos confirmées dans l'application vont aussi à l'entraînement."""
+    les photos confirmées dans l'application vont aussi à l'entraînement.
+    Les dossiers d'une voiture peuvent aussi venir de `extra` (DVM-Car, VMMRdb)."""
 
     def __init__(
         self,
@@ -43,7 +48,8 @@ class DatasetPreparer:
         source=DATASET_DIR,
         destination=SMALL_DATASET_DIR,
         user_photos=USER_PHOTOS_DIR,
-        max_train=None,
+        extra=None,
+        max_train=MAX_TRAIN_IMAGES,
         max_test=60,
         other_train=2000,
         other_test=300,
@@ -54,6 +60,7 @@ class DatasetPreparer:
         self.source = Path(source)
         self.destination = Path(destination)
         self.user_photos = Path(user_photos)
+        self.roots = [self.source] + ([Path(extra)] if extra else [])
         self.max_train = max_train
         self.max_test = max_test
         self.other_train = other_train
@@ -84,7 +91,7 @@ class DatasetPreparer:
             f"{car.id} : {name}"
             for car in self.catalog
             for name in car.sources
-            if not (self.source / "train" / name).is_dir()
+            if not self.folder("train", name).is_dir()
         ]
         if missing:
             raise FileNotFoundError(
@@ -94,7 +101,7 @@ class DatasetPreparer:
         too_small = []
         for car in self.catalog:
             count = sum(
-                len(list_images(self.source / "train" / name))
+                len(list_images(self.folder("train", name)))
                 for name in car.sources
             )
             if count < self.min_train:
@@ -105,11 +112,19 @@ class DatasetPreparer:
                 + "\n".join(too_small)
             )
 
+    def folder(self, split, name):
+        """Dossier `name` dans le grand dataset ou dans `extra`."""
+        for root in self.roots:
+            if (root / "train" / name).is_dir():
+                return root / split / name
+        return self.source / split / name
+
     def dataset_images(self, car, split):
         return [
             image
             for name in car.sources
-            for image in list_images(self.source / split / name)
+            if self.folder(split, name).is_dir()
+            for image in list_images(self.folder(split, name))
         ]
 
     def user_images(self, car):
@@ -123,7 +138,12 @@ class DatasetPreparer:
 
     def prepare_other_class(self):
         used = {name for car in self.catalog for name in car.sources}
-        known_families = {family(name) for name in used}
+        # Aussi par nom : une voiture venue de DVM-Car ne doit pas finir dans
+        # « autre » avec les photos du grand dataset
+        known_families = {family(name) for name in used} | {
+            (re.split(r"[\s-]", car.brand)[0].lower(), car.model.split()[0].lower())
+            for car in self.catalog
+        }
         folders = sorted(
             folder.name
             for folder in (self.source / "train").iterdir()

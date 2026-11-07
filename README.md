@@ -181,7 +181,7 @@ Imagine un Pokédex, mais avec de vraies voitures :
 
 L'idée est née parce que plusieurs membres de l'équipe sont passionnés d'automobile, et que l'un d'eux photographie des voitures de collection (« carspotting »).
 
-**L'IA connaît 758 voitures de 66 marques** : chaque modèle du dataset qui a au moins 50 photos, toutes générations et versions confondues (une seule « BMW M4 », une seule « Porsche 911 ») (Renault, Peugeot, Citroën, BMW, Audi, Mercedes, Toyota, Porsche, Ferrari…). La liste complète est dans `ai/models/cars.json`. Si l'IA n'est pas sûre d'elle, elle répond « voiture non reconnue » au lieu de deviner (voir [Limites connues](#14-limites-connues-et-suite)).
+**L'IA connaît 1 183 voitures de 79 marques** : chaque modèle du dataset et de DVM-Car et VMMRdb qui a au moins 50 photos, toutes générations et versions confondues (une seule « BMW M4 », une seule « Porsche 911 ») (Renault, Peugeot, Citroën, BMW, Audi, Mercedes, Toyota, Porsche, Ferrari…). La liste complète est dans `ai/models/cars.json`. Si l'IA n'est pas sûre d'elle, elle répond « voiture non reconnue » au lieu de deviner (voir [Limites connues](#14-limites-connues-et-suite)).
 
 ---
 
@@ -233,7 +233,7 @@ sequenceDiagram
     end
 ```
 
-**Corriger l'IA** : quand l'IA n'est pas sûre ou se trompe (bouton « Ce n'est pas la bonne voiture ? »), l'utilisateur touche la bonne voiture dans les suggestions. La fenêtre s'affiche alors avec cette voiture (« VOITURE CORRIGÉE »), et c'est elle qui est ajoutée à la bibliothèque. Si la bonne voiture n'est pas dans les suggestions, le bouton « Aider l'IA » (à côté de « Réessayer ») ouvre la liste des 758 voitures avec une recherche (« bmw m4 ») pour la choisir. Le backend n'accepte qu'une voiture de cette liste.
+**Corriger l'IA** : quand l'IA n'est pas sûre ou se trompe (bouton « Ce n'est pas la bonne voiture ? »), l'utilisateur touche la bonne voiture dans les suggestions. La fenêtre s'affiche alors avec cette voiture (« VOITURE CORRIGÉE »), et c'est elle qui est ajoutée à la bibliothèque. Si la bonne voiture n'est pas dans les suggestions, le bouton « Aider l'IA » (à côté de « Réessayer ») ouvre la liste des 1 183 voitures avec une recherche (« bmw m4 ») pour la choisir. Le backend n'accepte qu'une voiture de cette liste.
 
 **L'IA apprend avec les photos de l'application**, seulement pour les utilisateurs qui l'ont accepté dans les paramètres (« Autoriser l'entraînement de l'IA avec mes photos », désactivé par défaut, consentement RGPD). Chaque voiture ajoutée à leur bibliothèque, et chaque correction, est une photo dont la réponse est connue. Ces photos sont gardées dans MongoDB, puis ajoutées à l'entraînement suivant par `python main.py retrain` (voir [Réentraîner ou évaluer le modèle](#réentraîner-ou-évaluer-le-modèle)). Si l'utilisateur retire son accord, ses photos de correction sont supprimées et `collect` efface ses photos de `ai/dataset_user/`. Les photos sans réponse confirmée ne sont jamais utilisées : l'IA apprendrait ses propres erreurs.
 
@@ -242,7 +242,7 @@ sequenceDiagram
 ### Les deux modèles d'IA
 
 1. **Le détecteur** (`ai/models/detector/detect.tflite`) : un modèle *SSD MobileNet* déjà entraîné sur la base d'images COCO. Il sait trouver des voitures dans une photo et renvoie un rectangle. C'est lui qui permet de dessiner le **cadre rouge**.
-2. **Le classifieur** (`ai/models/spotit_classifier.keras`) : un modèle *EfficientNetV2-B3* entraîné par l'équipe sur une classe par génération (1 002 voitures) plus une classe « autre » ; ses réponses sont additionnées par modèle (les générations d'un même modèle forment une seule voiture). Le prochain entraînement apprendra directement les 758 modèles (technique du *transfer learning* : on réutilise un modèle qui sait déjà reconnaître des formes et on lui apprend à choisir entre nos voitures). Il ne regarde que la voiture découpée dans le cadre rouge (avec un peu de marge), pas le décor autour. C'est lui qui donne la **marque, le modèle et la confiance**. Les années de production viennent de la fiche de la voiture (`ai/models/cars.json`).
+2. **Le classifieur** (`ai/models/spotit_classifier.keras`) : un modèle *EfficientNetV2-B3* entraîné par l'équipe sur les 1 183 voitures plus une classe « autre » (technique du *transfer learning* : on réutilise un modèle qui sait déjà reconnaître des formes et on lui apprend à choisir entre nos voitures). Il ne regarde que la voiture découpée dans le cadre rouge (avec un peu de marge), pas le décor autour. C'est lui qui donne la **marque, le modèle et la confiance**. Les années de production viennent de la fiche de la voiture (`ai/models/cars.json`).
 
 #### La « confiance » en clair
 La confiance n'est **pas** « la probabilité d'avoir raison ». C'est la part de préférence du modèle pour cette voiture **par rapport aux autres voitures**. Si deux voitures se ressemblent (Peugeot 3008 et 5008), le modèle hésite et la confiance se partage.
@@ -733,7 +733,8 @@ SAE_5/
 │   │   ├── evaluate.py          ← évaluation du modèle sauvegardé
 │   │   ├── images.py            ← liste les images d'un dossier, recadre sur la voiture
 │   │   ├── dataset_analyzer.py  ← compte les images par voiture
-│   │   └── dataset_preparer.py  ← crée dataset_small (voitures regroupées + « autre »)
+│   │   ├── dataset_preparer.py  ← crée dataset_small (voitures regroupées + « autre »)
+│   │   └── extra_datasets.py    ← convertit DVM-Car et VMMRdb au format du grand dataset
 │   └── tests/                   ← tests automatiques
 │
 └── flutter_application_1/       ← L'APPLICATION (Flutter / Dart)
@@ -805,20 +806,20 @@ Le champ `box` est le rectangle de la voiture, en proportions de l'image (0 à 1
 
 ### L'IA en détail
 
-- **Classes** : 758 voitures + « autre ». Le modèle actuel a été entraîné sur 1 002 voitures (une par génération) ; ses résultats ci-dessous sont mesurés sur ces 1 003 classes. Données : dataset Kaggle [*Car Model Variants and Images*](https://www.kaggle.com/datasets/eimadevyni/car-model-variants-and-images-dataset) (≈ 3 800 modèles). Une voiture de l'application regroupe tous les dossiers du dataset d'un même modèle : carrosseries, finitions, versions et générations (par exemple toutes les Clio, ou toutes les Porsche 911 : Carrera, Turbo, GT3, 996, 997, 991…). Les regroupements sont faits par `python main.py catalog` et écrits dans `ai/models/cars.json` : 758 voitures. Les anciens identifiants (une voiture par génération) sont gardés dans `aliases`, pour que les photos déjà enregistrées dans l'application servent toujours.
-- **Images** : toutes les photos du dataset pour chaque voiture (50 au minimum), dont 60 au maximum gardées pour le test, plus les photos confirmées dans l'application ; soit 86 238 images d'entraînement et 22 182 de test. La classe « autre » contient 975 images d'entraînement, prises dans des voitures absentes de la liste.
+- **Classes** : 1 183 voitures + « autre ». Données : dataset Kaggle [*Car Model Variants and Images*](https://www.kaggle.com/datasets/eimadevyni/car-model-variants-and-images-dataset) (≈ 3 800 modèles), complété par DVM-Car et VMMRdb (voir plus bas). Une voiture de l'application regroupe tous les dossiers du dataset d'un même modèle : carrosseries, finitions, versions et générations (par exemple toutes les Clio, ou toutes les Porsche 911 : Carrera, Turbo, GT3, 996, 997, 991…). Les regroupements sont faits par `python main.py catalog` et écrits dans `ai/models/cars.json` : 1 183 voitures. Les anciens identifiants (une voiture par génération) sont gardés dans `aliases`, pour que les photos déjà enregistrées dans l'application servent toujours.
+- **Images** : au moins 50 photos par voiture et 500 au maximum pour l'entraînement, dont 60 au maximum gardées pour le test, plus les photos confirmées dans l'application ; soit 346 447 images d'entraînement et 46 623 de test. La classe « autre » contient des photos de voitures absentes de la liste.
 - **Classifieur** : EfficientNetV2-B3 (poids ImageNet), images en 300 × 300, *data augmentation* qui imite des photos de téléphone (miroir, rotation, zoom, décalage, perspective, luminosité, contraste, saturation, teinte, flou) sur une photo sur deux, l'autre restant intacte, précision mixte 16 bits. Le modèle sauvegardé ne contient pas ces transformations, entraînement en deux temps (nouvelle tête, puis affinage de tout le modèle) sur carte graphique, 15 % des images d'entraînement gardées pour régler les seuils.
-- **Résultats mesurés sur 22 182 photos de test** (`ai/models/evaluation/metrics.json`) :
+- **Résultats mesurés sur 46 623 photos de test** (`ai/models/evaluation/metrics.json`) :
 
 | Mesure | Valeur |
 |---|---|
-| Bonne voiture en 1ʳᵉ proposition (parmi 1 003 classes) | **80,1 %** |
-| Bonne voiture dans les 3 premières | **88,1 %** |
-| Réponses justes **quand l'IA répond** (seuil 30 %) | **92,8 %** |
-| Voitures de la liste trouvées **et** justes | 74,2 % |
-| Voitures hors liste prises à tort pour une voiture connue | 17,3 % |
+| Bonne voiture en 1ʳᵉ proposition (parmi 1 184 classes) | **87,4 %** |
+| Bonne voiture dans les 3 premières | **92,6 %** |
+| Réponses justes **quand l'IA répond** (seuil 30 %) | **94,4 %** |
+| Voitures de la liste trouvées **et** justes | 85,2 % |
+| Voitures hors liste prises à tort pour une voiture connue | 28,3 % |
 
-Pour comparaison, avec 68 voitures et MobileNetV3, l'IA trouvait la bonne en 1ʳᵉ proposition 67,2 % du temps ; avec 979 voitures et MobileNetV3, 55,3 %. Le passage à EfficientNetV2, aux images en 300 × 300 et à l'affinage de tout le modèle a fait gagner plus de 20 points. Le premier entraînement EfficientNetV2 (78,8 %) a duré environ 3 h 30 sur une RTX 4080 SUPER ; le second, avec toutes les photos et l'augmentation « téléphone », a duré environ 5 h 30 (une nuit) et a atteint 80,1 %. Un nouveau modèle n'est gardé que s'il fait mieux que l'ancien sur le test.
+Pour comparaison, avec 68 voitures et MobileNetV3, l'IA trouvait la bonne en 1ʳᵉ proposition 67,2 % du temps ; avec 979 voitures et MobileNetV3, 55,3 %. Le passage à EfficientNetV2, aux images en 300 × 300 et à l'affinage de tout le modèle a fait gagner plus de 20 points. Avec 758 voitures, l'IA trouvait la bonne 80,8 % du temps. L'ajout de DVM-Car et VMMRdb (4 fois plus de photos) l'a fait passer à 87,4 % avec 1 183 voitures : cet entraînement a duré environ 28 h sur une RTX 4080 SUPER, en 3 nuits, dont 10 h pour préparer les photos. Un nouveau modèle n'est gardé que s'il fait mieux que l'ancien sur le test.
 
 Quelques voitures de la première version, part de photos retrouvées : Citroën 2CV 96 %, Ferrari F12 90 %, Fiat 500 Abarth 86 %, Toyota Hilux 89 %. Les voitures françaises sont retrouvées 84 % du temps en moyenne. Le détail de chaque voiture est dans `ai/models/evaluation/metrics_by_class.csv`.
 
@@ -829,6 +830,23 @@ Quelques voitures de la première version, part de photos retrouvées : Citroën
 Le grand dataset n'est **pas** dans le dépôt (≈ 6 Go) : télécharge-le sur Kaggle (lien ci-dessus) et décompresse-le pour obtenir un dossier contenant `train/` et `test/` (par exemple `ai/dataset/`).
 
 Le plus simple est de passer par Docker (rien à installer). Le grand dataset doit être dans le dossier `archive/` à la racine du projet.
+
+**Datasets supplémentaires (facultatifs, environ 27 Go à télécharger)** : deux gros datasets ajoutent des photos aux mêmes voitures et de nouvelles voitures, pour un usage éducatif et de recherche :
+
+| Dataset | Photos | Pourquoi | Téléchargement |
+|---|---|---|---|
+| [DVM-Car](https://deepvisualmarketing.github.io/) (Huang et al., IEEE BigData 2022) | 1,45 million, 899 modèles vendus au Royaume-Uni | beaucoup de photos par voiture, sous tous les angles | `resized_DVM_v2.zip` (14,6 Go) et `tables_V2.0.zip` sur [figshare](https://figshare.com/articles/figure/DVM-CAR_Dataset/19586296/1) |
+| [VMMRdb](https://github.com/faezetta/VMMRdb) (Tafazzoli et al., CVPR Workshops 2017, licence MIT) | 291 752, 9 170 modèles et années | photos d'amateurs prises dans la rue, proches des photos de l'application | `VMMRdb.zip` (12,4 Go) |
+
+Mets-les dans un dossier sur un disque qui a au moins 60 Go libres, par exemple `F:\spotit-datasets\dvm\` (les deux zip DVM) et `F:\spotit-datasets\vmmr\` (`VMMRdb.zip`), sans les décompresser. `extra` les convertit au format du grand dataset dans `F:\spotit-datasets\extra\` : un dossier par marque et modèle, toutes années confondues, 700 photos au plus. Les photos de VMMRdb sont recadrées sur la voiture comme dans l'application, et les photos refusées par le contrôle qualité de DVM-Car sont ignorées. `catalog` rattache ensuite ces dossiers aux voitures déjà connues : même marque (« mercedes benz » et « Mercedes-Benz », les Vauxhall anglaises sont des Opel), même modèle (« Mazda3 » et « 3 Axela », « Lexus IS 250 » et « IS », « BMW 328i » et « 3 Series »). Les modèles inconnus deviennent de nouvelles voitures s'ils ont au moins 50 photos.
+
+```powershell
+$env:SPOTIT_DATASETS = "F:\spotit-datasets"
+docker compose run --rm trainer extra
+docker compose run --rm trainer catalog --source /dataset
+docker compose run --rm trainer retrain --source /dataset; docker compose up -d --build ai
+```
+`extra` dure une à deux heures (le recadrage des photos de VMMRdb utilise le processeur) et n'est à faire qu'une fois : relancé, il ne refait que les modèles pas encore convertis. Avec ces datasets, l'entraînement prend environ deux nuits. S'il est coupé, `docker compose run --rm trainer train` le reprend au dernier tour terminé.
 
 **Entraînement complet de nuit (carte graphique NVIDIA)** : une seule commande, depuis la racine du projet. Elle récupère les photos confirmées dans l'application, prépare le dataset avec **toutes** les photos, entraîne, évalue, puis redémarre le service IA avec le nouveau modèle :
 
@@ -857,15 +875,16 @@ docker run --rm -v "${PWD}/ai:/app" -w /app spotit-ai python main.py evaluate
 ```
 ⚠️ Sur le processeur, l'entraînement l'utilise à fond pendant longtemps (plus d'une heure avec toutes les voitures) : l'ordinateur chauffe et les ventilateurs tournent à fond, c'est normal.
 
-`prepare` ne copie pas les photos : il crée des liens vers celles du grand dataset, ce qui ne prend presque pas de place (une copie n'est faite que si les deux dossiers sont sur des disques différents).
+`prepare` ne copie pas les photos : il crée des liens vers celles du grand dataset, ce qui ne prend presque pas de place (une copie n'est faite que si les deux dossiers sont sur des disques différents). Avec Docker, `dataset_small` est créé dans le dossier `SPOTIT_DATASETS` (par défaut `datasets/` à la racine du projet).
 
 | Commande | Action | Besoin |
 |---|---|---|
 | `python main.py analyze --source …` | Compte les images par voiture du grand dataset | le grand dataset |
-| `python main.py catalog --source …` | Complète `cars.json` avec toutes les voitures du dataset qui ont au moins 50 photos (les fiches déjà présentes sont gardées) | le grand dataset |
+| `python main.py extra` | Convertit DVM-Car et VMMRdb téléchargés au format du grand dataset (voir plus haut) | les zip téléchargés |
+| `python main.py catalog --source …` | Complète `cars.json` avec toutes les voitures du dataset, et de DVM-Car et VMMRdb s'ils sont convertis, qui ont au moins 50 photos (les fiches déjà présentes sont gardées) | le grand dataset |
 | `python main.py collect` | Récupère dans MongoDB les photos confirmées (voitures ajoutées à une bibliothèque, corrections) des utilisateurs qui l'ont accepté, dans `ai/dataset_user/`, recadrées sur la voiture. Efface celles qui ont été supprimées ou dont l'accord a été retiré | `MONGODB_URI` |
-| `python main.py prepare --source …` | Crée `dataset_small` à partir de `cars.json` (remplace l'ancien) : toutes les photos du dataset, 60 photos de test par voiture, et les photos de `dataset_user` | le grand dataset |
-| `python main.py train` | **Entraîne** le modèle ; s'il est au moins aussi bon que l'actuel, calcule les seuils et écrit `spotit_classifier.keras`, `classes.json`, `recognition.json` | `dataset_small` |
+| `python main.py prepare --source …` | Crée `dataset_small` à partir de `cars.json` (remplace l'ancien) : 500 photos d'entraînement et 60 de test au plus par voiture, tous datasets confondus, et les photos de `dataset_user` | le grand dataset |
+| `python main.py train` | **Entraîne** le modèle ; s'il est au moins aussi bon que l'actuel, calcule les seuils et écrit `spotit_classifier.keras`, `classes.json`, `recognition.json`. Sauvegarde à chaque tour : relancé après une coupure, il reprend là où il s'était arrêté | `dataset_small` |
 | `python main.py retrain --source …` | `collect`, `prepare`, `train` puis `evaluate` : l'entraînement complet de la nuit | le grand dataset |
 | `python main.py evaluate` | Évalue le modèle sauvegardé (métriques, erreurs, grosses confusions) dans `models/evaluation/` | `dataset_small` |
 | `python main.py predict` | Tente l'image `images/f12.jpg` | — |
@@ -908,7 +927,7 @@ docker run --rm -v "${PWD}/ai:/app" -w /app spotit-ai python main.py evaluate
 | Modèle pré-entraîné de reconnaissance (MobileNet, SSD…) | ✅ EfficientNetV2 + SSD MobileNet |
 | Cadres autour des objets détectés et noms | ✅ cadre rouge + marque et modèle |
 | Pourcentage de confiance | ✅ jauge colorée |
-| Base de données de catégories | ✅ 758 voitures (modèles) de 66 marques (fiches dans `cars.json`) |
+| Base de données de catégories | ✅ 1 183 voitures (modèles) de 79 marques (fiches dans `cars.json`) |
 | Ajouter de nouvelles catégories | 🟡 possible en réentraînant (fiche dans `cars.json` puis `main.py`), pas encore depuis l'application |
 | Apprentissage personnalisé avec les images de l'utilisateur | ✅ photos confirmées ou corrigées dans l'application, ajoutées à chaque réentraînement |
 | Interface intuitive + historique des reconnaissances | ✅ bibliothèque personnelle avec fiches |
@@ -923,9 +942,9 @@ docker run --rm -v "${PWD}/ai:/app" -w /app spotit-ai python main.py evaluate
 ## 14. Limites connues et suite
 
 **Limites actuelles**
-- L'IA connaît **758 voitures** (modèles). Ses erreurs les plus fréquentes étaient des années (Audi A5 2007 et 2011, Volvo XC90 2014 et 2019) : ces générations sont maintenant une seule voiture. Environ 17 % des voitures hors liste sont prises pour une voiture connue.
+- L'IA connaît **1 183 voitures** (modèles). Ses erreurs les plus fréquentes sont des voitures presque identiques (Ford F-250 et F-350, Citroën DS3 et DS 3 ou Honda et Acura NSX, la même voiture rangée sous deux marques, Dodge Ram 1500 et 2500, Jaguar XK et XKR). Environ 28 % des voitures hors liste sont prises pour une voiture connue.
 - Les photos du dataset sont des photos de presse, propres et bien cadrées : sur des photos prises au téléphone, l'IA est moins sûre d'elle et répond plus souvent « non reconnue », mais sa 1ʳᵉ suggestion est souvent la bonne voiture.
-- Elle hésite entre voitures qui se ressemblent (Peugeot 3008 et 5008, 206 et 307…) : 67,2 % de bonnes réponses en 1ʳᵉ proposition, 53,5 % des voitures trouvées avec les seuils actuels. Plusieurs voitures n'ont que 50 à 100 photos d'entraînement.
+- Plusieurs voitures n'ont que 50 à 100 photos d'entraînement.
 - La confiance paraît parfois basse même sur une bonne réponse (voir [section 2](#la--confiance--en-clair)).
 - Le détecteur rate certaines photos (intérieur, très rapproché) : alors pas de cadre.
 - La connexion n'est gardée qu'**en mémoire** : on doit se reconnecter à chaque redémarrage de l'application.

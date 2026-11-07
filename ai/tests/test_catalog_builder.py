@@ -15,6 +15,7 @@ class CatalogBuilderTest(unittest.TestCase):
         self.addCleanup(self.tmp.cleanup)
         self.root = Path(self.tmp.name)
         self.rows = []
+        self.extra_rows = {}
 
     def add(self, brand, model, years, model_dir, years_dir, images=10):
         self.rows.append({
@@ -28,13 +29,89 @@ class CatalogBuilderTest(unittest.TestCase):
         for index in range(images):
             (folder / f"{index}.jpg").write_bytes(b"x")
 
+    def add_extra(self, brand, model, from_year, to_year, images=10, name="DVM"):
+        folder = f"{name}_{brand}_{model}".replace(" ", "_")
+        self.extra_rows.setdefault(name, []).append({
+            "folder": folder, "brand": brand, "model": model,
+            "from_year": from_year, "to_year": to_year,
+        })
+        target = self.root / "extra" / "train" / folder
+        target.mkdir(parents=True, exist_ok=True)
+        for index in range(images):
+            (target / f"{index}.jpg").write_bytes(b"x")
+
     def build(self, min_images=10, known=()):
         path = self.root / "data_full.csv"
         with open(path, "w", newline="", encoding="utf-8") as file:
             writer = csv.DictWriter(file, fieldnames=FIELDS)
             writer.writeheader()
             writer.writerows(self.rows)
-        return build_catalog(path, self.root / "train", min_images, known)
+
+        extra_dir = None
+        if self.extra_rows:
+            extra_dir = self.root / "extra"
+            for name, rows in self.extra_rows.items():
+                with open(extra_dir / f"{name}.csv", "w", newline="", encoding="utf-8") as file:
+                    writer = csv.DictWriter(file, fieldnames=list(rows[0]))
+                    writer.writeheader()
+                    writer.writerows(rows)
+        return build_catalog(path, self.root / "train", min_images, known, extra_dir)
+
+    def test_other_datasets_join_the_same_cars(self):
+        self.add("MERCEDESBENZ", "MERCEDES BENZ C-Klasse W205", range(2014, 2022),
+                 "MERCEDES_BENZ_CKlasse_W205", "20142021")
+        self.add("MAZDA", "MAZDA 3 Axela Sedan", range(2013, 2017), "MAZDA_3__Axela_Sedan", "20132016")
+        self.add("OPEL", "OPEL Mokka", range(2012, 2017), "OPEL_Mokka", "20122016")
+        self.add("LEXUS", "LEXUS IS", range(2013, 2021), "LEXUS_IS", "20132020")
+        self.add_extra("Mercedes-Benz", "C Class", 2008, 2020)
+        self.add_extra("mercedes benz", "c230", 2003, 2007, name="VMMR")
+        self.add_extra("mercedes benz", "c320 wagon", 2001, 2005, name="VMMR")
+        self.add_extra("Mazda", "Mazda3", 2009, 2019)
+        self.add_extra("Vauxhall", "Mokka", 2013, 2019)
+        self.add_extra("Lexus", "IS 250", 2006, 2013)
+
+        cars = {car["id"]: car for car in self.build()}
+
+        self.assertEqual(set(cars), {"mercedes_benz_c_klasse", "mazda_3_axela", "opel_mokka", "lexus_is"})
+        self.assertEqual(len(cars["mercedes_benz_c_klasse"]["sources"]), 4)
+        self.assertEqual(cars["mercedes_benz_c_klasse"]["from_year"], 2001)
+        self.assertEqual(cars["opel_mokka"]["brand"], "Opel")
+
+    def test_other_datasets_add_new_cars(self):
+        self.add("RENAULT", "RENAULT Clio", range(2019, 2024), "RENAULT_Clio", "2019Present")
+        self.add_extra("honda", "civic", 2001, 2016, name="VMMR")
+        self.add_extra("bmw", "328i", 2006, 2012, name="VMMR")
+
+        cars = {car["id"]: car for car in self.build()}
+
+        self.assertEqual(set(cars), {"renault_clio", "honda_civic", "bmw_3_series"})
+        self.assertEqual((cars["honda_civic"]["brand"], cars["honda_civic"]["model"]), ("Honda", "Civic"))
+        self.assertEqual(cars["honda_civic"]["to_year"], 2016)
+
+    def test_keeps_different_volvo_models_apart(self):
+        self.add_extra("Volvo", "XC60", 2009, 2020)
+        self.add_extra("Volvo", "XC90", 2003, 2020)
+
+        self.assertEqual([car["id"] for car in self.build()], ["volvo_xc60", "volvo_xc90"])
+
+    def test_us_trims_and_names_join_the_same_car(self):
+        self.add("VOLKSWAGEN", "VOLKSWAGEN Golf", range(2012, 2020), "VOLKSWAGEN_Golf", "20122019")
+        self.add("MINI", "MINI Hatch 5 Doors", range(2014, 2018), "MINI_Hatch_5_Doors", "20142018")
+        self.add_extra("volkswagen", "gti", 2006, 2014, name="VMMR")
+        self.add_extra("volkswagen", "rabbit", 2006, 2009, name="VMMR")
+        self.add_extra("MINI", "Hatch", 2014, 2019)
+        self.add_extra("toyota", "camry", 2002, 2016, name="VMMR")
+        self.add_extra("toyota", "camry xle", 2002, 2016, name="VMMR")
+        self.add_extra("mazda", "rx7", 1986, 2002, name="VMMR")
+        self.add_extra("DS", "DS 7 Crossback", 2018, 2019)
+
+        cars = {car["id"]: car for car in self.build()}
+
+        self.assertEqual(len(cars["volkswagen_golf"]["sources"]), 3)
+        self.assertEqual(len(cars["toyota_camry"]["sources"]), 2)
+        self.assertEqual(len([car for car in cars.values() if car["brand"] == "Mini"]), 1)
+        self.assertEqual(cars["mazda_rx7"]["model"], "RX7")
+        self.assertEqual(cars["ds_automobiles_7_crossback"]["brand"], "DS Automobiles")
 
     def test_merges_every_generation_and_body_style_of_a_model(self):
         self.add("RENAULT", "RENAULT Clio 5 Doors", range(2012, 2017), "RENAULT_Clio_5_Doors", "20122016")
@@ -146,6 +223,10 @@ class CatalogBuilderTest(unittest.TestCase):
         self.assertEqual(brand_name("BMW"), "BMW")
         self.assertEqual(brand_name("ALFAROMEO"), "Alfa Romeo")
         self.assertEqual(brand_name("DeLorean"), "DeLorean")
+        self.assertEqual(brand_name("mercedes benz"), "Mercedes-Benz")
+        self.assertEqual(brand_name("land rover"), "Land Rover")
+        self.assertEqual(brand_name("bmw"), "BMW")
+        self.assertEqual(brand_name("Vauxhall"), "Opel")
 
     def test_base_model_drops_brand_and_body_style(self):
         self.assertEqual(base_model("ALFAROMEO", "ALFA ROMEO Giulia Sedan"), "Giulia")

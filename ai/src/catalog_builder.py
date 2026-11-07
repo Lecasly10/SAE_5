@@ -1,8 +1,9 @@
 import csv
 import json
 import re
+import unicodedata
 from collections import defaultdict
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from pathlib import Path
 
 from src.config import CARS_PATH
@@ -60,11 +61,70 @@ class Variant:
     from_year: int
     to_year: int | None
     images: int
+    # Vient de DVM-Car ou VMMRdb (voir extra_datasets.py)
+    extra: bool = False
+
+
+def brand_key(name):
+    """"Mercedes-Benz", "MERCEDESBENZ" et "mercedes benz" donnent la même clé."""
+    text = unicodedata.normalize("NFKD", name).encode("ascii", "ignore").decode()
+    return re.sub(r"[^a-z0-9]", "", text.lower())
+
+
+BRAND_KEYS = {brand_key(raw): name for raw, name in BRAND_NAMES.items()} | {
+    "vw": "Volkswagen",
+    "chevy": "Chevrolet",
+    # Les Opel vendues au Royaume-Uni (DVM-Car) portent le logo Vauxhall
+    "vauxhall": "Opel",
+    "ds": "DS Automobiles",
+}
+
+# Finitions américaines de VMMRdb à la fin du nom : "camry le", "civic ex"
+TRIM_SUFFIX = re.compile(
+    r"(\s+(le|se|xle|xse|ce|dx|lx|ex|exl|ex-l|sr5|xlt|xl|lt|ltz|ls|sport|limited|base|hybrid|unspecified))+$",
+    re.IGNORECASE,
+)
+# Même voiture sous un autre nom aux États-Unis
+EXTRA_MODELS = {
+    ("volkswagen", "gti"): "Golf",
+    ("volkswagen", "rabbit"): "Golf",
+    ("volkswagen", "new beetle"): "Beetle",
+    ("volkswagen", "newbeetle"): "Beetle",
+    ("volkswagen", "bug"): "Beetle",
+}
+
+# Noms de motorisation des autres datasets : "IS 250" est une Lexus IS, "C230"
+# une Mercedes Classe C, "328i" une BMW Série 3. Seulement pour ces marques :
+# chez Volvo, XC60 et XC90 sont deux voitures différentes.
+ENGINE_NAME = re.compile(r"^([a-z]{1,3})\s?-?\d{2,3}[a-z]{0,3}$", re.IGNORECASE)
+ENGINE_BRANDS = {"lexus", "mercedesbenz", "infiniti"}
+BMW_ENGINE = re.compile(r"^([1-8])\d{2}[a-z]{0,3}$", re.IGNORECASE)
+
+
+def extra_model(raw_brand, model):
+    """Nom de modèle de DVM-Car ou VMMRdb ramené à celui du grand dataset."""
+    brand = brand_key(raw_brand)
+    if (brand, model.strip().lower()) in EXTRA_MODELS:
+        return EXTRA_MODELS[brand, model.strip().lower()]
+    model = clean_model(TRIM_SUFFIX.sub("", model.strip()))
+    if brand == "bmw" and BMW_ENGINE.match(model):
+        return f"{BMW_ENGINE.match(model)[1]} Series"
+    if brand in ENGINE_BRANDS and ENGINE_NAME.match(model):
+        return ENGINE_NAME.match(model)[1].upper()
+    if not model.islower():
+        return model
+    # "rx7" donne "RX7", "mpv" donne "MPV", "bel air" donne "Bel Air"
+    return " ".join(word.upper() if any(c.isdigit() for c in word) or not re.search("[aeiouy]", word)
+                    else word.capitalize() for word in model.split())
 
 
 def brand_name(raw):
     if raw in BRAND_NAMES:
         return BRAND_NAMES[raw]
+    if brand_key(raw) in BRAND_KEYS:
+        return BRAND_KEYS[brand_key(raw)]
+    if raw.islower():
+        return raw.title() if len(raw) > 3 else raw.upper()
     if not raw.isupper() or len(raw) <= 3:
         return raw
     return raw.capitalize()
@@ -93,6 +153,9 @@ def model_key(model):
     """Clé qui rassemble les noms d'un même modèle : "GLK-Klasse X204" et "GLK",
     "C-Class" et "CClass"."""
     text = re.sub(r"(klasse|class)\b", "", clean_model(model), flags=re.IGNORECASE)
+    # Nom fait seulement de mots de carrosserie : "Hatch 5 Doors" est une "Hatch"
+    if text == model.strip() and VARIANT_WORDS.search(text) and text.split():
+        text = text.split()[0]
     return re.sub(r"[^a-z0-9]", "", text.lower()) or model.lower()
 
 
@@ -123,6 +186,48 @@ def read_variants(csv_path, train_dir):
             )
 
     return list(variants.values())
+
+
+def read_extra_variants(extra_dir):
+    """Dossiers de DVM-Car et VMMRdb, décrits par les .csv de extra_datasets."""
+    variants = []
+
+    for csv_path in sorted(Path(extra_dir).glob("*.csv")):
+        with open(csv_path, encoding="utf-8") as file:
+            for row in csv.DictReader(file):
+                folder = Path(extra_dir) / "train" / row["folder"]
+                if not folder.is_dir():
+                    continue
+                variants.append(Variant(
+                    folder=row["folder"],
+                    brand=brand_name(row["brand"]),
+                    model=base_model(row["brand"], extra_model(row["brand"], row["model"])),
+                    from_year=int(row["from_year"]),
+                    to_year=int(row["to_year"]),
+                    images=len(list_images(folder)),
+                    extra=True,
+                ))
+
+    return variants
+
+
+def same_names(dataset_variants, extra_variants):
+    """Donne aux dossiers des autres datasets la marque et le modèle du grand
+    dataset : "Mercedes-Benz" partout, et "Mazda 3" rejoint "3 Axela", le plus
+    court des modèles connus qui commencent ainsi."""
+    brands = {brand_key(v.brand): v.brand for v in dataset_variants}
+    models = defaultdict(dict)
+    for v in dataset_variants:
+        models[v.brand].setdefault(model_key(v.model), v.model)
+
+    for v in extra_variants:
+        brand = brands.get(brand_key(v.brand), v.brand)
+        key = model_key(v.model)
+        longer = [known for known in models[brand] if known.startswith(key) and known[len(key):][:1].isalpha()]
+        model = v.model
+        if key not in models[brand] and longer:
+            model = models[brand][min(longer, key=len)]
+        yield replace(v, brand=brand, model=model)
 
 
 def group_models(variants, known):
@@ -158,7 +263,8 @@ def slug(text):
 
 
 def describe(group):
-    biggest = max(group, key=lambda v: v.images)
+    # Les noms du grand dataset d'abord, pour garder les identifiants connus
+    biggest = max(group, key=lambda v: (not v.extra, v.images))
     model = clean_model(biggest.model)
     ended = [v.to_year for v in group]
 
@@ -183,12 +289,15 @@ def known_variants(known, train_dir):
     }
 
 
-def build_catalog(csv_path, train_dir, min_images, known=()):
+def build_catalog(csv_path, train_dir, min_images, known=(), extra_dir=None):
     """Une voiture par marque et modèle, quelle que soit la génération, si elle
     a assez d'images. Les identifiants des voitures déjà connues qu'elle
-    remplace sont gardés dans « aliases », pour retrouver les anciennes photos."""
+    remplace sont gardés dans « aliases », pour retrouver les anciennes photos.
+    extra_dir ajoute les photos de DVM-Car et VMMRdb aux mêmes voitures."""
     variants = known_variants(known, train_dir)
     variants.update((v.folder, v) for v in read_variants(csv_path, train_dir))
+    if extra_dir:
+        variants.update((v.folder, v) for v in same_names(variants.values(), read_extra_variants(extra_dir)))
     cars = {}
 
     for group in group_models(variants, known):

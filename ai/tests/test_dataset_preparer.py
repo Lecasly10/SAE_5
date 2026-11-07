@@ -111,6 +111,29 @@ class DatasetPreparerTest(unittest.TestCase):
 
         self.assertEqual(count_images(self.destination, "train", "clio"), 12)
 
+    def test_reads_folders_of_other_datasets(self):
+        extra = Path(self.tmp.name) / "extra"
+        make_images(extra, "train", "DVM_renault_clio", 4)
+        make_images(extra, "test", "DVM_renault_clio", 2)
+        self.catalog = CarCatalog([
+            Car("clio", "Renault", "Clio", 2013, None, ("RENAULT_Clio_2019Present", "DVM_renault_clio")),
+        ])
+
+        self.preparer(extra=extra, max_test=50).prepare()
+
+        self.assertEqual(count_images(self.destination, "train", "clio"), 10)
+        self.assertEqual(count_images(self.destination, "test", "clio"), 4)
+
+    def test_other_class_skips_cars_known_by_name(self):
+        self.catalog = CarCatalog([
+            Car("focus", "Ford", "Focus", 2012, None, ("RENAULT_Clio_2019Present",)),
+        ])
+
+        self.preparer(max_train=50, max_test=50).prepare()
+
+        names = [path.name for path in (self.destination / "train" / OTHER_CLASS).iterdir()]
+        self.assertFalse(any(name.startswith("FORD") for name in names))
+
     def test_family_handles_both_folder_styles(self):
         self.assertEqual(family("RENAULT_Clio_2019Present"), ("renault", "clio"))
         self.assertEqual(family("2017_Dacia_Duster"), ("dacia", "duster"))
