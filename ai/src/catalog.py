@@ -2,7 +2,8 @@ import json
 from collections import defaultdict
 from dataclasses import dataclass
 
-from src.config import CARS_PATH
+from src.config import CARS_PATH, MARKET_PATH
+from src.market import load_market
 
 
 @dataclass(frozen=True)
@@ -15,6 +16,13 @@ class Car:
     sources: tuple[str, ...]
     # Anciens identifiants de cette voiture (une par génération auparavant)
     aliases: tuple[str, ...] = ()
+    # Prix neuf en euros et fréquence sur la route, en Europe et aux
+    # États-Unis (voir market.py) ; None quand on ne sait pas
+    price: int | None = None
+    europe: float | None = None
+    america: float | None = None
+    # Exemplaires fabriqués, seulement pour les séries limitées
+    produced: int | None = None
 
     def to_dict(self):
         return {
@@ -23,6 +31,9 @@ class Car:
             "model": self.model,
             "from_year": self.from_year,
             "to_year": self.to_year,
+            "price": self.price,
+            "seen": {"europe": self.europe, "america": self.america},
+            "produced": self.produced,
         }
 
 
@@ -46,7 +57,8 @@ class CarCatalog:
         self.by_id = {name: car for car in self.cars for name in (car.id, *car.aliases)}
 
     @classmethod
-    def load(cls, path=CARS_PATH):
+    def load(cls, path=CARS_PATH, market_path=MARKET_PATH):
+        market = load_market(market_path)
         return cls(
             Car(
                 id=entry["id"],
@@ -56,6 +68,7 @@ class CarCatalog:
                 to_year=entry["to_year"],
                 sources=tuple(entry["sources"]),
                 aliases=tuple(entry.get("aliases", ())),
+                **market.get(entry["id"], {}),
             )
             for entry in load_entries(path)
         )

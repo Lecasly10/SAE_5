@@ -77,6 +77,35 @@ class CatalogBuilderTest(unittest.TestCase):
         self.assertEqual(cars["mercedes_benz_c_klasse"]["from_year"], 2001)
         self.assertEqual(cars["opel_mokka"]["brand"], "Opel")
 
+    def test_same_car_under_two_names_is_one_car(self):
+        self.add("CITROEN", "CITROEN DS 3", range(2009, 2015), "CITROEN_DS_3", "20092014")
+        self.add("HONDA", "HONDA NSX", range(2016, 2023), "HONDA_NSX", "2016Present")
+        self.add_extra("DS", "3", 2014, 2017)
+        self.add_extra("acura", "nsx", 1991, 2005, name="VMMR")
+        self.add_extra("ford", "f250", 1999, 2016, name="VMMR")
+        self.add_extra("ford", "f350", 1999, 2016, name="VMMR")
+
+        cars = {car["id"]: car for car in self.build()}
+
+        self.assertEqual(set(cars), {"citro_n_ds_3", "honda_nsx", "ford_f_series_super_duty"})
+        self.assertEqual(cars["honda_nsx"]["from_year"], 1991)
+        self.assertEqual(len(cars["ford_f_series_super_duty"]["sources"]), 2)
+
+    def test_known_cars_under_two_names_become_aliases(self):
+        self.add("HONDA", "HONDA NSX", range(2016, 2023), "HONDA_NSX", "2016Present")
+        self.add("ACURA", "ACURA NSX", range(2016, 2023), "ACURA_NSX", "2016Present")
+        known = [
+            {"id": "honda_nsx", "brand": "Honda", "model": "NSX", "from_year": 2016, "to_year": None,
+             "sources": ["HONDA_NSX_2016Present"]},
+            {"id": "acura_nsx", "brand": "Acura", "model": "NSX", "from_year": 2016, "to_year": None,
+             "sources": ["ACURA_NSX_2016Present"]},
+        ]
+
+        cars = self.build(known=known)
+
+        self.assertEqual([car["id"] for car in cars], ["honda_nsx"])
+        self.assertEqual(cars[0]["aliases"], ["acura_nsx"])
+
     def test_other_datasets_add_new_cars(self):
         self.add("RENAULT", "RENAULT Clio", range(2019, 2024), "RENAULT_Clio", "2019Present")
         self.add_extra("honda", "civic", 2001, 2016, name="VMMR")

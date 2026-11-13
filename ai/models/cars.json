@@ -101,19 +101,6 @@
       "aliases": []
     },
     {
-      "id": "acura_nsx",
-      "brand": "Acura",
-      "model": "NSX",
-      "from_year": 1991,
-      "to_year": null,
-      "sources": [
-        "ACURA_NSX_19912001",
-        "ACURA_NSX_2016Present",
-        "VMMR_acura_nsx"
-      ],
-      "aliases": []
-    },
-    {
       "id": "acura_rdx",
       "brand": "Acura",
       "model": "RDX",
@@ -1182,6 +1169,9 @@
       "from_year": 2000,
       "to_year": null,
       "sources": [
+        "AUDI_TTS_Coupe_2018Present",
+        "AUDI_TTS_Roadster_20142018",
+        "AUDI_TTS_Roadster_2018Present",
         "AUDI_TT_Coupe_20062014",
         "AUDI_TT_Coupe_20142018",
         "AUDI_TT_Coupe_2018Present",
@@ -1195,28 +1185,16 @@
         "AUDI_TT_Roadster_2018Present",
         "DVM_audi_tt",
         "DVM_audi_tt_rs",
+        "DVM_audi_tts",
         "VMMR_audi_tt"
       ],
       "aliases": [
         "audi_tt_2006_2014",
         "audi_tt_2009_2014",
         "audi_tt_2014_2019",
-        "audi_tt_2018_present"
+        "audi_tt_2018_present",
+        "audi_tts"
       ]
-    },
-    {
-      "id": "audi_tts",
-      "brand": "Audi",
-      "model": "TTS",
-      "from_year": 2008,
-      "to_year": null,
-      "sources": [
-        "AUDI_TTS_Coupe_2018Present",
-        "AUDI_TTS_Roadster_20142018",
-        "AUDI_TTS_Roadster_2018Present",
-        "DVM_audi_tts"
-      ],
-      "aliases": []
     },
     {
       "id": "bentley_arnage_red_label",
@@ -3877,15 +3855,18 @@
       "brand": "Citroën",
       "model": "DS 3",
       "from_year": 2009,
-      "to_year": 2016,
+      "to_year": 2017,
       "sources": [
         "CITROEN_DS_3_20092014",
         "DS_AUTOMOBILES_DS_3_20142016",
         "DS_AUTOMOBILES_DS_3_Cabrio_20132016",
         "DVM_citroen_ds3",
-        "DVM_citroen_ds3_cabrio"
+        "DVM_citroen_ds3_cabrio",
+        "DVM_ds_3",
+        "DVM_ds_3_cabrio"
       ],
       "aliases": [
+        "ds_automobiles_3",
         "ds_automobiles_ds_3_2009_2016"
       ]
     },
@@ -4376,40 +4357,6 @@
       "aliases": []
     },
     {
-      "id": "dodge_ram_1500",
-      "brand": "Dodge",
-      "model": "Ram 1500",
-      "from_year": 1975,
-      "to_year": null,
-      "sources": [
-        "DODGE_Ram_1500_2009Present",
-        "VMMR_dodge_ram_1500"
-      ],
-      "aliases": []
-    },
-    {
-      "id": "dodge_ram_2500",
-      "brand": "Dodge",
-      "model": "Ram 2500",
-      "from_year": 1982,
-      "to_year": 2015,
-      "sources": [
-        "VMMR_dodge_ram_2500"
-      ],
-      "aliases": []
-    },
-    {
-      "id": "dodge_ram_3500",
-      "brand": "Dodge",
-      "model": "Ram 3500",
-      "from_year": 1992,
-      "to_year": 2014,
-      "sources": [
-        "VMMR_dodge_ram_3500"
-      ],
-      "aliases": []
-    },
-    {
       "id": "dodge_srt_viper",
       "brand": "Dodge",
       "model": "SRT Viper",
@@ -4454,18 +4401,6 @@
         "DODGE_Viper_SRT10_Roadster_20032007",
         "DODGE_Viper_SRT10_Roadster_20072010",
         "VMMR_dodge_viper"
-      ],
-      "aliases": []
-    },
-    {
-      "id": "ds_automobiles_3",
-      "brand": "DS Automobiles",
-      "model": "3",
-      "from_year": 2014,
-      "to_year": 2017,
-      "sources": [
-        "DVM_ds_3",
-        "DVM_ds_3_cabrio"
       ],
       "aliases": []
     },
@@ -4874,12 +4809,17 @@
       "to_year": null,
       "sources": [
         "DVM_fiat_500",
+        "DVM_fiat_500c",
         "FIAT_500_20072015",
-        "FIAT_500_2015Present"
+        "FIAT_500_2015Present",
+        "FIAT_500_C_20092015",
+        "FIAT_500_C_2015Present"
       ],
       "aliases": [
         "fiat_500_2007_2015",
-        "fiat_500_2015_present"
+        "fiat_500_2015_present",
+        "fiat_500_c",
+        "fiat_500_c_2009_2015"
       ]
     },
     {
@@ -4893,21 +4833,6 @@
       ],
       "aliases": [
         "fiat_500_abarth_2008_present"
-      ]
-    },
-    {
-      "id": "fiat_500_c",
-      "brand": "Fiat",
-      "model": "500 C",
-      "from_year": 2009,
-      "to_year": null,
-      "sources": [
-        "DVM_fiat_500c",
-        "FIAT_500_C_20092015",
-        "FIAT_500_C_2015Present"
-      ],
-      "aliases": [
-        "fiat_500_c_2009_2015"
       ]
     },
     {
@@ -5497,29 +5422,6 @@
       ]
     },
     {
-      "id": "ford_f250",
-      "brand": "Ford",
-      "model": "F250",
-      "from_year": 1900,
-      "to_year": 2016,
-      "sources": [
-        "DVM_ford_f250",
-        "VMMR_ford_f250"
-      ],
-      "aliases": []
-    },
-    {
-      "id": "ford_f350",
-      "brand": "Ford",
-      "model": "F350",
-      "from_year": 1954,
-      "to_year": 2016,
-      "sources": [
-        "VMMR_ford_f350"
-      ],
-      "aliases": []
-    },
-    {
       "id": "ford_f450",
       "brand": "Ford",
       "model": "F450",
@@ -5529,6 +5431,22 @@
         "VMMR_ford_f450"
       ],
       "aliases": []
+    },
+    {
+      "id": "ford_f_series_super_duty",
+      "brand": "Ford",
+      "model": "F-Series Super Duty",
+      "from_year": 1900,
+      "to_year": 2016,
+      "sources": [
+        "DVM_ford_f250",
+        "VMMR_ford_f250",
+        "VMMR_ford_f350"
+      ],
+      "aliases": [
+        "ford_f250",
+        "ford_f350"
+      ]
     },
     {
       "id": "ford_fairlane",
@@ -6595,12 +6513,16 @@
       "from_year": 1991,
       "to_year": null,
       "sources": [
+        "ACURA_NSX_19912001",
+        "ACURA_NSX_2016Present",
         "DVM_honda_nsx",
         "HONDA_NSX_19911997",
         "HONDA_NSX_20022005",
-        "HONDA_NSX_2016Present"
+        "HONDA_NSX_2016Present",
+        "VMMR_acura_nsx"
       ],
       "aliases": [
+        "acura_nsx",
         "honda_nsx_2002_2005",
         "honda_nsx_2016_present"
       ]
@@ -7613,11 +7535,22 @@
       "to_year": 2014,
       "sources": [
         "DVM_jaguar_xk",
+        "DVM_jaguar_xkr",
+        "DVM_jaguar_xkr_s",
+        "JAGUAR_XKRS_20112014",
+        "JAGUAR_XKRS_Convertible_20112014",
+        "JAGUAR_XKR_20092014",
+        "JAGUAR_XKR_Convertible_20092014",
         "JAGUAR_XK_20102014",
         "JAGUAR_XK_Cabrio_20102014",
         "VMMR_jaguar_xk"
       ],
-      "aliases": []
+      "aliases": [
+        "jaguar_xkr",
+        "jaguar_xkr_2009_2014",
+        "jaguar_xkrs",
+        "jaguar_xkrs_2011_2014"
+      ]
     },
     {
       "id": "jaguar_xk8",
@@ -7630,36 +7563,6 @@
         "JAGUAR_XK8_X100_19962002"
       ],
       "aliases": []
-    },
-    {
-      "id": "jaguar_xkr",
-      "brand": "Jaguar",
-      "model": "XKR",
-      "from_year": 2000,
-      "to_year": 2014,
-      "sources": [
-        "DVM_jaguar_xkr",
-        "JAGUAR_XKR_20092014",
-        "JAGUAR_XKR_Convertible_20092014"
-      ],
-      "aliases": [
-        "jaguar_xkr_2009_2014"
-      ]
-    },
-    {
-      "id": "jaguar_xkrs",
-      "brand": "Jaguar",
-      "model": "XKRS",
-      "from_year": 2005,
-      "to_year": 2014,
-      "sources": [
-        "DVM_jaguar_xkr_s",
-        "JAGUAR_XKRS_20112014",
-        "JAGUAR_XKRS_Convertible_20112014"
-      ],
-      "aliases": [
-        "jaguar_xkrs_2011_2014"
-      ]
     },
     {
       "id": "jeep_cherokee",
@@ -8522,35 +8425,27 @@
       ]
     },
     {
-      "id": "land_rover_defender_110",
+      "id": "land_rover_defender",
       "brand": "Land Rover",
-      "model": "Defender 110",
-      "from_year": 1990,
+      "model": "Defender",
+      "from_year": 1988,
       "to_year": null,
       "sources": [
         "DVM_land_rover_defender_110",
+        "DVM_land_rover_defender_90",
         "LAND_ROVER_Defender_110_19912007",
         "LAND_ROVER_Defender_110_20072012",
         "LAND_ROVER_Defender_110_20122016",
-        "LAND_ROVER_Defender_110_2019Present"
-      ],
-      "aliases": [
-        "land_rover_defender_110_2007_2012"
-      ]
-    },
-    {
-      "id": "land_rover_defender_90",
-      "brand": "Land Rover",
-      "model": "Defender 90",
-      "from_year": 1995,
-      "to_year": null,
-      "sources": [
-        "DVM_land_rover_defender_90",
+        "LAND_ROVER_Defender_110_2019Present",
         "LAND_ROVER_Defender_90_20072012",
         "LAND_ROVER_Defender_90_20122016",
-        "LAND_ROVER_Defender_90_2019Present"
+        "LAND_ROVER_Defender_90_2019Present",
+        "VMMR_landrover_defender"
       ],
       "aliases": [
+        "land_rover_defender_110",
+        "land_rover_defender_110_2007_2012",
+        "land_rover_defender_90",
         "land_rover_defender_90_2019_present"
       ]
     },
@@ -13878,32 +13773,22 @@
       "to_year": null,
       "sources": [
         "DVM_porsche_macan",
-        "PORSCHE_Macan_S_95B_20142018",
-        "PORSCHE_Macan_S_95B_20182021",
-        "PORSCHE_Macan_S_95B_2021Present",
-        "PORSCHE_Macan_S_Diesel_95B_20142018"
-      ],
-      "aliases": [
-        "porsche_macan_s_95b_2014_2018"
-      ]
-    },
-    {
-      "id": "porsche_macan_95b",
-      "brand": "Porsche",
-      "model": "Macan 95B",
-      "from_year": 2014,
-      "to_year": null,
-      "sources": [
         "PORSCHE_Macan_95B_20142018",
         "PORSCHE_Macan_95B_2018Present",
         "PORSCHE_Macan_GTS_95B_20152019",
         "PORSCHE_Macan_GTS_95B_20192021",
         "PORSCHE_Macan_GTS_95B_2021Present",
+        "PORSCHE_Macan_S_95B_20142018",
+        "PORSCHE_Macan_S_95B_20182021",
+        "PORSCHE_Macan_S_95B_2021Present",
+        "PORSCHE_Macan_S_Diesel_95B_20142018",
         "PORSCHE_Macan_Turbo_95B_20142019",
         "PORSCHE_Macan_Turbo_95B_2019Present"
       ],
       "aliases": [
+        "porsche_macan_95b",
         "porsche_macan_gts_95b_2019_2021",
+        "porsche_macan_s_95b_2014_2018",
         "porsche_macan_turbo_95b_2014_2019"
       ]
     },
@@ -13982,15 +13867,18 @@
       "id": "ram_1500",
       "brand": "RAM",
       "model": "1500",
-      "from_year": 1997,
+      "from_year": 1975,
       "to_year": null,
       "sources": [
+        "DODGE_Ram_1500_2009Present",
         "RAM_Trucks_1500_Crew_Cab_20132015",
         "RAM_Trucks_1500_Crew_Cab_20152018",
         "RAM_Trucks_1500_Crew_Cab_2018Present",
+        "VMMR_dodge_ram_1500",
         "VMMR_ram_1500"
       ],
       "aliases": [
+        "dodge_ram_1500",
         "ram_1500_2013_2018"
       ]
     },
@@ -14008,29 +13896,26 @@
       ]
     },
     {
-      "id": "ram_2500",
+      "id": "ram_2500_3500",
       "brand": "RAM",
-      "model": "2500",
-      "from_year": 2001,
+      "model": "2500 / 3500",
+      "from_year": 1982,
       "to_year": null,
       "sources": [
         "RAM_Trucks_2500_Crew_Cab_20132016",
         "RAM_Trucks_2500_Crew_Cab_2016Present",
-        "VMMR_ram_2500"
-      ],
-      "aliases": []
-    },
-    {
-      "id": "ram_3500",
-      "brand": "RAM",
-      "model": "3500",
-      "from_year": 2005,
-      "to_year": 2016,
-      "sources": [
         "RAM_Trucks_3500_Crew_Cab_20132016",
+        "VMMR_dodge_ram_2500",
+        "VMMR_dodge_ram_3500",
+        "VMMR_ram_2500",
         "VMMR_ram_3500"
       ],
-      "aliases": []
+      "aliases": [
+        "dodge_ram_2500",
+        "dodge_ram_3500",
+        "ram_2500",
+        "ram_3500"
+      ]
     },
     {
       "id": "renault_5",

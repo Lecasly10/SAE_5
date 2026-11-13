@@ -25,8 +25,12 @@ class ServerTest(unittest.TestCase):
 
         self.assertEqual(len(cars), len(list(CarCatalog.load())))
         self.assertEqual(cars, sorted(cars, key=lambda car: (car["brand"], car["model"], car["from_year"])))
-        self.assertIn({"id": "ferrari_f12_berlinetta", "brand": "Ferrari", "model": "F12 Berlinetta",
-                       "from_year": 2012, "to_year": 2015}, cars)
+        f12 = next(car for car in cars if car["id"] == "ferrari_f12_berlinetta")
+        self.assertEqual((f12["brand"], f12["model"], f12["from_year"], f12["to_year"]),
+                         ("Ferrari", "F12 Berlinetta", 2012, 2015))
+        # Prix neuf et fréquence, pour la rareté dans l'application
+        self.assertGreater(f12["price"], 150000)
+        self.assertLess(f12["seen"]["europe"], 0.1)
 
     def test_suggestions_are_distinct_cars(self):
         suggestions = post_image(self.client, "z4.jpg").get_json()["suggestions"]

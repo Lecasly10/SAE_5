@@ -49,9 +49,10 @@ class DatasetPreparerTest(unittest.TestCase):
         ])
 
     def preparer(self, **options):
+        options = {"other_train": 10, "other_test": 10, **options}
         return DatasetPreparer(
             self.catalog, self.source, self.destination, self.user_photos,
-            min_train=5, other_train=10, other_test=10, **options,
+            min_train=5, **options,
         )
 
     def test_merges_sources_and_caps_images(self):
@@ -72,8 +73,8 @@ class DatasetPreparerTest(unittest.TestCase):
     def test_other_class_skips_known_families(self):
         self.preparer(max_train=50, max_test=50).prepare()
 
-        # Seuls Ford Focus et BMW M3 : la Clio V6 appartient à la famille Clio.
-        self.assertEqual(count_images(self.destination, "train", OTHER_CLASS), 2)
+        # Les 3 photos de Ford Focus et de BMW M3 : la Clio V6 appartient à la famille Clio.
+        self.assertEqual(count_images(self.destination, "train", OTHER_CLASS), 6)
         names = [path.name for path in (self.destination / "train" / OTHER_CLASS).iterdir()]
         self.assertFalse(any(name.startswith("RENAULT") for name in names))
 
@@ -133,6 +134,24 @@ class DatasetPreparerTest(unittest.TestCase):
 
         names = [path.name for path in (self.destination / "train" / OTHER_CLASS).iterdir()]
         self.assertFalse(any(name.startswith("FORD") for name in names))
+
+    def test_other_class_mixes_cars_before_taking_more_photos(self):
+        self.preparer(max_train=50, max_test=50, other_train=2).prepare()
+
+        names = sorted(path.name.split("_")[0] for path in (self.destination / "train" / OTHER_CLASS).iterdir())
+        self.assertEqual(names, ["BMW", "FORD"])
+
+    def test_other_class_uses_small_models_of_other_datasets(self):
+        extra = Path(self.tmp.name) / "extra"
+        make_images(extra, "train", "VMMR_lotus_esprit", 2)
+        make_images(extra, "train", "DVM_renault_clio_rs", 2)
+
+        self.preparer(extra=extra, max_train=50, max_test=50).prepare()
+
+        names = [path.name for path in (self.destination / "train" / OTHER_CLASS).iterdir()]
+        self.assertEqual(sum(name.startswith("VMMR_lotus") for name in names), 2)
+        # Une Clio RS reste une Clio, même dans un autre dataset
+        self.assertFalse(any(name.startswith("DVM_renault") for name in names))
 
     def test_family_handles_both_folder_styles(self):
         self.assertEqual(family("RENAULT_Clio_2019Present"), ("renault", "clio"))

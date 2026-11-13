@@ -4,6 +4,7 @@ import re
 import shutil
 from pathlib import Path
 
+from src.catalog_builder import brand_key
 from src.config import DATASET_DIR, OTHER_CLASS, SMALL_DATASET_DIR, USER_PHOTOS_DIR
 from src.images import list_images
 
@@ -33,6 +34,12 @@ def family(folder_name):
     return tuple(part.lower() for part in parts[:2])
 
 
+def folder_key(folder_name):
+    """Nom d'un dossier sans préfixe de dataset ni séparateurs :
+    "VMMR_land_rover_range_rover" donne "landroverrangerover"."""
+    return brand_key(re.sub(r"^(DVM|VMMR)_", "", folder_name))
+
+
 class DatasetPreparer:
     """Construit dataset_small à partir du grand dataset et de cars.json :
     une voiture = un dossier regroupant plusieurs dossiers du grand dataset,
@@ -51,7 +58,7 @@ class DatasetPreparer:
         extra=None,
         max_train=MAX_TRAIN_IMAGES,
         max_test=60,
-        other_train=2000,
+        other_train=6000,
         other_test=300,
         min_train=MIN_TRAIN_IMAGES,
         seed=42,
@@ -144,24 +151,36 @@ class DatasetPreparer:
             (re.split(r"[\s-]", car.brand)[0].lower(), car.model.split()[0].lower())
             for car in self.catalog
         }
+        known_names = {brand_key(f"{car.brand} {car.model.split()[0]}") for car in self.catalog}
+        # Les modèles de DVM-Car et VMMRdb qui ont trop peu de photos pour être
+        # une voiture de la liste servent aussi d'exemples de voitures inconnues
         folders = sorted(
-            folder.name
-            for folder in (self.source / "train").iterdir()
+            (root, folder.name)
+            for root in self.roots
+            for folder in (root / "train").iterdir()
             if folder.is_dir()
             and folder.name not in used
             and family(folder.name) not in known_families
+            and not any(folder_key(folder.name).startswith(name) for name in known_names)
         )
 
         for split, count in (("train", self.other_train), ("test", self.other_test)):
-            files = self.one_image_per_folder(split, folders, count)
+            files = self.spread_images(split, folders, count)
             self.copy_class(split, OTHER_CLASS, files)
 
-    def one_image_per_folder(self, split, folders, count):
+    def spread_images(self, split, folders, count):
+        """`count` photos prises une à une dans chaque dossier, pour que la
+        classe « autre » montre le plus de voitures différentes possible."""
+        pools = []
+        for root, name in self.random.sample(folders, len(folders)):
+            images = list_images(root / split / name) if (root / split / name).is_dir() else []
+            pools.append(self.random.sample(images, len(images)))
+
         files = []
-        for name in self.random.sample(folders, min(count, len(folders))):
-            images = list_images(self.source / split / name)
-            if images:
-                files.append(self.random.choice(images))
+        while len(files) < count and any(pools):
+            for pool in pools:
+                if pool and len(files) < count:
+                    files.append(pool.pop())
         return files
 
     def copy_class(self, split, class_name, files):

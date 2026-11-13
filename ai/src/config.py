@@ -8,6 +8,8 @@ MODEL_PATH = MODELS_DIR / "spotit_classifier.keras"
 CLASSES_PATH = MODELS_DIR / "classes.json"
 CARS_PATH = MODELS_DIR / "cars.json"
 THRESHOLDS_PATH = MODELS_DIR / "recognition.json"
+# Prix neuf et fréquence de chaque voiture, faits par `main.py market`
+MARKET_PATH = MODELS_DIR / "market.json"
 DETECTOR_PATH = MODELS_DIR / "detector" / "detect.tflite"
 EVALUATION_DIR = MODELS_DIR / "evaluation"
 METRICS_PATH = EVALUATION_DIR / "metrics.json"

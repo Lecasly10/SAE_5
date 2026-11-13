@@ -100,6 +100,32 @@ ENGINE_NAME = re.compile(r"^([a-z]{1,3})\s?-?\d{2,3}[a-z]{0,3}$", re.IGNORECASE)
 ENGINE_BRANDS = {"lexus", "mercedesbenz", "infiniti"}
 BMW_ENGINE = re.compile(r"^([1-8])\d{2}[a-z]{0,3}$", re.IGNORECASE)
 
+# Même voiture sous deux marques ou deux noms, que l'IA confondait le plus :
+# (marque, modèle) donne le nom de la voiture qui la regroupe
+SAME_CARS = {
+    ("dsautomobiles", "3"): ("Citroën", "DS 3"),
+    ("acura", "nsx"): ("Honda", "NSX"),
+    ("porsche", "macan95b"): ("Porsche", "Macan"),
+    ("jaguar", "xkr"): ("Jaguar", "XK"),
+    ("jaguar", "xkrs"): ("Jaguar", "XK"),
+    ("audi", "tts"): ("Audi", "TT"),
+    ("fiat", "500c"): ("Fiat", "500"),
+    ("landrover", "defender90"): ("Land Rover", "Defender"),
+    ("landrover", "defender110"): ("Land Rover", "Defender"),
+    ("dodge", "ram1500"): ("RAM", "1500"),
+    ("dodge", "ram2500"): ("RAM", "2500 / 3500"),
+    ("dodge", "ram3500"): ("RAM", "2500 / 3500"),
+    ("ram", "2500"): ("RAM", "2500 / 3500"),
+    ("ram", "3500"): ("RAM", "2500 / 3500"),
+    ("ford", "f250"): ("Ford", "F-Series Super Duty"),
+    ("ford", "f350"): ("Ford", "F-Series Super Duty"),
+}
+
+
+def same_car(brand, model):
+    """Marque et modèle de la voiture qui regroupe celle-ci (voir SAME_CARS)."""
+    return SAME_CARS.get((brand_key(brand), model_key(model)), (brand, model))
+
 
 def extra_model(raw_brand, model):
     """Nom de modèle de DVM-Car ou VMMRdb ramené à celui du grand dataset."""
@@ -249,8 +275,9 @@ def group_models(variants, known):
     for variant in variants.values():
         join(variant.folder, (variant.brand, model_key(variant.model)))
     for car in known:
+        brand, model = same_car(car["brand"], car["model"])
         for name in car["sources"]:
-            join(name, (car["brand"], model_key(car["model"])))
+            join(name, (brand, model_key(model)))
 
     groups = defaultdict(list)
     for folder, variant in variants.items():
@@ -298,6 +325,9 @@ def build_catalog(csv_path, train_dir, min_images, known=(), extra_dir=None):
     variants.update((v.folder, v) for v in read_variants(csv_path, train_dir))
     if extra_dir:
         variants.update((v.folder, v) for v in same_names(variants.values(), read_extra_variants(extra_dir)))
+    for folder, variant in variants.items():
+        brand, model = same_car(variant.brand, variant.model)
+        variants[folder] = replace(variant, brand=brand, model=model)
     cars = {}
 
     for group in group_models(variants, known):

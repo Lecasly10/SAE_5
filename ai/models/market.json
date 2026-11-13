@@ -1,0 +1,7022 @@
+{
+ "abarth_124": {
+  "america": null,
+  "europe": 0.26,
+  "price": 32800,
+  "produced": null
+ },
+ "abarth_595": {
+  "america": null,
+  "europe": 0.608,
+  "price": 16900,
+  "produced": null
+ },
+ "abarth_595c": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "acura_cl": {
+  "america": 0.478,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "acura_ilx": {
+  "america": 0.163,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "acura_integra": {
+  "america": 0.783,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "acura_legend": {
+  "america": 0.425,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "acura_mdx": {
+  "america": 0.851,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "acura_rdx": {
+  "america": 0.49,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "acura_rl": {
+  "america": 0.633,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "acura_rsx": {
+  "america": 0.681,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "acura_tl": {
+  "america": 0.93,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "acura_tlx": {
+  "america": 0.036,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "acura_tsx": {
+  "america": 0.654,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "acura_zdx": {
+  "america": 0.142,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "alfa_romeo_147": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "alfa_romeo_155": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "alfa_romeo_156": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "alfa_romeo_156_gta": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "alfa_romeo_159": {
+  "america": null,
+  "europe": 0.424,
+  "price": 21500,
+  "produced": null
+ },
+ "alfa_romeo_164": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "alfa_romeo_4c": {
+  "america": 0.049,
+  "europe": 0.157,
+  "price": 60000,
+  "produced": null
+ },
+ "alfa_romeo_brera": {
+  "america": null,
+  "europe": 0.285,
+  "price": 26700,
+  "produced": null
+ },
+ "alfa_romeo_giulia": {
+  "america": null,
+  "europe": 0.419,
+  "price": 33900,
+  "produced": null
+ },
+ "alfa_romeo_giulietta": {
+  "america": null,
+  "europe": 0.681,
+  "price": 20600,
+  "produced": null
+ },
+ "alfa_romeo_giulietta_quadrifoglio_verde": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "alfa_romeo_gt": {
+  "america": null,
+  "europe": 0.349,
+  "price": 23100,
+  "produced": null
+ },
+ "alfa_romeo_mito": {
+  "america": null,
+  "europe": 0.633,
+  "price": 14600,
+  "produced": null
+ },
+ "alfa_romeo_mito_quadrifoglio_verde": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "alfa_romeo_spider": {
+  "america": 0.096,
+  "europe": 0.257,
+  "price": 27200,
+  "produced": null
+ },
+ "alfa_romeo_stelvio": {
+  "america": null,
+  "europe": 0.351,
+  "price": 39500,
+  "produced": null
+ },
+ "alfa_romeo_stelvio_quadrifoglio": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "alpine_a110": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "aston_martin_db11": {
+  "america": null,
+  "europe": 0.255,
+  "price": 169500,
+  "produced": null
+ },
+ "aston_martin_db7_vantage": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "aston_martin_db9": {
+  "america": 0.019,
+  "europe": 0.378,
+  "price": 144300,
+  "produced": null
+ },
+ "aston_martin_dbs": {
+  "america": null,
+  "europe": 0.225,
+  "price": 200500,
+  "produced": null
+ },
+ "aston_martin_rapide": {
+  "america": null,
+  "europe": 0.2,
+  "price": 171000,
+  "produced": null
+ },
+ "aston_martin_vanquish": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "aston_martin_vantage": {
+  "america": 0.009,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "aston_martin_virage": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "audi_100": {
+  "america": 0.068,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "audi_200": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "audi_90": {
+  "america": 0.096,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "audi_a1": {
+  "america": null,
+  "europe": 0.922,
+  "price": 16500,
+  "produced": null
+ },
+ "audi_a2": {
+  "america": null,
+  "europe": 0.494,
+  "price": 15200,
+  "produced": null
+ },
+ "audi_a3": {
+  "america": 0.486,
+  "europe": 0.982,
+  "price": 17600,
+  "produced": null
+ },
+ "audi_a3_etron": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "audi_a4": {
+  "america": 0.943,
+  "europe": 0.966,
+  "price": 22500,
+  "produced": null
+ },
+ "audi_a5": {
+  "america": 0.342,
+  "europe": 0.893,
+  "price": 30000,
+  "produced": null
+ },
+ "audi_a6": {
+  "america": 0.828,
+  "europe": 0.907,
+  "price": 28800,
+  "produced": null
+ },
+ "audi_a7": {
+  "america": 0.057,
+  "europe": 0.601,
+  "price": 48000,
+  "produced": null
+ },
+ "audi_a8": {
+  "america": 0.55,
+  "europe": 0.551,
+  "price": 57800,
+  "produced": null
+ },
+ "audi_allroad": {
+  "america": 0.267,
+  "europe": 0.275,
+  "price": null,
+  "produced": null
+ },
+ "audi_etron": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "audi_q2": {
+  "america": null,
+  "europe": 0.788,
+  "price": 23600,
+  "produced": null
+ },
+ "audi_q3": {
+  "america": null,
+  "europe": 0.879,
+  "price": 28500,
+  "produced": null
+ },
+ "audi_q4_etron": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "audi_q5": {
+  "america": 0.21,
+  "europe": 0.834,
+  "price": 34900,
+  "produced": null
+ },
+ "audi_q7": {
+  "america": 0.299,
+  "europe": 0.766,
+  "price": 46200,
+  "produced": null
+ },
+ "audi_q8_etron": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "audi_r8": {
+  "america": 0.127,
+  "europe": 0.362,
+  "price": 101600,
+  "produced": null
+ },
+ "audi_sq5": {
+  "america": null,
+  "europe": 0.529,
+  "price": null,
+  "produced": null
+ },
+ "audi_sq7": {
+  "america": null,
+  "europe": 0.337,
+  "price": null,
+  "produced": null
+ },
+ "audi_tt": {
+  "america": 0.352,
+  "europe": 0.872,
+  "price": 27900,
+  "produced": null
+ },
+ "bentley_arnage_red_label": {
+  "america": 0.096,
+  "europe": 0.205,
+  "price": 187000,
+  "produced": null
+ },
+ "bentley_azure": {
+  "america": null,
+  "europe": 0.121,
+  "price": null,
+  "produced": null
+ },
+ "bentley_bentayga": {
+  "america": null,
+  "europe": 0.299,
+  "price": 158900,
+  "produced": null
+ },
+ "bentley_bentayga_hybrid": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "bentley_continental": {
+  "america": 0.068,
+  "europe": 0.553,
+  "price": 144800,
+  "produced": null
+ },
+ "bentley_flying_spur": {
+  "america": null,
+  "europe": 0.194,
+  "price": 155400,
+  "produced": null
+ },
+ "bentley_mulsanne": {
+  "america": null,
+  "europe": 0.189,
+  "price": 268400,
+  "produced": null
+ },
+ "bmw_1_series": {
+  "america": 0.427,
+  "europe": 0.975,
+  "price": 20200,
+  "produced": null
+ },
+ "bmw_2_series": {
+  "america": null,
+  "europe": 0.84,
+  "price": 26700,
+  "produced": null
+ },
+ "bmw_2_series_active": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "bmw_3_series": {
+  "america": 0.979,
+  "europe": 0.986,
+  "price": 24800,
+  "produced": null
+ },
+ "bmw_3_series_compact": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "bmw_3_series_turismo": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "bmw_4_series": {
+  "america": 0.168,
+  "europe": 0.843,
+  "price": 34700,
+  "produced": null
+ },
+ "bmw_5_series": {
+  "america": 0.945,
+  "europe": 0.939,
+  "price": 31400,
+  "produced": null
+ },
+ "bmw_5_series_turismo": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "bmw_6_series": {
+  "america": 0.444,
+  "europe": 0.638,
+  "price": 55300,
+  "produced": null
+ },
+ "bmw_6_series_turismo": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "bmw_7_series": {
+  "america": 0.779,
+  "europe": 0.599,
+  "price": 60400,
+  "produced": null
+ },
+ "bmw_7_series_e65e66": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "bmw_7_series_f0102": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "bmw_8_series": {
+  "america": 0.176,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "bmw_alpina": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "bmw_alpina_d3_bi": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "bmw_i3": {
+  "america": 0.068,
+  "europe": 0.626,
+  "price": 36200,
+  "produced": null
+ },
+ "bmw_i4": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "bmw_i8": {
+  "america": null,
+  "europe": 0.301,
+  "price": 122400,
+  "produced": null
+ },
+ "bmw_ix": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "bmw_ix1": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "bmw_ix3": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "bmw_m": {
+  "america": 0.136,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "bmw_m2": {
+  "america": null,
+  "europe": 0.574,
+  "price": null,
+  "produced": null
+ },
+ "bmw_m3": {
+  "america": 0.701,
+  "europe": 0.585,
+  "price": null,
+  "produced": null
+ },
+ "bmw_m4": {
+  "america": null,
+  "europe": 0.531,
+  "price": null,
+  "produced": null
+ },
+ "bmw_m5": {
+  "america": 0.401,
+  "europe": 0.392,
+  "price": null,
+  "produced": null
+ },
+ "bmw_m6": {
+  "america": 0.212,
+  "europe": 0.235,
+  "price": null,
+  "produced": null
+ },
+ "bmw_m8": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "bmw_x1": {
+  "america": 0.121,
+  "europe": 0.841,
+  "price": 28100,
+  "produced": null
+ },
+ "bmw_x2": {
+  "america": null,
+  "europe": 0.561,
+  "price": 34800,
+  "produced": null
+ },
+ "bmw_x3": {
+  "america": 0.641,
+  "europe": 0.848,
+  "price": 33300,
+  "produced": null
+ },
+ "bmw_x4": {
+  "america": null,
+  "europe": 0.565,
+  "price": 43700,
+  "produced": null
+ },
+ "bmw_x5": {
+  "america": 0.866,
+  "europe": 0.845,
+  "price": 46700,
+  "produced": null
+ },
+ "bmw_x5m": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "bmw_x6": {
+  "america": 0.078,
+  "europe": 0.56,
+  "price": 54900,
+  "produced": null
+ },
+ "bmw_x6m": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "bmw_z3": {
+  "america": 0.422,
+  "europe": 0.308,
+  "price": 22000,
+  "produced": null
+ },
+ "bmw_z3m": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "bmw_z4": {
+  "america": 0.484,
+  "europe": 0.717,
+  "price": 32000,
+  "produced": null
+ },
+ "bmw_z4m": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "bugatti_chiron": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": 500
+ },
+ "bugatti_veyron_grand_sport_vitesse": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": 450
+ },
+ "buick_century": {
+  "america": 0.752,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "buick_enclave": {
+  "america": 0.473,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "buick_lacrosse": {
+  "america": 0.622,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "buick_lesabre": {
+  "america": 0.698,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "buick_lucerne": {
+  "america": 0.382,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "buick_parkavenue": {
+  "america": 0.58,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "buick_rainier": {
+  "america": 0.293,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "buick_regal": {
+  "america": 0.733,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "buick_rendezvous": {
+  "america": 0.62,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "buick_riviera": {
+  "america": 0.469,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "buick_roadmaster": {
+  "america": 0.302,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "buick_skylark": {
+  "america": 0.285,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "buick_terraza": {
+  "america": 0.25,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "buick_verano": {
+  "america": 0.113,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "cadillac_allante": {
+  "america": 0.193,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "cadillac_bls": {
+  "america": null,
+  "europe": 0.143,
+  "price": 24000,
+  "produced": null
+ },
+ "cadillac_catera": {
+  "america": 0.397,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "cadillac_cts": {
+  "america": 0.843,
+  "europe": 0.125,
+  "price": 28800,
+  "produced": null
+ },
+ "cadillac_cts_sport": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "cadillac_ctsv": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "cadillac_deville": {
+  "america": 0.856,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "cadillac_eldorado": {
+  "america": 0.571,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "cadillac_escalade": {
+  "america": 0.862,
+  "europe": 0.105,
+  "price": 52200,
+  "produced": null
+ },
+ "cadillac_fleetwood": {
+  "america": 0.253,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "cadillac_lyriq": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "cadillac_seville": {
+  "america": 0.541,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "cadillac_srx": {
+  "america": 0.629,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "cadillac_sts": {
+  "america": 0.671,
+  "europe": 0.073,
+  "price": 39200,
+  "produced": null
+ },
+ "cadillac_xt5": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "cadillac_xts": {
+  "america": 0.121,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "chevrolet_agile": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "chevrolet_astro": {
+  "america": 0.584,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "chevrolet_avalanche": {
+  "america": 0.769,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "chevrolet_aveo": {
+  "america": 0.788,
+  "europe": 0.545,
+  "price": 10700,
+  "produced": null
+ },
+ "chevrolet_aveokalos": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "chevrolet_bel_air": {
+  "america": 0.497,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "chevrolet_blazer": {
+  "america": 0.898,
+  "europe": 0.057,
+  "price": 26800,
+  "produced": null
+ },
+ "chevrolet_c10": {
+  "america": 0.73,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "chevrolet_c20": {
+  "america": 0.316,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "chevrolet_c_k1500": {
+  "america": 0.514,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "chevrolet_camaro": {
+  "america": 0.949,
+  "europe": 0.13,
+  "price": 39900,
+  "produced": null
+ },
+ "chevrolet_caprice": {
+  "america": 0.592,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "chevrolet_captiva": {
+  "america": 0.096,
+  "europe": 0.483,
+  "price": 23200,
+  "produced": null
+ },
+ "chevrolet_cavalier": {
+  "america": 0.885,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "chevrolet_chevelle": {
+  "america": 0.459,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "chevrolet_cheyenne": {
+  "america": 0.287,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "chevrolet_classic": {
+  "america": 0.149,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "chevrolet_cobalt": {
+  "america": 0.89,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "chevrolet_colorado": {
+  "america": 0.637,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "chevrolet_corvette": {
+  "america": 0.964,
+  "europe": 0.1,
+  "price": null,
+  "produced": null
+ },
+ "chevrolet_cruze": {
+  "america": 0.726,
+  "europe": 0.447,
+  "price": 16200,
+  "produced": null
+ },
+ "chevrolet_el_camino": {
+  "america": 0.509,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "chevrolet_equinox": {
+  "america": 0.809,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "chevrolet_express": {
+  "america": 0.588,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "chevrolet_hhr": {
+  "america": 0.784,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "chevrolet_impala": {
+  "america": 0.981,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "chevrolet_k10": {
+  "america": 0.316,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "chevrolet_kalos": {
+  "america": null,
+  "europe": 0.422,
+  "price": 8100,
+  "produced": null
+ },
+ "chevrolet_lacetti": {
+  "america": null,
+  "europe": 0.394,
+  "price": 11200,
+  "produced": null
+ },
+ "chevrolet_lumina": {
+  "america": 0.647,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "chevrolet_malibu": {
+  "america": 0.953,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "chevrolet_malibu_eco": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "chevrolet_matiz_spark": {
+  "america": null,
+  "europe": 0.592,
+  "price": 6800,
+  "produced": null
+ },
+ "chevrolet_metro": {
+  "america": 0.227,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "chevrolet_montecarlo": {
+  "america": 0.817,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "chevrolet_nova": {
+  "america": 0.59,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "chevrolet_orlando": {
+  "america": 0.049,
+  "europe": 0.399,
+  "price": 20200,
+  "produced": null
+ },
+ "chevrolet_pickup": {
+  "america": 0.253,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "chevrolet_prisma": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "chevrolet_prizm": {
+  "america": 0.391,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "chevrolet_s10": {
+  "america": 0.877,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "chevrolet_silverado_1500": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "chevrolet_silverado_3500hd": {
+  "america": 0.535,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "chevrolet_silverado_hybrid": {
+  "america": 0.992,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "chevrolet_sonic": {
+  "america": 0.408,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "chevrolet_spark_ev": {
+  "america": 0.197,
+  "europe": 0.595,
+  "price": 8600,
+  "produced": null
+ },
+ "chevrolet_ssr": {
+  "america": 0.163,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "chevrolet_suburban": {
+  "america": 0.904,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "chevrolet_tacuma": {
+  "america": null,
+  "europe": 0.228,
+  "price": 12900,
+  "produced": null
+ },
+ "chevrolet_tahoe": {
+  "america": 0.96,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "chevrolet_tracker": {
+  "america": 0.552,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "chevrolet_trailblazer_ss": {
+  "america": 0.936,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "chevrolet_traverse": {
+  "america": 0.55,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "chevrolet_trax": {
+  "america": null,
+  "europe": 0.253,
+  "price": 17900,
+  "produced": null
+ },
+ "chevrolet_uplander": {
+  "america": 0.601,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "chevrolet_venture": {
+  "america": 0.767,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "chevrolet_volt": {
+  "america": 0.168,
+  "europe": 0.123,
+  "price": 41200,
+  "produced": null
+ },
+ "chrysler_200": {
+  "america": 0.524,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "chrysler_300": {
+  "america": 0.883,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "chrysler_300c": {
+  "america": null,
+  "europe": 0.433,
+  "price": 31400,
+  "produced": null
+ },
+ "chrysler_300c_srt8": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "chrysler_aspen": {
+  "america": 0.221,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "chrysler_cirrus": {
+  "america": 0.302,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "chrysler_concorde": {
+  "america": 0.505,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "chrysler_crossfire": {
+  "america": 0.459,
+  "europe": 0.321,
+  "price": 29000,
+  "produced": null
+ },
+ "chrysler_crossfire_srt6": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "chrysler_grand_voyager": {
+  "america": null,
+  "europe": 0.201,
+  "price": 29900,
+  "produced": null
+ },
+ "chrysler_lhs": {
+  "america": 0.28,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "chrysler_pacifica": {
+  "america": 0.826,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "chrysler_pt_cruiser": {
+  "america": 0.756,
+  "europe": 0.396,
+  "price": 15000,
+  "produced": null
+ },
+ "chrysler_sebring": {
+  "america": 0.9,
+  "europe": 0.223,
+  "price": 21200,
+  "produced": null
+ },
+ "chrysler_town_country": {
+  "america": 0.909,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "chrysler_voyager": {
+  "america": 0.369,
+  "europe": 0.542,
+  "price": 21400,
+  "produced": null
+ },
+ "chrysler_ypsilon": {
+  "america": null,
+  "europe": 0.408,
+  "price": 11600,
+  "produced": null
+ },
+ "citro_n_2cv": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "citro_n_ax": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "citro_n_berlingo": {
+  "america": null,
+  "europe": 0.795,
+  "price": 11700,
+  "produced": null
+ },
+ "citro_n_berlingo_multispace": {
+  "america": null,
+  "europe": 0.057,
+  "price": 14700,
+  "produced": null
+ },
+ "citro_n_bx": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "citro_n_c1": {
+  "america": null,
+  "europe": 0.916,
+  "price": 9300,
+  "produced": null
+ },
+ "citro_n_c2": {
+  "america": null,
+  "europe": 0.64,
+  "price": 9200,
+  "produced": null
+ },
+ "citro_n_c3": {
+  "america": null,
+  "europe": 0.95,
+  "price": 10800,
+  "produced": null
+ },
+ "citro_n_c3_aircross": {
+  "america": null,
+  "europe": 0.057,
+  "price": 16100,
+  "produced": null
+ },
+ "citro_n_c3_picasso": {
+  "america": null,
+  "europe": 0.057,
+  "price": 15000,
+  "produced": null
+ },
+ "citro_n_c3_pluriel": {
+  "america": null,
+  "europe": 0.057,
+  "price": 14400,
+  "produced": null
+ },
+ "citro_n_c4": {
+  "america": null,
+  "europe": 0.934,
+  "price": 16200,
+  "produced": null
+ },
+ "citro_n_c4_cactus": {
+  "america": null,
+  "europe": 0.057,
+  "price": 15700,
+  "produced": null
+ },
+ "citro_n_c5": {
+  "america": null,
+  "europe": 0.679,
+  "price": 17900,
+  "produced": null
+ },
+ "citro_n_c5_aircross": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "citro_n_c6": {
+  "america": null,
+  "europe": 0.166,
+  "price": 32600,
+  "produced": null
+ },
+ "citro_n_c8": {
+  "america": null,
+  "europe": 0.319,
+  "price": 22300,
+  "produced": null
+ },
+ "citro_n_ccrosser": {
+  "america": null,
+  "europe": 0.323,
+  "price": 23500,
+  "produced": null
+ },
+ "citro_n_dispatch": {
+  "america": null,
+  "europe": 0.316,
+  "price": 25700,
+  "produced": null
+ },
+ "citro_n_ds4": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "citro_n_ds5": {
+  "america": 0.049,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "citro_n_ds_3": {
+  "america": null,
+  "europe": 0.87,
+  "price": 15000,
+  "produced": null
+ },
+ "citro_n_grand_c4_picasso": {
+  "america": null,
+  "europe": 0.057,
+  "price": 20500,
+  "produced": null
+ },
+ "citro_n_saxo": {
+  "america": null,
+  "europe": 0.426,
+  "price": 7300,
+  "produced": null
+ },
+ "citro_n_sm": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "citro_n_spacetourer": {
+  "america": null,
+  "europe": 0.307,
+  "price": 33200,
+  "produced": null
+ },
+ "citro_n_xsara_picasso": {
+  "america": null,
+  "europe": 0.057,
+  "price": 14800,
+  "produced": null
+ },
+ "cupra_ateca": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "cupra_formentor": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "dacia_dokker": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "dacia_duster": {
+  "america": null,
+  "europe": 0.797,
+  "price": 10800,
+  "produced": null
+ },
+ "dacia_lodgy": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "dacia_logan": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "dacia_logan_mcv": {
+  "america": null,
+  "europe": 0.57,
+  "price": 8000,
+  "produced": null
+ },
+ "dacia_sandero": {
+  "america": null,
+  "europe": 0.85,
+  "price": 6800,
+  "produced": null
+ },
+ "dacia_spring_electric": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "daihatsu_copen": {
+  "america": null,
+  "europe": 0.237,
+  "price": 13700,
+  "produced": null
+ },
+ "daihatsu_sirion": {
+  "america": null,
+  "europe": 0.467,
+  "price": 8900,
+  "produced": null
+ },
+ "daihatsu_terios": {
+  "america": null,
+  "europe": 0.421,
+  "price": 12800,
+  "produced": null
+ },
+ "dodge_avenger": {
+  "america": 0.745,
+  "europe": 0.176,
+  "price": 17300,
+  "produced": null
+ },
+ "dodge_caliber": {
+  "america": 0.754,
+  "europe": 0.344,
+  "price": 14400,
+  "produced": null
+ },
+ "dodge_challenger": {
+  "america": 0.637,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "dodge_challenger_srt": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "dodge_charger": {
+  "america": 0.879,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "dodge_charger_srt": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "dodge_charger_srt8": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "dodge_charger_srt_hellcat_widebody": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "dodge_dakota_club": {
+  "america": 0.854,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "dodge_dart": {
+  "america": 0.539,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "dodge_durango": {
+  "america": 0.957,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "dodge_durango_srt": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "dodge_grand_caravan": {
+  "america": 0.966,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "dodge_intrepid": {
+  "america": 0.66,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "dodge_journey": {
+  "america": 0.584,
+  "europe": 0.239,
+  "price": 19200,
+  "produced": null
+ },
+ "dodge_magnum": {
+  "america": 0.696,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "dodge_neon": {
+  "america": 0.864,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "dodge_nitro": {
+  "america": 0.518,
+  "europe": 0.269,
+  "price": 21800,
+  "produced": null
+ },
+ "dodge_srt_viper": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "dodge_stealth": {
+  "america": 0.204,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "dodge_stratus": {
+  "america": 0.76,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "dodge_viper_srt10": {
+  "america": 0.308,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "ds_automobiles_4": {
+  "america": null,
+  "europe": 0.576,
+  "price": 20700,
+  "produced": null
+ },
+ "ds_automobiles_4_crossback": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "ds_automobiles_5": {
+  "america": null,
+  "europe": 0.428,
+  "price": 27000,
+  "produced": null
+ },
+ "ds_automobiles_ds_3_crossback": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "ds_automobiles_ds_7": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "eagle_talon": {
+  "america": 0.308,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "ferrari_212_inter": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": 80
+ },
+ "ferrari_250": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "ferrari_328": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "ferrari_360": {
+  "america": null,
+  "europe": 0.155,
+  "price": 120600,
+  "produced": null
+ },
+ "ferrari_360_modena": {
+  "america": 0.068,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "ferrari_365_gtb4_daytona": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": 1400
+ },
+ "ferrari_365_gts4": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": 120
+ },
+ "ferrari_430_scuderia": {
+  "america": null,
+  "europe": 0.086,
+  "price": null,
+  "produced": null
+ },
+ "ferrari_458_italia": {
+  "america": null,
+  "europe": 0.221,
+  "price": 207600,
+  "produced": null
+ },
+ "ferrari_488": {
+  "america": null,
+  "europe": 0.251,
+  "price": 213900,
+  "produced": null
+ },
+ "ferrari_575_m_superamerica": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": 560
+ },
+ "ferrari_575m_maranello": {
+  "america": null,
+  "europe": 0.112,
+  "price": null,
+  "produced": null
+ },
+ "ferrari_599_gto": {
+  "america": null,
+  "europe": 0.141,
+  "price": null,
+  "produced": 600
+ },
+ "ferrari_612_scaglietti": {
+  "america": null,
+  "europe": 0.134,
+  "price": 208900,
+  "produced": null
+ },
+ "ferrari_812_superfast": {
+  "america": null,
+  "europe": 0.057,
+  "price": 305300,
+  "produced": null
+ },
+ "ferrari_california_t": {
+  "america": null,
+  "europe": 0.242,
+  "price": 168900,
+  "produced": null
+ },
+ "ferrari_enzo": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": 400
+ },
+ "ferrari_f12_berlinetta": {
+  "america": null,
+  "europe": 0.057,
+  "price": 279600,
+  "produced": null
+ },
+ "ferrari_f149_california": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "ferrari_f355": {
+  "america": null,
+  "europe": 0.057,
+  "price": 111000,
+  "produced": null
+ },
+ "ferrari_f40": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": 1300
+ },
+ "ferrari_f430": {
+  "america": 0.049,
+  "europe": 0.196,
+  "price": 150500,
+  "produced": null
+ },
+ "ferrari_ff": {
+  "america": null,
+  "europe": 0.137,
+  "price": 264400,
+  "produced": null
+ },
+ "ferrari_gtc4lusso": {
+  "america": null,
+  "europe": 0.057,
+  "price": 231800,
+  "produced": null
+ },
+ "fiat_124": {
+  "america": null,
+  "europe": 0.332,
+  "price": 23500,
+  "produced": null
+ },
+ "fiat_500": {
+  "america": null,
+  "europe": 0.973,
+  "price": 11600,
+  "produced": null
+ },
+ "fiat_500_abarth": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "fiat_500_x": {
+  "america": null,
+  "europe": 0.46,
+  "price": 16800,
+  "produced": null
+ },
+ "fiat_500e": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "fiat_500l": {
+  "america": null,
+  "europe": 0.262,
+  "price": 15400,
+  "produced": null
+ },
+ "fiat_500l_trekking": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "fiat_595_abarth": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "fiat_barchetta": {
+  "america": null,
+  "europe": 0.107,
+  "price": 18400,
+  "produced": null
+ },
+ "fiat_bravo": {
+  "america": null,
+  "europe": 0.512,
+  "price": 12600,
+  "produced": null
+ },
+ "fiat_croma": {
+  "america": null,
+  "europe": 0.146,
+  "price": 17300,
+  "produced": null
+ },
+ "fiat_doblo": {
+  "america": 0.049,
+  "europe": 0.563,
+  "price": 13500,
+  "produced": null
+ },
+ "fiat_five_hundred": {
+  "america": 0.422,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "fiat_freemont": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "fiat_fullback": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "fiat_grande_punto_abarth": {
+  "america": null,
+  "europe": 0.057,
+  "price": 8600,
+  "produced": null
+ },
+ "fiat_idea": {
+  "america": null,
+  "europe": 0.216,
+  "price": 11500,
+  "produced": null
+ },
+ "fiat_multipla": {
+  "america": null,
+  "europe": 0.266,
+  "price": 15400,
+  "produced": null
+ },
+ "fiat_palio": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "fiat_panda": {
+  "america": null,
+  "europe": 0.847,
+  "price": 9000,
+  "produced": null
+ },
+ "fiat_panda_cross": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "fiat_punto": {
+  "america": null,
+  "europe": 0.875,
+  "price": 8600,
+  "produced": null
+ },
+ "fiat_punto_evo": {
+  "america": null,
+  "europe": 0.057,
+  "price": 11000,
+  "produced": null
+ },
+ "fiat_qubo": {
+  "america": null,
+  "europe": 0.389,
+  "price": 13300,
+  "produced": null
+ },
+ "fiat_sedici": {
+  "america": null,
+  "europe": 0.276,
+  "price": 12800,
+  "produced": null
+ },
+ "fiat_stilo": {
+  "america": null,
+  "europe": 0.33,
+  "price": 11500,
+  "produced": null
+ },
+ "fiat_tipo": {
+  "america": null,
+  "europe": 0.529,
+  "price": 15000,
+  "produced": null
+ },
+ "ford_bmax": {
+  "america": null,
+  "europe": 0.783,
+  "price": 15100,
+  "produced": null
+ },
+ "ford_bronco": {
+  "america": 0.79,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "ford_cmax": {
+  "america": 0.117,
+  "europe": 0.906,
+  "price": 20400,
+  "produced": null
+ },
+ "ford_contour": {
+  "america": 0.493,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "ford_coupe": {
+  "america": 0.312,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "ford_crown_victoria": {
+  "america": 0.794,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "ford_e150": {
+  "america": 0.382,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "ford_e250": {
+  "america": 0.444,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "ford_e350": {
+  "america": 0.567,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "ford_ecosport": {
+  "america": null,
+  "europe": 0.838,
+  "price": 16900,
+  "produced": null
+ },
+ "ford_edge": {
+  "america": 0.648,
+  "europe": 0.476,
+  "price": 34900,
+  "produced": null
+ },
+ "ford_escape": {
+  "america": 0.947,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "ford_escort": {
+  "america": 0.665,
+  "europe": 0.114,
+  "price": null,
+  "produced": null
+ },
+ "ford_everest": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "ford_excursion": {
+  "america": 0.603,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "ford_expedition": {
+  "america": 0.962,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "ford_explorer": {
+  "america": 0.987,
+  "europe": 0.071,
+  "price": 29900,
+  "produced": null
+ },
+ "ford_f100": {
+  "america": 0.656,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "ford_f150": {
+  "america": 0.989,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "ford_f150_super": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "ford_f450": {
+  "america": 0.378,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "ford_f_series_super_duty": {
+  "america": 0.985,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "ford_fairlane": {
+  "america": 0.261,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "ford_fiesta": {
+  "america": 0.565,
+  "europe": 1.0,
+  "price": 9800,
+  "produced": null
+ },
+ "ford_figo": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "ford_five_hundred": {
+  "america": 0.56,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "ford_flex": {
+  "america": 0.28,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "ford_focus": {
+  "america": 0.968,
+  "europe": 0.998,
+  "price": 14400,
+  "produced": null
+ },
+ "ford_focus_c_max": {
+  "america": null,
+  "europe": 0.057,
+  "price": 15200,
+  "produced": null
+ },
+ "ford_focus_cc": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "ford_freestar": {
+  "america": 0.626,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "ford_fusion": {
+  "america": 0.873,
+  "europe": 0.807,
+  "price": 12300,
+  "produced": null
+ },
+ "ford_fusion_north_american": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "ford_galaxie": {
+  "america": 0.344,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "ford_galaxy": {
+  "america": null,
+  "europe": 0.824,
+  "price": 22500,
+  "produced": null
+ },
+ "ford_grand_cmax": {
+  "america": null,
+  "europe": 0.615,
+  "price": 23000,
+  "produced": null
+ },
+ "ford_grand_tourneo_connect": {
+  "america": null,
+  "europe": 0.057,
+  "price": 19800,
+  "produced": null
+ },
+ "ford_ka": {
+  "america": null,
+  "europe": 0.925,
+  "price": 9200,
+  "produced": null
+ },
+ "ford_kuga": {
+  "america": null,
+  "europe": 0.959,
+  "price": 23700,
+  "produced": null
+ },
+ "ford_maverick": {
+  "america": 0.187,
+  "europe": 0.185,
+  "price": 20800,
+  "produced": null
+ },
+ "ford_mondeo": {
+  "america": null,
+  "europe": 0.957,
+  "price": 17300,
+  "produced": null
+ },
+ "ford_mustang": {
+  "america": 0.996,
+  "europe": 0.496,
+  "price": 35600,
+  "produced": null
+ },
+ "ford_mustang_mache": {
+  "america": 0.18,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "ford_puma": {
+  "america": null,
+  "europe": 0.684,
+  "price": 14200,
+  "produced": null
+ },
+ "ford_ranger": {
+  "america": 0.951,
+  "europe": 0.068,
+  "price": null,
+  "produced": null
+ },
+ "ford_smax": {
+  "america": null,
+  "europe": 0.829,
+  "price": 24600,
+  "produced": null
+ },
+ "ford_streetka": {
+  "america": null,
+  "europe": 0.383,
+  "price": 14600,
+  "produced": null
+ },
+ "ford_taurus": {
+  "america": 0.975,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "ford_taurus_sho": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "ford_thunderbird": {
+  "america": 0.743,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "ford_tourneo_connect": {
+  "america": null,
+  "europe": 0.52,
+  "price": 16900,
+  "produced": null
+ },
+ "ford_tourneo_custom": {
+  "america": null,
+  "europe": 0.586,
+  "price": null,
+  "produced": null
+ },
+ "ford_transit_connect": {
+  "america": null,
+  "europe": 0.298,
+  "price": null,
+  "produced": null
+ },
+ "ford_transit_custom": {
+  "america": null,
+  "europe": 0.278,
+  "price": null,
+  "produced": null
+ },
+ "ford_transittourneo_connect_7seats": {
+  "america": 0.197,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "ford_windstar": {
+  "america": 0.718,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "genesis_g70": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "genesis_g80": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "genesis_g90": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "genesis_gv70": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "gmc_acadia": {
+  "america": 0.631,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "gmc_canyon": {
+  "america": 0.384,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "gmc_denali": {
+  "america": 0.357,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "gmc_envoy": {
+  "america": 0.858,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "gmc_jimmy": {
+  "america": 0.675,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "gmc_safari": {
+  "america": 0.333,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "gmc_savana": {
+  "america": 0.233,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "gmc_sierra_1500": {
+  "america": 0.928,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "gmc_sierra_2500hd": {
+  "america": 0.597,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "gmc_sierra_3500hd": {
+  "america": 0.491,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "gmc_sonoma": {
+  "america": 0.639,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "gmc_suburban_1500": {
+  "america": 0.571,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "gmc_terrain": {
+  "america": 0.357,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "gmc_yukon": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "gmc_yukon_1500": {
+  "america": 0.909,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "great_wall_steed": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "holden_captiva": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "holden_commodore": {
+  "america": 0.076,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "holden_cruze": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "holden_ute": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "honda_accord": {
+  "america": 0.998,
+  "europe": 0.734,
+  "price": 19800,
+  "produced": null
+ },
+ "honda_civic": {
+  "america": 1.0,
+  "europe": 0.968,
+  "price": 15200,
+  "produced": null
+ },
+ "honda_crv": {
+  "america": 0.932,
+  "europe": 0.932,
+  "price": 23000,
+  "produced": null
+ },
+ "honda_crx": {
+  "america": 0.308,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "honda_crz": {
+  "america": 0.127,
+  "europe": 0.381,
+  "price": 20200,
+  "produced": null
+ },
+ "honda_delsol": {
+  "america": 0.452,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "honda_element": {
+  "america": 0.652,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "honda_fit_ev": {
+  "america": 0.735,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "honda_frv_edix": {
+  "america": null,
+  "europe": 0.517,
+  "price": 17500,
+  "produced": null
+ },
+ "honda_hrv": {
+  "america": 0.104,
+  "europe": 0.709,
+  "price": 19200,
+  "produced": null
+ },
+ "honda_insight": {
+  "america": 0.319,
+  "europe": 0.481,
+  "price": 19800,
+  "produced": null
+ },
+ "honda_integra": {
+  "america": null,
+  "europe": 0.148,
+  "price": 22600,
+  "produced": null
+ },
+ "honda_jazzfit": {
+  "america": 0.076,
+  "europe": 0.971,
+  "price": 12800,
+  "produced": null
+ },
+ "honda_nsx": {
+  "america": 0.009,
+  "europe": 0.119,
+  "price": null,
+  "produced": null
+ },
+ "honda_odyssey": {
+  "america": 0.97,
+  "europe": 0.118,
+  "price": null,
+  "produced": null
+ },
+ "honda_passport": {
+  "america": 0.435,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "honda_pilot": {
+  "america": 0.845,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "honda_prelude": {
+  "america": 0.707,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "honda_ridgeline": {
+  "america": 0.45,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "honda_s2000": {
+  "america": 0.609,
+  "europe": 0.373,
+  "price": 31400,
+  "produced": null
+ },
+ "hummer_h2": {
+  "america": 0.55,
+  "europe": 0.075,
+  "price": 56900,
+  "produced": null
+ },
+ "hummer_h3": {
+  "america": 0.484,
+  "europe": 0.102,
+  "price": 30500,
+  "produced": null
+ },
+ "hyundai_accent": {
+  "america": 0.86,
+  "europe": 0.357,
+  "price": 8700,
+  "produced": null
+ },
+ "hyundai_amica": {
+  "america": null,
+  "europe": 0.48,
+  "price": 6800,
+  "produced": null
+ },
+ "hyundai_azera": {
+  "america": 0.378,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "hyundai_bayon": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "hyundai_coupe": {
+  "america": null,
+  "europe": 0.513,
+  "price": 16800,
+  "produced": null
+ },
+ "hyundai_elantra": {
+  "america": 0.924,
+  "europe": 0.16,
+  "price": 12700,
+  "produced": null
+ },
+ "hyundai_elantra_n_line": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "hyundai_equus": {
+  "america": 0.068,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "hyundai_genesis": {
+  "america": 0.522,
+  "europe": 0.089,
+  "price": 55300,
+  "produced": null
+ },
+ "hyundai_getz": {
+  "america": null,
+  "europe": 0.715,
+  "price": 8000,
+  "produced": null
+ },
+ "hyundai_grandeur": {
+  "america": null,
+  "europe": 0.08,
+  "price": 30900,
+  "produced": null
+ },
+ "hyundai_i10": {
+  "america": null,
+  "europe": 0.941,
+  "price": 9700,
+  "produced": null
+ },
+ "hyundai_i20": {
+  "america": null,
+  "europe": 0.891,
+  "price": 12100,
+  "produced": null
+ },
+ "hyundai_i30": {
+  "america": null,
+  "europe": 0.873,
+  "price": 16000,
+  "produced": null
+ },
+ "hyundai_i40": {
+  "america": null,
+  "europe": 0.66,
+  "price": 22300,
+  "produced": null
+ },
+ "hyundai_i800": {
+  "america": null,
+  "europe": 0.469,
+  "price": 25900,
+  "produced": null
+ },
+ "hyundai_ioniq": {
+  "america": null,
+  "europe": 0.688,
+  "price": 23300,
+  "produced": null
+ },
+ "hyundai_ix20": {
+  "america": null,
+  "europe": 0.699,
+  "price": 14400,
+  "produced": null
+ },
+ "hyundai_ix35_tucson": {
+  "america": null,
+  "europe": 0.791,
+  "price": 19600,
+  "produced": null
+ },
+ "hyundai_kona": {
+  "america": null,
+  "europe": 0.683,
+  "price": 18700,
+  "produced": null
+ },
+ "hyundai_kona_n": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "hyundai_matrix": {
+  "america": null,
+  "europe": 0.44,
+  "price": 12600,
+  "produced": null
+ },
+ "hyundai_palisade": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "hyundai_santa_fe": {
+  "america": 0.796,
+  "europe": 0.743,
+  "price": 24900,
+  "produced": null
+ },
+ "hyundai_sonata": {
+  "america": 0.94,
+  "europe": 0.212,
+  "price": 16700,
+  "produced": null
+ },
+ "hyundai_sonata_i45": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "hyundai_tiburon": {
+  "america": 0.76,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "hyundai_tucson": {
+  "america": 0.526,
+  "europe": 0.886,
+  "price": 19400,
+  "produced": null
+ },
+ "hyundai_veloster": {
+  "america": 0.233,
+  "europe": 0.328,
+  "price": 20200,
+  "produced": null
+ },
+ "infiniti_ex": {
+  "america": null,
+  "europe": 0.057,
+  "price": 40100,
+  "produced": null
+ },
+ "infiniti_fx": {
+  "america": 0.628,
+  "europe": 0.173,
+  "price": 49600,
+  "produced": null
+ },
+ "infiniti_g": {
+  "america": 0.921,
+  "europe": 0.057,
+  "price": 39100,
+  "produced": null
+ },
+ "infiniti_g37": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "infiniti_ipl_g": {
+  "america": 0.705,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "infiniti_jx": {
+  "america": 0.155,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "infiniti_m": {
+  "america": 0.573,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "infiniti_q30": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "infiniti_q50": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "infiniti_q60": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "infiniti_qx": {
+  "america": 0.645,
+  "europe": 0.474,
+  "price": 33700,
+  "produced": null
+ },
+ "infiniti_qx30": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "infiniti_qx4": {
+  "america": 0.529,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "infiniti_qx50": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "infiniti_qx60": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "infiniti_qx80": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "isuzu_dmax": {
+  "america": null,
+  "europe": 0.066,
+  "price": null,
+  "produced": null
+ },
+ "isuzu_rodeo": {
+  "america": 0.732,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "isuzu_trooper": {
+  "america": 0.469,
+  "europe": 0.246,
+  "price": 22100,
+  "produced": null
+ },
+ "jaguar_epace": {
+  "america": null,
+  "europe": 0.676,
+  "price": 33100,
+  "produced": null
+ },
+ "jaguar_fpace": {
+  "america": null,
+  "europe": 0.763,
+  "price": 40100,
+  "produced": null
+ },
+ "jaguar_fpace_svr": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "jaguar_ftype": {
+  "america": null,
+  "europe": 0.549,
+  "price": 58900,
+  "produced": null
+ },
+ "jaguar_s_type": {
+  "america": 0.535,
+  "europe": 0.588,
+  "price": 32000,
+  "produced": null
+ },
+ "jaguar_x_type": {
+  "america": 0.594,
+  "europe": 0.759,
+  "price": 23200,
+  "produced": null
+ },
+ "jaguar_xe": {
+  "america": null,
+  "europe": 0.75,
+  "price": 31100,
+  "produced": null
+ },
+ "jaguar_xf": {
+  "america": 0.153,
+  "europe": 0.859,
+  "price": 35000,
+  "produced": null
+ },
+ "jaguar_xf_sportbrake": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "jaguar_xfr": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "jaguar_xj": {
+  "america": 0.667,
+  "europe": 0.629,
+  "price": 50700,
+  "produced": null
+ },
+ "jaguar_xk": {
+  "america": 0.28,
+  "europe": 0.583,
+  "price": 68900,
+  "produced": null
+ },
+ "jaguar_xk8": {
+  "america": null,
+  "europe": 0.057,
+  "price": 58300,
+  "produced": null
+ },
+ "jeep_cherokee": {
+  "america": 0.875,
+  "europe": 0.663,
+  "price": 23100,
+  "produced": null
+ },
+ "jeep_cherokeeliberty": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "jeep_cj5": {
+  "america": 0.397,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "jeep_cj7": {
+  "america": 0.429,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "jeep_commander": {
+  "america": 0.558,
+  "europe": 0.21,
+  "price": 31900,
+  "produced": null
+ },
+ "jeep_compass": {
+  "america": 0.563,
+  "europe": 0.504,
+  "price": 20800,
+  "produced": null
+ },
+ "jeep_gladiator": {
+  "america": 0.036,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "jeep_grand_cherokee": {
+  "america": 0.974,
+  "europe": 0.435,
+  "price": 32500,
+  "produced": null
+ },
+ "jeep_grand_cherokee_srt8": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "jeep_grand_cherokee_trackhawk": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "jeep_grand_wagoneer": {
+  "america": 0.083,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "jeep_liberty": {
+  "america": 0.913,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "jeep_patriot": {
+  "america": 0.586,
+  "europe": 0.367,
+  "price": 17200,
+  "produced": null
+ },
+ "jeep_renegade": {
+  "america": 0.104,
+  "europe": 0.67,
+  "price": 21100,
+  "produced": null
+ },
+ "jeep_wagoneer": {
+  "america": 0.132,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "jeep_wrangler": {
+  "america": 0.911,
+  "europe": 0.403,
+  "price": 20600,
+  "produced": null
+ },
+ "jeep_wrangler_rubicon": {
+  "america": 0.367,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "jeep_wrangler_sahara": {
+  "america": 0.217,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "jeep_wrangler_tj": {
+  "america": 0.285,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "jeep_wrangler_unlimited": {
+  "america": 0.554,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "jeep_wrangler_unlimited_rubicon": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "kia_amanti": {
+  "america": 0.333,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "kia_carens": {
+  "america": null,
+  "europe": 0.617,
+  "price": 15000,
+  "produced": null
+ },
+ "kia_carnival": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "kia_carnivalsedona": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "kia_ceed": {
+  "america": 0.036,
+  "europe": 0.884,
+  "price": 15800,
+  "produced": null
+ },
+ "kia_ceratoforte": {
+  "america": null,
+  "europe": 0.28,
+  "price": 11500,
+  "produced": null
+ },
+ "kia_forte": {
+  "america": 0.44,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "kia_forte_koup": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "kia_k7_cadenza": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "kia_k9": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "kia_niro": {
+  "america": null,
+  "europe": 0.731,
+  "price": 24900,
+  "produced": null
+ },
+ "kia_optima": {
+  "america": 0.805,
+  "europe": 0.533,
+  "price": 23300,
+  "produced": null
+ },
+ "kia_picanto": {
+  "america": null,
+  "europe": 0.918,
+  "price": 8100,
+  "produced": null
+ },
+ "kia_proceed": {
+  "america": null,
+  "europe": 0.49,
+  "price": 16700,
+  "produced": null
+ },
+ "kia_rio": {
+  "america": 0.766,
+  "europe": 0.865,
+  "price": 8700,
+  "produced": null
+ },
+ "kia_rondo": {
+  "america": 0.327,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "kia_sedona": {
+  "america": 0.824,
+  "europe": 0.501,
+  "price": 18200,
+  "produced": null
+ },
+ "kia_sephia": {
+  "america": 0.361,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "kia_sorento": {
+  "america": 0.792,
+  "europe": 0.747,
+  "price": 25500,
+  "produced": null
+ },
+ "kia_soul": {
+  "america": 0.578,
+  "europe": 0.652,
+  "price": 14600,
+  "produced": null
+ },
+ "kia_spectra": {
+  "america": 0.775,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "kia_sportage": {
+  "america": 0.696,
+  "europe": 0.954,
+  "price": 16700,
+  "produced": null
+ },
+ "kia_stinger": {
+  "america": null,
+  "europe": 0.273,
+  "price": 36400,
+  "produced": null
+ },
+ "kia_stonic": {
+  "america": null,
+  "europe": 0.62,
+  "price": 18800,
+  "produced": null
+ },
+ "kia_telluride": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "kia_venga": {
+  "america": null,
+  "europe": 0.768,
+  "price": 13700,
+  "produced": null
+ },
+ "kia_xceed": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "lamborghini_aventador_lp_7004": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "lamborghini_aventador_svj": {
+  "america": null,
+  "europe": 0.169,
+  "price": 307500,
+  "produced": 1700
+ },
+ "lamborghini_gallardo": {
+  "america": 0.036,
+  "europe": 0.153,
+  "price": 149800,
+  "produced": null
+ },
+ "lamborghini_huracan": {
+  "america": null,
+  "europe": 0.191,
+  "price": 181800,
+  "produced": null
+ },
+ "lamborghini_huracan_evo": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "lamborghini_huracan_lp_6104": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "lamborghini_lp7804_ultimae": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": 600
+ },
+ "lamborghini_murcielago": {
+  "america": null,
+  "europe": 0.096,
+  "price": 198900,
+  "produced": 4100
+ },
+ "lamborghini_urus_performante": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "lancia_delta": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "lancia_thema": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "lancia_ypsilon": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "land_rover_defender": {
+  "america": 0.049,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "land_rover_discovery": {
+  "america": 0.412,
+  "europe": 0.948,
+  "price": 32900,
+  "produced": null
+ },
+ "land_rover_discovery_3": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "land_rover_discovery_4": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "land_rover_discovery_sport": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "land_rover_freelander": {
+  "america": 0.185,
+  "europe": 0.904,
+  "price": 20000,
+  "produced": null
+ },
+ "land_rover_freelander_2": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "land_rover_lr3": {
+  "america": 0.221,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "land_rover_range_rover": {
+  "america": 0.662,
+  "europe": 0.979,
+  "price": 55200,
+  "produced": null
+ },
+ "land_rover_range_rover_evoque": {
+  "america": null,
+  "europe": 0.057,
+  "price": 34000,
+  "produced": null
+ },
+ "land_rover_range_rover_sport": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "land_rover_range_rover_velar": {
+  "america": null,
+  "europe": 0.057,
+  "price": 52200,
+  "produced": null
+ },
+ "lexus_ct": {
+  "america": 0.18,
+  "europe": 0.695,
+  "price": 26000,
+  "produced": null
+ },
+ "lexus_es": {
+  "america": 0.807,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "lexus_gs": {
+  "america": 0.764,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "lexus_gx": {
+  "america": 0.461,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "lexus_hs_250h": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "lexus_is": {
+  "america": 0.813,
+  "europe": 0.758,
+  "price": 26800,
+  "produced": null
+ },
+ "lexus_is_c": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "lexus_is_f": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "lexus_lc": {
+  "america": null,
+  "europe": 0.159,
+  "price": 87200,
+  "produced": null
+ },
+ "lexus_ls": {
+  "america": 0.703,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "lexus_lx": {
+  "america": 0.391,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "lexus_nx": {
+  "america": 0.036,
+  "europe": 0.647,
+  "price": 35000,
+  "produced": null
+ },
+ "lexus_rc": {
+  "america": 0.009,
+  "europe": 0.292,
+  "price": 42000,
+  "produced": null
+ },
+ "lexus_rc_f": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "lexus_rx": {
+  "america": 0.773,
+  "europe": 0.736,
+  "price": 37700,
+  "produced": null
+ },
+ "lexus_rz_450e": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "lexus_sc": {
+  "america": 0.614,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "lexus_ux": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "lexus_ux_300e": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "lincoln_aviator": {
+  "america": 0.473,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "lincoln_continental": {
+  "america": 0.609,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "lincoln_corsair": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "lincoln_ls": {
+  "america": 0.741,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "lincoln_mark_viii": {
+  "america": 0.25,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "lincoln_mkc": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "lincoln_mks": {
+  "america": 0.272,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "lincoln_mkt": {
+  "america": 0.096,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "lincoln_mkx": {
+  "america": 0.388,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "lincoln_mkz": {
+  "america": 0.348,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "lincoln_nautilus": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "lincoln_navigator": {
+  "america": 0.802,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "lincoln_town_car": {
+  "america": 0.819,
+  "europe": 0.082,
+  "price": null,
+  "produced": null
+ },
+ "lotus_elise": {
+  "america": 0.104,
+  "europe": 0.326,
+  "price": 28200,
+  "produced": null
+ },
+ "lotus_evora": {
+  "america": 0.009,
+  "europe": 0.187,
+  "price": 60800,
+  "produced": null
+ },
+ "lotus_evora_400": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "lotus_exige": {
+  "america": null,
+  "europe": 0.214,
+  "price": 38600,
+  "produced": null
+ },
+ "maserati_3200": {
+  "america": null,
+  "europe": 0.128,
+  "price": null,
+  "produced": null
+ },
+ "maserati_coupe": {
+  "america": null,
+  "europe": 0.168,
+  "price": 68000,
+  "produced": null
+ },
+ "maserati_ghibli": {
+  "america": 0.049,
+  "europe": 0.358,
+  "price": 57200,
+  "produced": null
+ },
+ "maserati_grancabrio": {
+  "america": null,
+  "europe": 0.18,
+  "price": 113700,
+  "produced": null
+ },
+ "maserati_granturismo": {
+  "america": 0.057,
+  "europe": 0.264,
+  "price": 94900,
+  "produced": null
+ },
+ "maserati_granturismo_mc_stradale": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "maserati_levante": {
+  "america": null,
+  "europe": 0.303,
+  "price": 62900,
+  "produced": null
+ },
+ "maserati_quattroporte": {
+  "america": 0.159,
+  "europe": 0.242,
+  "price": 82400,
+  "produced": null
+ },
+ "maserati_spyder": {
+  "america": 0.112,
+  "europe": 0.132,
+  "price": 76700,
+  "produced": null
+ },
+ "maybach_57": {
+  "america": null,
+  "europe": 0.071,
+  "price": 302100,
+  "produced": null
+ },
+ "maybach_62": {
+  "america": null,
+  "europe": 0.077,
+  "price": 345100,
+  "produced": null
+ },
+ "mazda_2": {
+  "america": 0.267,
+  "europe": 0.895,
+  "price": 11200,
+  "produced": null
+ },
+ "mazda_323": {
+  "america": 0.138,
+  "europe": 0.25,
+  "price": 11900,
+  "produced": null
+ },
+ "mazda_3_axela": {
+  "america": 0.834,
+  "europe": 0.882,
+  "price": 16700,
+  "produced": null
+ },
+ "mazda_3_mps_mazdaspeed3": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mazda_5_premacy": {
+  "america": 0.484,
+  "europe": 0.59,
+  "price": 19700,
+  "produced": null
+ },
+ "mazda_626": {
+  "america": 0.699,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mazda_6atenza": {
+  "america": 0.83,
+  "europe": 0.827,
+  "price": 18100,
+  "produced": null
+ },
+ "mazda_b2300": {
+  "america": 0.217,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mazda_b3000": {
+  "america": 0.233,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mazda_bt50": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mazda_cx3": {
+  "america": null,
+  "europe": 0.74,
+  "price": 20600,
+  "produced": null
+ },
+ "mazda_cx5": {
+  "america": 0.112,
+  "europe": 0.761,
+  "price": 25200,
+  "produced": null
+ },
+ "mazda_cx7": {
+  "america": 0.297,
+  "europe": 0.296,
+  "price": 27600,
+  "produced": null
+ },
+ "mazda_cx9": {
+  "america": 0.272,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mazda_millenia": {
+  "america": 0.422,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mazda_mpv": {
+  "america": 0.728,
+  "europe": 0.111,
+  "price": 21500,
+  "produced": null
+ },
+ "mazda_mx5_miata": {
+  "america": 0.771,
+  "europe": 0.818,
+  "price": 18200,
+  "produced": null
+ },
+ "mazda_mx6": {
+  "america": 0.327,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mazda_mx_5_rf": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mazda_protege": {
+  "america": 0.749,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mazda_rx7": {
+  "america": 0.456,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mazda_rx8": {
+  "america": 0.66,
+  "europe": 0.385,
+  "price": 24700,
+  "produced": null
+ },
+ "mazda_speed3": {
+  "america": 0.21,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mazda_tribute": {
+  "america": 0.724,
+  "europe": 0.15,
+  "price": 18500,
+  "produced": null
+ },
+ "mclaren_12c": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mclaren_540c": {
+  "america": null,
+  "europe": 0.103,
+  "price": 158000,
+  "produced": null
+ },
+ "mclaren_570gt": {
+  "america": null,
+  "europe": 0.139,
+  "price": 183700,
+  "produced": null
+ },
+ "mclaren_570s": {
+  "america": null,
+  "europe": 0.178,
+  "price": 174300,
+  "produced": null
+ },
+ "mclaren_650s": {
+  "america": null,
+  "europe": 0.086,
+  "price": null,
+  "produced": null
+ },
+ "mclaren_675lt": {
+  "america": null,
+  "europe": 0.098,
+  "price": null,
+  "produced": 1000
+ },
+ "mclaren_720s": {
+  "america": null,
+  "europe": 0.171,
+  "price": null,
+  "produced": null
+ },
+ "mclaren_mp412c": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mclaren_p1": {
+  "america": null,
+  "europe": 0.059,
+  "price": null,
+  "produced": 375
+ },
+ "mercedes_amg_53": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mercedes_amg_a_45": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mercedes_amg_c190": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mercedes_amg_c63_s_e": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mercedes_amg_c_43": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mercedes_amg_c_63": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mercedes_amg_cla_45": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mercedes_amg_e43": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mercedes_amg_e53": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mercedes_amg_e_63": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mercedes_amg_eqe": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mercedes_amg_eqe_suv": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mercedes_amg_gla_45": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mercedes_amg_glc_43": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mercedes_amg_glc_63": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mercedes_amg_gle": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mercedes_amg_s": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mercedes_amg_slclass": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mercedes_benz_190": {
+  "america": 0.076,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mercedes_benz_300_sl": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mercedes_benz_300d": {
+  "america": 0.25,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mercedes_benz_aklasse": {
+  "america": null,
+  "europe": 0.97,
+  "price": 16500,
+  "produced": null
+ },
+ "mercedes_benz_amg_gt": {
+  "america": null,
+  "europe": 0.642,
+  "price": 114000,
+  "produced": null
+ },
+ "mercedes_benz_bklasse": {
+  "america": 0.106,
+  "europe": 0.816,
+  "price": 24700,
+  "produced": null
+ },
+ "mercedes_benz_c_63": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mercedes_benz_c_63_black_series": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mercedes_benz_citan": {
+  "america": null,
+  "europe": 0.094,
+  "price": null,
+  "produced": null
+ },
+ "mercedes_benz_cklasse": {
+  "america": 0.905,
+  "europe": 0.98,
+  "price": 23600,
+  "produced": null
+ },
+ "mercedes_benz_cklasse_sport": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mercedes_benz_cl": {
+  "america": 0.25,
+  "europe": 0.342,
+  "price": 85900,
+  "produced": null
+ },
+ "mercedes_benz_cl_63": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mercedes_benz_cl_65": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mercedes_benz_cla": {
+  "america": 0.036,
+  "europe": 0.754,
+  "price": 29200,
+  "produced": null
+ },
+ "mercedes_benz_cla_45": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mercedes_benz_clc": {
+  "america": null,
+  "europe": 0.54,
+  "price": 22000,
+  "produced": null
+ },
+ "mercedes_benz_clk": {
+  "america": 0.673,
+  "europe": 0.713,
+  "price": 32900,
+  "produced": null
+ },
+ "mercedes_benz_clk_dtm": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mercedes_benz_cls": {
+  "america": 0.31,
+  "europe": 0.636,
+  "price": 54200,
+  "produced": null
+ },
+ "mercedes_benz_cls_63": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mercedes_benz_e_63": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mercedes_benz_eclass_allterrain": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mercedes_benz_eklasse": {
+  "america": 0.892,
+  "europe": 0.945,
+  "price": 31900,
+  "produced": null
+ },
+ "mercedes_benz_eqb": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mercedes_benz_eqc_400": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mercedes_benz_eqe": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mercedes_benz_eqe_suv": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mercedes_benz_eqs": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mercedes_benz_g_63": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mercedes_benz_gclass": {
+  "america": null,
+  "europe": 0.289,
+  "price": 96700,
+  "produced": null
+ },
+ "mercedes_benz_gl_63": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mercedes_benz_gla": {
+  "america": 0.172,
+  "europe": 0.825,
+  "price": 29300,
+  "produced": null
+ },
+ "mercedes_benz_glc": {
+  "america": null,
+  "europe": 0.809,
+  "price": 41500,
+  "produced": null
+ },
+ "mercedes_benz_gle": {
+  "america": null,
+  "europe": 0.661,
+  "price": 58900,
+  "produced": null
+ },
+ "mercedes_benz_glkklasse": {
+  "america": 0.297,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mercedes_benz_glklasse": {
+  "america": 0.408,
+  "europe": 0.335,
+  "price": 64700,
+  "produced": null
+ },
+ "mercedes_benz_glsclass": {
+  "america": null,
+  "europe": 0.324,
+  "price": 82200,
+  "produced": null
+ },
+ "mercedes_benz_ml_63": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mercedes_benz_mlklasse": {
+  "america": 0.781,
+  "europe": 0.749,
+  "price": 41500,
+  "produced": null
+ },
+ "mercedes_benz_rklasse": {
+  "america": 0.28,
+  "europe": 0.34,
+  "price": 42300,
+  "produced": null
+ },
+ "mercedes_benz_s_63": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mercedes_benz_s_65": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mercedes_benz_sclass": {
+  "america": 0.8,
+  "europe": 0.667,
+  "price": 63100,
+  "produced": null
+ },
+ "mercedes_benz_sclass_maybach": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mercedes_benz_sl_63": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mercedes_benz_sl_65": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mercedes_benz_slcclass": {
+  "america": 0.108,
+  "europe": 0.463,
+  "price": 36100,
+  "produced": null
+ },
+ "mercedes_benz_slk": {
+  "america": 0.543,
+  "europe": 0.777,
+  "price": 33500,
+  "produced": null
+ },
+ "mercedes_benz_slk_55": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mercedes_benz_slklasse": {
+  "america": 0.686,
+  "europe": 0.558,
+  "price": 72100,
+  "produced": null
+ },
+ "mercedes_benz_sls": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mercedes_benz_sprinter": {
+  "america": 0.17,
+  "europe": 0.232,
+  "price": null,
+  "produced": null
+ },
+ "mercedes_benz_tclass": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mercedes_benz_vclass": {
+  "america": null,
+  "europe": 0.487,
+  "price": 27700,
+  "produced": null
+ },
+ "mercedes_benz_viano": {
+  "america": null,
+  "europe": 0.41,
+  "price": 28400,
+  "produced": null
+ },
+ "mercedes_benz_vito": {
+  "america": null,
+  "europe": 0.506,
+  "price": null,
+  "produced": null
+ },
+ "mercedes_benz_x_class": {
+  "america": null,
+  "europe": 0.062,
+  "price": null,
+  "produced": null
+ },
+ "mercury_cougar": {
+  "america": 0.681,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mercury_grand_marquis": {
+  "america": 0.82,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mercury_mariner": {
+  "america": 0.512,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mercury_milan": {
+  "america": 0.435,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mercury_mountaineer": {
+  "america": 0.822,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mercury_sable": {
+  "america": 0.762,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mercury_villager": {
+  "america": 0.412,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mg_3": {
+  "america": null,
+  "europe": 0.61,
+  "price": 9600,
+  "produced": null
+ },
+ "mg_6_magnette": {
+  "america": null,
+  "europe": 0.314,
+  "price": 16300,
+  "produced": null
+ },
+ "mg_f": {
+  "america": null,
+  "europe": 0.258,
+  "price": null,
+  "produced": null
+ },
+ "mg_gs": {
+  "america": null,
+  "europe": 0.333,
+  "price": 17300,
+  "produced": null
+ },
+ "mg_tf": {
+  "america": null,
+  "europe": 0.485,
+  "price": 17900,
+  "produced": null
+ },
+ "mg_zr": {
+  "america": null,
+  "europe": 0.365,
+  "price": 11500,
+  "produced": null
+ },
+ "mg_zs": {
+  "america": null,
+  "europe": 0.524,
+  "price": 14400,
+  "produced": null
+ },
+ "mg_zt": {
+  "america": null,
+  "europe": 0.369,
+  "price": 18800,
+  "produced": null
+ },
+ "mini_clubman": {
+  "america": null,
+  "europe": 0.774,
+  "price": 16900,
+  "produced": null
+ },
+ "mini_clubvan": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mini_convertible": {
+  "america": null,
+  "europe": 0.057,
+  "price": 17300,
+  "produced": null
+ },
+ "mini_cooper": {
+  "america": 0.881,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mini_countryman": {
+  "america": null,
+  "europe": 0.868,
+  "price": 19200,
+  "produced": null
+ },
+ "mini_coupe": {
+  "america": null,
+  "europe": 0.057,
+  "price": 19400,
+  "produced": null
+ },
+ "mini_hatch_5_doors": {
+  "america": null,
+  "europe": 0.989,
+  "price": 13000,
+  "produced": null
+ },
+ "mini_paceman": {
+  "america": null,
+  "europe": 0.499,
+  "price": 22000,
+  "produced": null
+ },
+ "mini_roadster": {
+  "america": null,
+  "europe": 0.414,
+  "price": 20900,
+  "produced": null
+ },
+ "mitsubishi_3000gt": {
+  "america": 0.425,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mitsubishi_asx_rvr_outlander_sport": {
+  "america": null,
+  "europe": 0.697,
+  "price": 17500,
+  "produced": null
+ },
+ "mitsubishi_colt": {
+  "america": 0.019,
+  "europe": 0.708,
+  "price": 9100,
+  "produced": null
+ },
+ "mitsubishi_colt_ralliart": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mitsubishi_diamante": {
+  "america": 0.257,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mitsubishi_eclipse": {
+  "america": 0.915,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mitsubishi_eclipse_cross": {
+  "america": null,
+  "europe": 0.515,
+  "price": 24200,
+  "produced": null
+ },
+ "mitsubishi_endeavor": {
+  "america": 0.469,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mitsubishi_galant": {
+  "america": 0.847,
+  "europe": 0.135,
+  "price": 18500,
+  "produced": null
+ },
+ "mitsubishi_l200": {
+  "america": null,
+  "europe": 0.091,
+  "price": null,
+  "produced": null
+ },
+ "mitsubishi_lancer": {
+  "america": 0.803,
+  "europe": 0.526,
+  "price": 13800,
+  "produced": null
+ },
+ "mitsubishi_mirage": {
+  "america": 0.44,
+  "europe": 0.522,
+  "price": 10500,
+  "produced": null
+ },
+ "mitsubishi_montero": {
+  "america": 0.52,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mitsubishi_outlander": {
+  "america": 0.605,
+  "europe": 0.815,
+  "price": 24000,
+  "produced": null
+ },
+ "mitsubishi_outlander_phev": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "mitsubishi_shogun": {
+  "america": null,
+  "europe": 0.725,
+  "price": 24900,
+  "produced": null
+ },
+ "mitsubishi_space_star": {
+  "america": null,
+  "europe": 0.374,
+  "price": 12900,
+  "produced": null
+ },
+ "nio_es6": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "nissan_240sx": {
+  "america": 0.478,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "nissan_300_zx": {
+  "america": 0.535,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "nissan_350z": {
+  "america": 0.777,
+  "europe": 0.398,
+  "price": 30100,
+  "produced": null
+ },
+ "nissan_370z": {
+  "america": 0.327,
+  "europe": 0.312,
+  "price": 32100,
+  "produced": null
+ },
+ "nissan_370z_nismo": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "nissan_almera_pulsar": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "nissan_almera_tino": {
+  "america": null,
+  "europe": 0.701,
+  "price": 11500,
+  "produced": null
+ },
+ "nissan_altima": {
+  "america": 0.991,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "nissan_armada": {
+  "america": 0.577,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "nissan_cube": {
+  "america": 0.183,
+  "europe": 0.217,
+  "price": 16100,
+  "produced": null
+ },
+ "nissan_elgrand": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "nissan_frontier": {
+  "america": 0.737,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "nissan_gtr": {
+  "america": 0.147,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "nissan_gtr_r35_nismo": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "nissan_juke": {
+  "america": 0.236,
+  "europe": 0.964,
+  "price": 15200,
+  "produced": null
+ },
+ "nissan_juke_nismo": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "nissan_leaf": {
+  "america": 0.076,
+  "europe": 0.72,
+  "price": 30600,
+  "produced": null
+ },
+ "nissan_maxima": {
+  "america": 0.972,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "nissan_micra": {
+  "america": null,
+  "europe": 0.961,
+  "price": 9100,
+  "produced": null
+ },
+ "nissan_micra_cc": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "nissan_murano": {
+  "america": 0.868,
+  "europe": 0.248,
+  "price": 34800,
+  "produced": null
+ },
+ "nissan_navara": {
+  "america": null,
+  "europe": 0.064,
+  "price": null,
+  "produced": null
+ },
+ "nissan_navara_np300_king": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "nissan_note": {
+  "america": null,
+  "europe": 0.911,
+  "price": 11700,
+  "produced": null
+ },
+ "nissan_np300_pickup": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "nissan_nv200": {
+  "america": 0.083,
+  "europe": 0.287,
+  "price": 22100,
+  "produced": null
+ },
+ "nissan_nv300": {
+  "america": null,
+  "europe": 0.127,
+  "price": null,
+  "produced": null
+ },
+ "nissan_pathfinder": {
+  "america": 0.902,
+  "europe": 0.465,
+  "price": 31600,
+  "produced": null
+ },
+ "nissan_patrol": {
+  "america": null,
+  "europe": 0.198,
+  "price": 27800,
+  "produced": null
+ },
+ "nissan_pixo": {
+  "america": null,
+  "europe": 0.547,
+  "price": 8100,
+  "produced": null
+ },
+ "nissan_primera": {
+  "america": null,
+  "europe": 0.451,
+  "price": 14600,
+  "produced": null
+ },
+ "nissan_pulsar": {
+  "america": 0.019,
+  "europe": 0.631,
+  "price": 16300,
+  "produced": null
+ },
+ "nissan_qashqai": {
+  "america": null,
+  "europe": 0.988,
+  "price": 19500,
+  "produced": null
+ },
+ "nissan_qashqai_2": {
+  "america": null,
+  "europe": 0.057,
+  "price": 19300,
+  "produced": null
+ },
+ "nissan_quest": {
+  "america": 0.896,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "nissan_rogue": {
+  "america": 0.69,
+  "europe": 0.305,
+  "price": 87900,
+  "produced": null
+ },
+ "nissan_sakura": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "nissan_sentra": {
+  "america": 0.958,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "nissan_serena": {
+  "america": null,
+  "europe": 0.118,
+  "price": 16900,
+  "produced": null
+ },
+ "nissan_terrano": {
+  "america": null,
+  "europe": 0.31,
+  "price": 19600,
+  "produced": null
+ },
+ "nissan_tiidaversa": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "nissan_titan": {
+  "america": 0.624,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "nissan_versa": {
+  "america": 0.853,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "nissan_xterra": {
+  "america": 0.841,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "nissan_xtrail": {
+  "america": 0.068,
+  "europe": 0.857,
+  "price": 23800,
+  "produced": null
+ },
+ "nissan_z": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "oldsmobile_alero": {
+  "america": 0.677,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "oldsmobile_aurora": {
+  "america": 0.446,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "oldsmobile_bravada": {
+  "america": 0.501,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "oldsmobile_cutlass": {
+  "america": 0.612,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "oldsmobile_eightyeight": {
+  "america": 0.35,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "oldsmobile_intrigue": {
+  "america": 0.505,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "oldsmobile_silhouette": {
+  "america": 0.575,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "opel_adam": {
+  "america": null,
+  "europe": 0.79,
+  "price": 13800,
+  "produced": null
+ },
+ "opel_adam_rocks": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "opel_agila": {
+  "america": null,
+  "europe": 0.752,
+  "price": 8000,
+  "produced": null
+ },
+ "opel_ampera": {
+  "america": null,
+  "europe": 0.23,
+  "price": 40200,
+  "produced": null
+ },
+ "opel_antara": {
+  "america": null,
+  "europe": 0.649,
+  "price": 22600,
+  "produced": null
+ },
+ "opel_astra": {
+  "america": 0.009,
+  "europe": 0.993,
+  "price": 13500,
+  "produced": null
+ },
+ "opel_astra_opc": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "opel_astra_twin_top": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "opel_astra_vxr": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "opel_calibra": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "opel_cascada": {
+  "america": null,
+  "europe": 0.339,
+  "price": 27900,
+  "produced": null
+ },
+ "opel_corsa": {
+  "america": null,
+  "europe": 0.996,
+  "price": 9000,
+  "produced": null
+ },
+ "opel_crossland_x": {
+  "america": null,
+  "europe": 0.77,
+  "price": 19300,
+  "produced": null
+ },
+ "opel_grandland_x": {
+  "america": null,
+  "europe": 0.786,
+  "price": 25900,
+  "produced": null
+ },
+ "opel_gt": {
+  "america": 0.036,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "opel_insignia": {
+  "america": null,
+  "europe": 0.943,
+  "price": 19600,
+  "produced": null
+ },
+ "opel_insignia_country": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "opel_meriva": {
+  "america": null,
+  "europe": 0.888,
+  "price": 14400,
+  "produced": null
+ },
+ "opel_mokka": {
+  "america": null,
+  "europe": 0.929,
+  "price": 19200,
+  "produced": null
+ },
+ "opel_mokka_x": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "opel_omega": {
+  "america": null,
+  "europe": 0.271,
+  "price": 21100,
+  "produced": null
+ },
+ "opel_signum": {
+  "america": null,
+  "europe": 0.36,
+  "price": 20800,
+  "produced": null
+ },
+ "opel_tigra": {
+  "america": null,
+  "europe": 0.535,
+  "price": 15900,
+  "produced": null
+ },
+ "opel_vectra": {
+  "america": null,
+  "europe": 0.811,
+  "price": 16200,
+  "produced": null
+ },
+ "opel_vectra_caravan": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "opel_viva": {
+  "america": null,
+  "europe": 0.729,
+  "price": 10400,
+  "produced": null
+ },
+ "opel_vivaro": {
+  "america": 0.009,
+  "europe": 0.462,
+  "price": 27700,
+  "produced": null
+ },
+ "opel_vxr8": {
+  "america": null,
+  "europe": 0.162,
+  "price": 51400,
+  "produced": null
+ },
+ "opel_zafira": {
+  "america": null,
+  "europe": 0.963,
+  "price": 15900,
+  "produced": null
+ },
+ "pagani_huayra": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": 100
+ },
+ "peugeot_1007": {
+  "america": null,
+  "europe": 0.376,
+  "price": 12500,
+  "produced": null
+ },
+ "peugeot_106": {
+  "america": null,
+  "europe": 0.412,
+  "price": 7400,
+  "produced": null
+ },
+ "peugeot_107": {
+  "america": null,
+  "europe": 0.889,
+  "price": 9300,
+  "produced": null
+ },
+ "peugeot_108": {
+  "america": null,
+  "europe": 0.806,
+  "price": 9700,
+  "produced": null
+ },
+ "peugeot_2008": {
+  "america": null,
+  "europe": 0.866,
+  "price": 15600,
+  "produced": null
+ },
+ "peugeot_205": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "peugeot_206": {
+  "america": null,
+  "europe": 0.863,
+  "price": 9600,
+  "produced": null
+ },
+ "peugeot_207_cc": {
+  "america": null,
+  "europe": 0.923,
+  "price": 11500,
+  "produced": null
+ },
+ "peugeot_208": {
+  "america": null,
+  "europe": 0.92,
+  "price": 11900,
+  "produced": null
+ },
+ "peugeot_3008": {
+  "america": 0.019,
+  "europe": 0.897,
+  "price": 19700,
+  "produced": null
+ },
+ "peugeot_301": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "peugeot_306": {
+  "america": null,
+  "europe": 0.291,
+  "price": 13400,
+  "produced": null
+ },
+ "peugeot_307_cc": {
+  "america": null,
+  "europe": 0.822,
+  "price": 12700,
+  "produced": null
+ },
+ "peugeot_308": {
+  "america": null,
+  "europe": 0.914,
+  "price": 17100,
+  "produced": null
+ },
+ "peugeot_4007": {
+  "america": null,
+  "europe": 0.282,
+  "price": 27200,
+  "produced": null
+ },
+ "peugeot_406": {
+  "america": null,
+  "europe": 0.406,
+  "price": 15600,
+  "produced": null
+ },
+ "peugeot_407": {
+  "america": 0.036,
+  "europe": 0.627,
+  "price": 18100,
+  "produced": null
+ },
+ "peugeot_408": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "peugeot_5008": {
+  "america": null,
+  "europe": 0.706,
+  "price": 21500,
+  "produced": null
+ },
+ "peugeot_508_berline": {
+  "america": null,
+  "europe": 0.622,
+  "price": 22100,
+  "produced": null
+ },
+ "peugeot_607": {
+  "america": null,
+  "europe": 0.182,
+  "price": 21400,
+  "produced": null
+ },
+ "peugeot_807": {
+  "america": null,
+  "europe": 0.317,
+  "price": 22700,
+  "produced": null
+ },
+ "peugeot_expert": {
+  "america": null,
+  "europe": 0.39,
+  "price": null,
+  "produced": null
+ },
+ "peugeot_expert_tepee": {
+  "america": null,
+  "europe": 0.057,
+  "price": 23300,
+  "produced": null
+ },
+ "peugeot_partner_tepee": {
+  "america": null,
+  "europe": 0.057,
+  "price": 14700,
+  "produced": null
+ },
+ "peugeot_rcz": {
+  "america": null,
+  "europe": 0.537,
+  "price": 24600,
+  "produced": null
+ },
+ "peugeot_rifter": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "peugeot_traveller": {
+  "america": null,
+  "europe": 0.294,
+  "price": 33200,
+  "produced": null
+ },
+ "plymouth_breeze": {
+  "america": 0.255,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "plymouth_neon": {
+  "america": 0.408,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "plymouth_voyager": {
+  "america": 0.488,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "pontiac_aztek": {
+  "america": 0.342,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "pontiac_bonneville": {
+  "america": 0.686,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "pontiac_fiero": {
+  "america": 0.225,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "pontiac_firebird": {
+  "america": 0.741,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "pontiac_g5": {
+  "america": 0.45,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "pontiac_g6": {
+  "america": 0.839,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "pontiac_g8": {
+  "america": 0.267,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "pontiac_grandam": {
+  "america": 0.832,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "pontiac_grandprix": {
+  "america": 0.887,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "pontiac_gto": {
+  "america": 0.518,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "pontiac_montana": {
+  "america": 0.716,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "pontiac_solstice": {
+  "america": 0.329,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "pontiac_sunfire": {
+  "america": 0.692,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "pontiac_torrent": {
+  "america": 0.408,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "pontiac_transam": {
+  "america": 0.669,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "pontiac_vibe": {
+  "america": 0.611,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "porsche_718_boxster": {
+  "america": null,
+  "europe": 0.364,
+  "price": 48800,
+  "produced": null
+ },
+ "porsche_718_cayman": {
+  "america": null,
+  "europe": 0.371,
+  "price": 46700,
+  "produced": null
+ },
+ "porsche_911": {
+  "america": 0.544,
+  "europe": 0.718,
+  "price": 75200,
+  "produced": null
+ },
+ "porsche_928": {
+  "america": 0.157,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "porsche_944": {
+  "america": 0.342,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "porsche_boxster": {
+  "america": 0.616,
+  "europe": 0.635,
+  "price": 39000,
+  "produced": null
+ },
+ "porsche_cayenne": {
+  "america": 0.497,
+  "europe": 0.702,
+  "price": 46400,
+  "produced": null
+ },
+ "porsche_cayman": {
+  "america": 0.096,
+  "europe": 0.51,
+  "price": 45400,
+  "produced": null
+ },
+ "porsche_cayman_981c": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "porsche_cayman_987c": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "porsche_cayman_gt4_981c": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "porsche_macan": {
+  "america": null,
+  "europe": 0.672,
+  "price": 47900,
+  "produced": null
+ },
+ "porsche_panamera": {
+  "america": 0.153,
+  "europe": 0.449,
+  "price": 71900,
+  "produced": null
+ },
+ "porsche_panamera_4": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "porsche_taycan": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "proton_gen2": {
+  "america": null,
+  "europe": 0.234,
+  "price": 10300,
+  "produced": null
+ },
+ "ram_1500": {
+  "america": 0.926,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "ram_1500_trx": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "ram_2500_3500": {
+  "america": 0.934,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "renault_5": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "renault_arkana_eu": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "renault_captur": {
+  "america": 0.036,
+  "europe": 0.902,
+  "price": 17000,
+  "produced": null
+ },
+ "renault_clio": {
+  "america": null,
+  "europe": 0.977,
+  "price": 9100,
+  "produced": null
+ },
+ "renault_clio_symbolthalia": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "renault_espace": {
+  "america": null,
+  "europe": 0.415,
+  "price": 22200,
+  "produced": null
+ },
+ "renault_fluence": {
+  "america": null,
+  "europe": 0.093,
+  "price": null,
+  "produced": null
+ },
+ "renault_grand_espace": {
+  "america": null,
+  "europe": 0.057,
+  "price": 25900,
+  "produced": null
+ },
+ "renault_grand_modus": {
+  "america": null,
+  "europe": 0.057,
+  "price": 12300,
+  "produced": null
+ },
+ "renault_kadjar": {
+  "america": null,
+  "europe": 0.804,
+  "price": 21700,
+  "produced": null
+ },
+ "renault_kangoo": {
+  "america": null,
+  "europe": 0.581,
+  "price": 11000,
+  "produced": null
+ },
+ "renault_koleos": {
+  "america": null,
+  "europe": 0.401,
+  "price": 31100,
+  "produced": null
+ },
+ "renault_laguna": {
+  "america": null,
+  "europe": 0.602,
+  "price": 17200,
+  "produced": null
+ },
+ "renault_latitude": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "renault_m_gane": {
+  "america": null,
+  "europe": 0.913,
+  "price": 12700,
+  "produced": null
+ },
+ "renault_megane_etech": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "renault_modus": {
+  "america": null,
+  "europe": 0.645,
+  "price": 10700,
+  "produced": null
+ },
+ "renault_scenic": {
+  "america": null,
+  "europe": 0.836,
+  "price": 17300,
+  "produced": null
+ },
+ "renault_scenic_xmod": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "renault_talisman": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "renault_trafic": {
+  "america": null,
+  "europe": 0.472,
+  "price": null,
+  "produced": null
+ },
+ "renault_twingo": {
+  "america": null,
+  "europe": 0.677,
+  "price": 11000,
+  "produced": null
+ },
+ "renault_wind": {
+  "america": null,
+  "europe": 0.283,
+  "price": 15000,
+  "produced": null
+ },
+ "renault_zoe": {
+  "america": null,
+  "europe": 0.567,
+  "price": 27400,
+  "produced": null
+ },
+ "rolls_royce_dawn": {
+  "america": null,
+  "europe": 0.164,
+  "price": 308900,
+  "produced": null
+ },
+ "rolls_royce_ghost": {
+  "america": null,
+  "europe": 0.203,
+  "price": 237500,
+  "produced": null
+ },
+ "rolls_royce_phantom": {
+  "america": null,
+  "europe": 0.193,
+  "price": 324300,
+  "produced": null
+ },
+ "rolls_royce_wraith": {
+  "america": null,
+  "europe": 0.175,
+  "price": 277200,
+  "produced": null
+ },
+ "rover_25": {
+  "america": null,
+  "europe": 0.458,
+  "price": 9200,
+  "produced": null
+ },
+ "rover_75": {
+  "america": null,
+  "europe": 0.554,
+  "price": 19500,
+  "produced": null
+ },
+ "saab_900": {
+  "america": 0.2,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "saab_93": {
+  "america": 0.682,
+  "europe": 0.793,
+  "price": 19700,
+  "produced": null
+ },
+ "saab_93_sport": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "saab_93_sportcombi": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "saab_95": {
+  "america": 0.463,
+  "europe": 0.544,
+  "price": 23200,
+  "produced": null
+ },
+ "saab_95_sportcombi": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "saturn_astra_xr": {
+  "america": 0.142,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "saturn_aura": {
+  "america": 0.529,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "saturn_ion": {
+  "america": 0.747,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "saturn_l200": {
+  "america": 0.388,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "saturn_l300": {
+  "america": 0.367,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "saturn_ls": {
+  "america": 0.198,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "saturn_outlook": {
+  "america": 0.321,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "saturn_relay": {
+  "america": 0.24,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "saturn_sc2": {
+  "america": 0.217,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "saturn_sky": {
+  "america": 0.181,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "saturn_sl": {
+  "america": 0.225,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "saturn_sl1": {
+  "america": 0.348,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "saturn_sl2": {
+  "america": 0.401,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "saturn_vue": {
+  "america": 0.786,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "scion_frs": {
+  "america": 0.132,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "scion_tc": {
+  "america": 0.817,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "scion_xa": {
+  "america": 0.372,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "scion_xb": {
+  "america": 0.643,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "scion_xd": {
+  "america": 0.44,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "seat_alhambra": {
+  "america": null,
+  "europe": 0.704,
+  "price": 19700,
+  "produced": null
+ },
+ "seat_altea": {
+  "america": null,
+  "europe": 0.643,
+  "price": 15500,
+  "produced": null
+ },
+ "seat_altea_xl": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "seat_arona": {
+  "america": null,
+  "europe": 0.727,
+  "price": 19100,
+  "produced": null
+ },
+ "seat_ateca": {
+  "america": null,
+  "europe": 0.733,
+  "price": 21000,
+  "produced": null
+ },
+ "seat_exeo": {
+  "america": null,
+  "europe": 0.456,
+  "price": 21800,
+  "produced": null
+ },
+ "seat_ibiza": {
+  "america": null,
+  "europe": 0.93,
+  "price": 9900,
+  "produced": null
+ },
+ "seat_ibiza_cupra": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "seat_leon": {
+  "america": null,
+  "europe": 0.927,
+  "price": 15900,
+  "produced": null
+ },
+ "seat_leon_cupra_r": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "seat_leon_sc": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "seat_mii": {
+  "america": null,
+  "europe": 0.597,
+  "price": 9700,
+  "produced": null
+ },
+ "seat_tarraco": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "seat_toledo": {
+  "america": null,
+  "europe": 0.488,
+  "price": 15200,
+  "produced": null
+ },
+ "skoda_citigo": {
+  "america": null,
+  "europe": 0.775,
+  "price": 9600,
+  "produced": null
+ },
+ "skoda_enyaq_iv": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "skoda_fabia": {
+  "america": null,
+  "europe": 0.955,
+  "price": 9400,
+  "produced": null
+ },
+ "skoda_fabia_combi": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "skoda_kamiq_eu": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "skoda_karoq": {
+  "america": null,
+  "europe": 0.742,
+  "price": 24200,
+  "produced": null
+ },
+ "skoda_kodiaq": {
+  "america": null,
+  "europe": 0.692,
+  "price": 24900,
+  "produced": null
+ },
+ "skoda_octavia": {
+  "america": null,
+  "europe": 0.938,
+  "price": 13200,
+  "produced": null
+ },
+ "skoda_octavia_combi": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "skoda_octavia_scout": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "skoda_rapid": {
+  "america": null,
+  "europe": 0.654,
+  "price": 15500,
+  "produced": null
+ },
+ "skoda_rapid_spaceback": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "skoda_roomster": {
+  "america": null,
+  "europe": 0.624,
+  "price": 11500,
+  "produced": null
+ },
+ "skoda_superb": {
+  "america": null,
+  "europe": 0.802,
+  "price": 19300,
+  "produced": null
+ },
+ "skoda_superb_combi": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "skoda_yeti": {
+  "america": null,
+  "europe": 0.82,
+  "price": 17600,
+  "produced": null
+ },
+ "smart_forfour": {
+  "america": null,
+  "europe": 0.668,
+  "price": 12100,
+  "produced": null
+ },
+ "smart_fortwo": {
+  "america": 0.478,
+  "europe": 0.799,
+  "price": 9100,
+  "produced": null
+ },
+ "smart_roadster_coupe": {
+  "america": null,
+  "europe": 0.348,
+  "price": 12700,
+  "produced": null
+ },
+ "ssangyong_korando": {
+  "america": null,
+  "europe": 0.455,
+  "price": 17500,
+  "produced": null
+ },
+ "ssangyong_musso": {
+  "america": null,
+  "europe": 0.061,
+  "price": 19300,
+  "produced": null
+ },
+ "ssangyong_rexton": {
+  "america": null,
+  "europe": 0.38,
+  "price": 22200,
+  "produced": null
+ },
+ "ssangyong_rodius": {
+  "america": null,
+  "europe": 0.355,
+  "price": 17200,
+  "produced": null
+ },
+ "ssangyong_tivoli": {
+  "america": null,
+  "europe": 0.446,
+  "price": 14900,
+  "produced": null
+ },
+ "ssangyong_tivoli_xlv": {
+  "america": null,
+  "europe": 0.057,
+  "price": 20100,
+  "produced": null
+ },
+ "ssangyong_turismo": {
+  "america": null,
+  "europe": 0.057,
+  "price": 21200,
+  "produced": null
+ },
+ "subaru_baja": {
+  "america": 0.189,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "subaru_brz": {
+  "america": 0.21,
+  "europe": 0.209,
+  "price": 28200,
+  "produced": null
+ },
+ "subaru_forester": {
+  "america": 0.871,
+  "europe": 0.606,
+  "price": 20400,
+  "produced": null
+ },
+ "subaru_impreza": {
+  "america": 0.836,
+  "europe": 0.569,
+  "price": 16100,
+  "produced": null
+ },
+ "subaru_legacy": {
+  "america": 0.722,
+  "europe": 0.437,
+  "price": 19600,
+  "produced": null
+ },
+ "subaru_levorg": {
+  "america": null,
+  "europe": 0.184,
+  "price": 31900,
+  "produced": null
+ },
+ "subaru_outback": {
+  "america": 0.894,
+  "europe": 0.471,
+  "price": 30900,
+  "produced": null
+ },
+ "subaru_solterra": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "subaru_tribeca": {
+  "america": 0.193,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "subaru_wrx": {
+  "america": 0.561,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "subaru_wrx_sti": {
+  "america": null,
+  "europe": 0.267,
+  "price": null,
+  "produced": null
+ },
+ "subaru_xv": {
+  "america": null,
+  "europe": 0.431,
+  "price": 24700,
+  "produced": null
+ },
+ "suzuki_aerio": {
+  "america": 0.293,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "suzuki_alto": {
+  "america": null,
+  "europe": 0.784,
+  "price": 7200,
+  "produced": null
+ },
+ "suzuki_baleno": {
+  "america": null,
+  "europe": 0.439,
+  "price": 13800,
+  "produced": null
+ },
+ "suzuki_celerio": {
+  "america": null,
+  "europe": 0.686,
+  "price": 9100,
+  "produced": null
+ },
+ "suzuki_forenza": {
+  "america": 0.664,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "suzuki_grand_vitara": {
+  "america": 0.24,
+  "europe": 0.144,
+  "price": 13900,
+  "produced": null
+ },
+ "suzuki_ignis": {
+  "america": null,
+  "europe": 0.693,
+  "price": 8700,
+  "produced": null
+ },
+ "suzuki_jimny": {
+  "america": null,
+  "europe": 0.658,
+  "price": 12300,
+  "produced": null
+ },
+ "suzuki_liana": {
+  "america": null,
+  "europe": 0.346,
+  "price": 11500,
+  "produced": null
+ },
+ "suzuki_r": {
+  "america": null,
+  "europe": 0.538,
+  "price": 9200,
+  "produced": null
+ },
+ "suzuki_reno": {
+  "america": 0.293,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "suzuki_samurai": {
+  "america": 0.25,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "suzuki_splash": {
+  "america": null,
+  "europe": 0.613,
+  "price": 10800,
+  "produced": null
+ },
+ "suzuki_swift": {
+  "america": 0.147,
+  "europe": 0.9,
+  "price": 9400,
+  "produced": null
+ },
+ "suzuki_sx4": {
+  "america": 0.367,
+  "europe": 0.756,
+  "price": 12300,
+  "produced": null
+ },
+ "suzuki_sx4_scross": {
+  "america": null,
+  "europe": 0.057,
+  "price": 16900,
+  "produced": null
+ },
+ "suzuki_verona": {
+  "america": 0.234,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "suzuki_vitara": {
+  "america": 0.129,
+  "europe": 0.832,
+  "price": 16300,
+  "produced": null
+ },
+ "suzuki_xl7": {
+  "america": 0.361,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "tesla_model": {
+  "america": null,
+  "europe": 0.508,
+  "price": 65800,
+  "produced": null
+ },
+ "tesla_model_x": {
+  "america": null,
+  "europe": 0.43,
+  "price": 85500,
+  "produced": null
+ },
+ "toyota_4runner": {
+  "america": 0.941,
+  "europe": 0.109,
+  "price": null,
+  "produced": null
+ },
+ "toyota_86": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "toyota_alphard": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "toyota_aurion": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "toyota_auris": {
+  "america": null,
+  "europe": 0.909,
+  "price": 16000,
+  "produced": null
+ },
+ "toyota_avalon": {
+  "america": 0.849,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "toyota_avensis": {
+  "america": null,
+  "europe": 0.856,
+  "price": 16700,
+  "produced": null
+ },
+ "toyota_avensis_verso": {
+  "america": null,
+  "europe": 0.057,
+  "price": 20600,
+  "produced": null
+ },
+ "toyota_aygo": {
+  "america": null,
+  "europe": 0.947,
+  "price": 9800,
+  "produced": null
+ },
+ "toyota_aygo_x": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "toyota_bz4x": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "toyota_camry": {
+  "america": 0.994,
+  "europe": 0.219,
+  "price": 22600,
+  "produced": null
+ },
+ "toyota_camry_hybrid": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "toyota_camry_solara": {
+  "america": 0.272,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "toyota_celica": {
+  "america": 0.713,
+  "europe": 0.503,
+  "price": 19700,
+  "produced": null
+ },
+ "toyota_chr": {
+  "america": null,
+  "europe": 0.8,
+  "price": 24300,
+  "produced": null
+ },
+ "toyota_corolla": {
+  "america": 0.983,
+  "europe": 0.877,
+  "price": 12500,
+  "produced": null
+ },
+ "toyota_corolla_verso": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "toyota_crown": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "toyota_echo": {
+  "america": 0.374,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "toyota_estima": {
+  "america": 0.057,
+  "europe": 0.207,
+  "price": null,
+  "produced": null
+ },
+ "toyota_fj_cruiser": {
+  "america": 0.558,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "toyota_fortuner": {
+  "america": 0.057,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "toyota_gr_86": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "toyota_gt86": {
+  "america": null,
+  "europe": 0.442,
+  "price": 27700,
+  "produced": null
+ },
+ "toyota_highlander": {
+  "america": 0.837,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "toyota_highlander_kluger": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "toyota_hilux": {
+  "america": 0.127,
+  "europe": 0.08,
+  "price": null,
+  "produced": null
+ },
+ "toyota_iq": {
+  "america": null,
+  "europe": 0.594,
+  "price": 12400,
+  "produced": null
+ },
+ "toyota_land_cruiser": {
+  "america": 0.62,
+  "europe": 0.619,
+  "price": 33900,
+  "produced": null
+ },
+ "toyota_land_cruiser_150": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "toyota_land_cruiser_200": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "toyota_matrix": {
+  "america": 0.688,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "toyota_mirai": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "toyota_mr2": {
+  "america": 0.537,
+  "europe": 0.417,
+  "price": 19800,
+  "produced": null
+ },
+ "toyota_pickup": {
+  "america": 0.499,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "toyota_picnic": {
+  "america": null,
+  "europe": 0.089,
+  "price": 18500,
+  "produced": null
+ },
+ "toyota_previa": {
+  "america": 0.285,
+  "europe": 0.405,
+  "price": 23100,
+  "produced": null
+ },
+ "toyota_prius": {
+  "america": 0.888,
+  "europe": 0.854,
+  "price": 20800,
+  "produced": null
+ },
+ "toyota_prius_c_aqua": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "toyota_prius_prime": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "toyota_prius_vprius": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "toyota_proace_verso": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "toyota_rav4": {
+  "america": 0.87,
+  "europe": 0.898,
+  "price": 20800,
+  "produced": null
+ },
+ "toyota_scion": {
+  "america": 0.319,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "toyota_sequoia": {
+  "america": 0.798,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "toyota_sienna": {
+  "america": 0.938,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "toyota_solara": {
+  "america": 0.652,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "toyota_supra": {
+  "america": 0.431,
+  "europe": 0.152,
+  "price": null,
+  "produced": null
+ },
+ "toyota_t100": {
+  "america": 0.371,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "toyota_tacoma": {
+  "america": 0.919,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "toyota_tercel": {
+  "america": 0.456,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "toyota_tundra": {
+  "america": 0.811,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "toyota_urban_cruiser": {
+  "america": null,
+  "europe": 0.387,
+  "price": 17600,
+  "produced": null
+ },
+ "toyota_venza": {
+  "america": 0.342,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "toyota_verso": {
+  "america": null,
+  "europe": 0.651,
+  "price": 19900,
+  "produced": null
+ },
+ "toyota_versos": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "toyota_yaris": {
+  "america": 0.709,
+  "europe": 0.984,
+  "price": 11100,
+  "produced": null
+ },
+ "toyota_yaris_verso": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "volkswagen_amarok": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "volkswagen_arteon": {
+  "america": null,
+  "europe": 0.444,
+  "price": 36100,
+  "produced": null
+ },
+ "volkswagen_arteon_r": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "volkswagen_atlas": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "volkswagen_beetle": {
+  "america": 0.917,
+  "europe": 0.779,
+  "price": 14900,
+  "produced": null
+ },
+ "volkswagen_bora": {
+  "america": null,
+  "europe": 0.519,
+  "price": 15700,
+  "produced": null
+ },
+ "volkswagen_caddy": {
+  "america": null,
+  "europe": 0.604,
+  "price": null,
+  "produced": null
+ },
+ "volkswagen_caddy_maxi": {
+  "america": null,
+  "europe": 0.353,
+  "price": null,
+  "produced": null
+ },
+ "volkswagen_caddy_maxi_life": {
+  "america": null,
+  "europe": 0.057,
+  "price": 22500,
+  "produced": null
+ },
+ "volkswagen_california": {
+  "america": null,
+  "europe": 0.244,
+  "price": 41200,
+  "produced": null
+ },
+ "volkswagen_caravelle": {
+  "america": null,
+  "europe": 0.478,
+  "price": 34800,
+  "produced": null
+ },
+ "volkswagen_cc": {
+  "america": 0.393,
+  "europe": 0.578,
+  "price": 28200,
+  "produced": null
+ },
+ "volkswagen_eos": {
+  "america": 0.357,
+  "europe": 0.579,
+  "price": 23800,
+  "produced": null
+ },
+ "volkswagen_fox": {
+  "america": 0.096,
+  "europe": 0.711,
+  "price": 7500,
+  "produced": null
+ },
+ "volkswagen_gol": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "volkswagen_golf": {
+  "america": 0.922,
+  "europe": 0.995,
+  "price": 14100,
+  "produced": null
+ },
+ "volkswagen_golf_plus": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "volkswagen_golf_r": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "volkswagen_golf_sportsvan": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "volkswagen_golf_sv": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "volkswagen_jetta": {
+  "america": 0.977,
+  "europe": 0.656,
+  "price": 19600,
+  "produced": null
+ },
+ "volkswagen_passat": {
+  "america": 0.955,
+  "europe": 0.952,
+  "price": 18100,
+  "produced": null
+ },
+ "volkswagen_passat_cc": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "volkswagen_phaeton": {
+  "america": 0.117,
+  "europe": 0.228,
+  "price": 51500,
+  "produced": null
+ },
+ "volkswagen_polo": {
+  "america": null,
+  "europe": 0.991,
+  "price": 9200,
+  "produced": null
+ },
+ "volkswagen_routan": {
+  "america": 0.174,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "volkswagen_scirocco": {
+  "america": 0.104,
+  "europe": 0.772,
+  "price": 23000,
+  "produced": null
+ },
+ "volkswagen_scirocco_r": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "volkswagen_sharan": {
+  "america": null,
+  "europe": 0.722,
+  "price": 21300,
+  "produced": null
+ },
+ "volkswagen_taigo": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "volkswagen_tcross": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "volkswagen_tiguan": {
+  "america": 0.342,
+  "europe": 0.936,
+  "price": 23900,
+  "produced": null
+ },
+ "volkswagen_tiguan_allspace": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "volkswagen_touareg": {
+  "america": 0.599,
+  "europe": 0.745,
+  "price": 38800,
+  "produced": null
+ },
+ "volkswagen_touareg_r": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "volkswagen_touran": {
+  "america": null,
+  "europe": 0.831,
+  "price": 19700,
+  "produced": null
+ },
+ "volkswagen_transporter": {
+  "america": null,
+  "europe": 0.572,
+  "price": null,
+  "produced": null
+ },
+ "volkswagen_transporter_shuttle": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "volkswagen_transporter_sportline": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "volkswagen_troc": {
+  "america": null,
+  "europe": 0.781,
+  "price": 21900,
+  "produced": null
+ },
+ "volkswagen_up": {
+  "america": null,
+  "europe": 0.881,
+  "price": 9900,
+  "produced": null
+ },
+ "volvo_850": {
+  "america": 0.414,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "volvo_c30": {
+  "america": 0.168,
+  "europe": 0.674,
+  "price": 17100,
+  "produced": null
+ },
+ "volvo_c40_recharge": {
+  "america": 0.019,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "volvo_c70": {
+  "america": 0.416,
+  "europe": 0.492,
+  "price": 28900,
+  "produced": null
+ },
+ "volvo_s40": {
+  "america": 0.715,
+  "europe": 0.69,
+  "price": 16300,
+  "produced": null
+ },
+ "volvo_s60": {
+  "america": 0.752,
+  "europe": 0.665,
+  "price": 23200,
+  "produced": null
+ },
+ "volvo_s70": {
+  "america": 0.507,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "volvo_s80": {
+  "america": 0.711,
+  "europe": 0.497,
+  "price": 27100,
+  "produced": null
+ },
+ "volvo_s90": {
+  "america": 0.147,
+  "europe": 0.453,
+  "price": 38300,
+  "produced": null
+ },
+ "volvo_v40": {
+  "america": 0.261,
+  "europe": 0.852,
+  "price": 22200,
+  "produced": null
+ },
+ "volvo_v40_cross_country": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "volvo_v50": {
+  "america": 0.204,
+  "europe": 0.738,
+  "price": 20100,
+  "produced": null
+ },
+ "volvo_v60": {
+  "america": null,
+  "europe": 0.724,
+  "price": 25500,
+  "produced": null
+ },
+ "volvo_v60_cross_country": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "volvo_v70": {
+  "america": 0.595,
+  "europe": 0.765,
+  "price": 26700,
+  "produced": null
+ },
+ "volvo_v90": {
+  "america": 0.083,
+  "europe": 0.556,
+  "price": 40600,
+  "produced": null
+ },
+ "volvo_v90_cross_country": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "volvo_xc40": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ },
+ "volvo_xc60": {
+  "america": 0.136,
+  "europe": 0.861,
+  "price": 32100,
+  "produced": null
+ },
+ "volvo_xc70": {
+  "america": 0.51,
+  "europe": 0.611,
+  "price": 33100,
+  "produced": null
+ },
+ "volvo_xc90": {
+  "america": 0.72,
+  "europe": 0.813,
+  "price": 36800,
+  "produced": null
+ },
+ "wiesmann_mf4": {
+  "america": null,
+  "europe": null,
+  "price": null,
+  "produced": null
+ }
+}

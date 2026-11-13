@@ -71,6 +71,22 @@ def extra(args):
         ExtraDataset("VMMR", vmmr, vmmr_label, EXTRA_DATASET_DIR, detector=CarDetector()).convert()
 
 
+def market(args):
+    from src.catalog import CarCatalog
+    from src.market import build_market, dvm_market, save_market, vmmr_counts
+
+    downloads = Path(args.downloads)
+    tables = downloads / "dvm" / "tables_V2.0.zip"
+    vmmr = downloads / "vmmr" / "VMMRdb.zip"
+    dvm = dvm_market(tables) if tables.exists() else {}
+    counts = vmmr_counts(vmmr) if vmmr.exists() else {}
+
+    market = build_market(CarCatalog.load(), dvm, counts)
+    save_market(market)
+    known = sum(1 for car in market.values() if car["price"] is not None)
+    print(f"{len(market)} voitures, {known} avec un prix neuf")
+
+
 def collect(args):
     from pymongo import MongoClient
     from pymongo.errors import PyMongoError
@@ -138,6 +154,7 @@ COMMANDS = {
     "analyze": ("Analyser le dataset", analyze),
     "extra": ("Convertir DVM-Car et VMMRdb téléchargés", extra),
     "catalog": ("Créer la liste des voitures (cars.json)", catalog),
+    "market": ("Prix neuf et fréquence de chaque voiture (market.json)", market),
     "collect": ("Récupérer les photos confirmées dans l'application", collect),
     "prepare": ("Préparer dataset_small", prepare),
     "train": ("Entraîner le modèle", train),
@@ -160,7 +177,7 @@ def build_parser():
                 "--source", default=DATASET_DIR,
                 help="dossier du grand dataset, avec train/, test/ et data_full.csv",
             )
-        if name == "extra":
+        if name in ("extra", "market"):
             command.add_argument(
                 "--downloads", default=DOWNLOADS_DIR,
                 help="dossier avec dvm/resized_DVM_v2.zip, dvm/tables_V2.0.zip et vmmr/VMMRdb.zip",
