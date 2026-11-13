@@ -73,15 +73,13 @@ def extra(args):
 
 def market(args):
     from src.catalog import CarCatalog
-    from src.market import build_market, dvm_market, save_market, vmmr_counts
+    from src.market import build_market, dvm_prices, save_market
 
-    downloads = Path(args.downloads)
-    tables = downloads / "dvm" / "tables_V2.0.zip"
-    vmmr = downloads / "vmmr" / "VMMRdb.zip"
-    dvm = dvm_market(tables) if tables.exists() else {}
-    counts = vmmr_counts(vmmr) if vmmr.exists() else {}
+    tables = Path(args.downloads) / "dvm" / "tables_V2.0.zip"
+    prices = dvm_prices(tables) if tables.exists() else {}
 
-    market = build_market(CarCatalog.load(), dvm, counts)
+    # Sans l'ancien market.json : il est recalculé
+    market = build_market(CarCatalog.load(market_path=None), prices)
     save_market(market)
     known = sum(1 for car in market.values() if car["price"] is not None)
     print(f"{len(market)} voitures, {known} avec un prix neuf")
@@ -154,7 +152,7 @@ COMMANDS = {
     "analyze": ("Analyser le dataset", analyze),
     "extra": ("Convertir DVM-Car et VMMRdb téléchargés", extra),
     "catalog": ("Créer la liste des voitures (cars.json)", catalog),
-    "market": ("Prix neuf et fréquence de chaque voiture (market.json)", market),
+    "market": ("Prix neuf et exemplaires de chaque voiture (market.json)", market),
     "collect": ("Récupérer les photos confirmées dans l'application", collect),
     "prepare": ("Préparer dataset_small", prepare),
     "train": ("Entraîner le modèle", train),

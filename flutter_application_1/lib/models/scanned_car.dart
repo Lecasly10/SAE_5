@@ -16,24 +16,6 @@ enum Rarity {
       Rarity.values.firstWhere((r) => r.name == value, orElse: () => commune);
 }
 
-/// À quelle fréquence on croise cette voiture là où la photo a été prise.
-enum OnRoad {
-  courante('Courante'),
-  peuCourante('Peu courante'),
-  tresRare('Très rare');
-
-  const OnRoad(this.label);
-
-  final String label;
-
-  static OnRoad? fromJson(Object? value) => switch (value) {
-        'courante' => courante,
-        'peu_courante' => peuCourante,
-        'tres_rare' => tresRare,
-        _ => null,
-      };
-}
-
 /// Endroit où la photo a été prise.
 class CarLocation {
   const CarLocation({
@@ -87,7 +69,6 @@ class ScannedCar {
     this.location,
     this.price,
     this.produced,
-    this.onRoad,
   });
 
   factory ScannedCar.fromJson(Map<String, dynamic> json) {
@@ -100,7 +81,6 @@ class ScannedCar {
       location: location == null ? null : CarLocation.fromJson(location),
       price: (json['price'] as num?)?.round(),
       produced: (json['produced'] as num?)?.round(),
-      onRoad: OnRoad.fromJson(json['onRoad']),
     );
   }
 
@@ -115,7 +95,6 @@ class ScannedCar {
 
   /// Exemplaires fabriqués, seulement pour les séries limitées.
   final int? produced;
-  final OnRoad? onRoad;
 
   String get scannedDate => formatDate(scannedAt);
 }

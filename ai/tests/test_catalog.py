@@ -37,7 +37,7 @@ class CarCatalogTest(unittest.TestCase):
 
         self.assertEqual(
             set(car.to_dict()),
-            {"id", "brand", "model", "from_year", "to_year", "price", "seen", "produced"},
+            {"id", "brand", "model", "from_year", "to_year", "price", "produced"},
         )
 
     def test_old_ids_lead_to_the_merged_car(self):

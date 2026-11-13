@@ -16,11 +16,8 @@ class Car:
     sources: tuple[str, ...]
     # Anciens identifiants de cette voiture (une par génération auparavant)
     aliases: tuple[str, ...] = ()
-    # Prix neuf en euros et fréquence sur la route, en Europe et aux
-    # États-Unis (voir market.py) ; None quand on ne sait pas
+    # Prix neuf en euros (voir market.py), None quand on ne sait pas
     price: int | None = None
-    europe: float | None = None
-    america: float | None = None
     # Exemplaires fabriqués, seulement pour les séries limitées
     produced: int | None = None
 
@@ -32,7 +29,6 @@ class Car:
             "from_year": self.from_year,
             "to_year": self.to_year,
             "price": self.price,
-            "seen": {"europe": self.europe, "america": self.america},
             "produced": self.produced,
         }
 

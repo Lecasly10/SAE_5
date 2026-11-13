@@ -33,7 +33,6 @@ const carSchema = new mongoose.Schema({
   price: { type: Number, default: null },
   produced: { type: Number, default: null },
   rarity: { type: String, enum: ['commune', 'rare', 'epique', 'legendaire', 'mythique'], default: null },
-  onRoad: { type: String, enum: ['courante', 'peu_courante', 'tres_rare'], default: null },
   image: imageField,
   createdAt: { type: Date, default: Date.now },
 });

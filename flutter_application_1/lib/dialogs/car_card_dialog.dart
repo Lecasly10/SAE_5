@@ -93,24 +93,13 @@ class _CarCardDialogState extends State<_CarCardDialog> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Center(child: RarityBadge(rarity: car.rarity)),
-          if (car.price != null || car.onRoad != null) ...[
+          if (car.price != null) ...[
             const SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                if (car.price != null)
-                  _Detail(
-                    icon: Icons.sell_outlined,
-                    text: 'Neuve : ${formatEuros(car.price!)}',
-                  ),
-                if (car.price != null && car.onRoad != null)
-                  const SizedBox(width: 14),
-                if (car.onRoad != null)
-                  _Detail(
-                    icon: Icons.visibility_outlined,
-                    text: car.onRoad!.label,
-                  ),
-              ],
+            Center(
+              child: _Detail(
+                icon: Icons.sell_outlined,
+                text: 'Neuve : ${formatEuros(car.price!)}',
+              ),
             ),
           ],
           if (car.produced != null) ...[

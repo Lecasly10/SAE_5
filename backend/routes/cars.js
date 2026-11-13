@@ -32,7 +32,6 @@ const toJson = (car) => ({
   price: car.price ?? null,
   produced: car.produced ?? null,
   rarity: rarityOf(car),
-  onRoad: car.onRoad ?? null,
   createdAt: car.createdAt,
 });
 
@@ -59,7 +58,6 @@ router.post('/', scanLimiter, uploadedImage, async (req, res) => {
   if (!chosen) throw new HttpError(422, 'Voiture non reconnue, elle n’a pas été ajoutée');
 
   const { carId, brand, model, years, confidence } = chosen;
-  const { rarity, onRoad } = assessRarity(chosen);
   const car = await Car.create({
     user: req.userId,
     image: req.image,
@@ -72,8 +70,7 @@ router.post('/', scanLimiter, uploadedImage, async (req, res) => {
     location,
     price: chosen.price ?? null,
     produced: chosen.produced ?? null,
-    rarity,
-    onRoad,
+    rarity: assessRarity(chosen),
   });
   res.status(201).json(toJson(car));
 });

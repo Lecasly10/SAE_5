@@ -23,9 +23,8 @@ function describeCar(car) {
     brand: car.brand,
     model: car.model,
     years: formatYears(car),
-    // Prix neuf en euros et fréquence sur la route, pour la rareté
+    // Prix neuf en euros et exemplaires fabriqués, pour la rareté
     price: car.price ?? null,
-    seen: car.seen ?? null,
     produced: car.produced ?? null,
   };
 }

@@ -250,7 +250,7 @@ describe('API', () => {
 
     assert.equal(status, 200);
     assert.deepEqual(json[0], {
-      carId: f12.id, brand: 'Ferrari', model: 'F12 Berlinetta', years: '2012 – 2015', price: null, seen: null, produced: null,
+      carId: f12.id, brand: 'Ferrari', model: 'F12 Berlinetta', years: '2012 – 2015', price: null, produced: null,
     });
   });
 

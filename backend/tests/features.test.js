@@ -28,25 +28,18 @@ describe('photo location', () => {
 });
 
 describe('rarity', () => {
-  const clio = { brand: 'Renault', years: '1990 – aujourd’hui', price: 9100, seen: { europe: 0.98, america: null } };
-  const superDuty = { brand: 'Ford', years: '1999 – 2016', price: null, seen: { europe: null, america: 0.99 } };
-
-  it('depends on the brand, the price, the age and how often the car is seen', () => {
-    assert.deepEqual(assessRarity(clio), { rarity: 'commune', onRoad: 'courante' });
-    // Courante aux États-Unis : c'est une voiture courante, où qu'on la voie
-    assert.deepEqual(assessRarity(superDuty), { rarity: 'commune', onRoad: 'courante' });
-    assert.equal(
-      assessRarity({ brand: 'Porsche', years: '1964 – aujourd’hui', price: 75200, seen: { europe: 0.72 } }).rarity,
-      'epique'
-    );
-    assert.equal(assessRarity({ brand: 'Ferrari', years: '2012 – 2017', seen: { europe: 0.06 } }).rarity, 'legendaire');
-    assert.equal(assessRarity({ brand: 'Citroën', years: '1948 – 1990' }).rarity, 'rare');
+  it('depends on the brand, the price and the age of the car', () => {
+    assert.equal(assessRarity({ brand: 'Renault', years: '1990 – aujourd’hui', price: 9100 }), 'commune');
+    assert.equal(assessRarity({ brand: 'Ford', years: '1999 – 2016' }), 'commune');
+    assert.equal(assessRarity({ brand: 'Porsche', years: '1964 – aujourd’hui', price: 75200 }), 'epique');
+    assert.equal(assessRarity({ brand: 'Ferrari', years: '2012 – 2017', price: 279600 }), 'legendaire');
+    assert.equal(assessRarity({ brand: 'Citroën', years: '1948 – 1990' }), 'rare');
   });
 
-  it('makes cars built in small numbers mythic', () => {
-    assert.equal(assessRarity({ brand: 'Ferrari', years: '2002 – 2004', produced: 400 }).rarity, 'mythique');
-    assert.equal(assessRarity({ brand: 'Lamborghini', years: '2005 – 2010', produced: 4100 }).rarity, 'legendaire');
-    assert.equal(assessRarity({ brand: 'Ford', years: '2005 – 2006', price: 160000, produced: 4000 }).rarity, 'legendaire');
+  it('depends on how many were built', () => {
+    assert.equal(assessRarity({ brand: 'Ferrari', years: '2002 – 2004', produced: 400 }), 'mythique');
+    assert.equal(assessRarity({ brand: 'Lamborghini', years: '2005 – 2010', produced: 4100 }), 'legendaire');
+    assert.equal(assessRarity({ brand: 'Ford', years: '2005 – 2006', price: 160000, produced: 4000 }), 'epique');
   });
 
   it('keeps the rarity saved with the car', () => {

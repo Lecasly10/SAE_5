@@ -18,7 +18,6 @@ void main() {
       'rarity': 'legendaire',
       'price': 279600,
       'produced': 1500,
-      'onRoad': 'tres_rare',
       'location': {
         'latitude': 48.8584,
         'longitude': 2.2945,
@@ -30,7 +29,6 @@ void main() {
     expect(scanned.rarity, Rarity.legendaire);
     expect(scanned.rarity.label, 'Légendaire');
     expect(scanned.price, 279600);
-    expect(scanned.onRoad, OnRoad.tresRare);
     expect(formatEuros(scanned.price!), '279 600 €');
     expect(formatEuros(950), '950 €');
     expect(scanned.location!.fromPhoto, isTrue);
@@ -49,7 +47,6 @@ void main() {
     expect(scanned.location, isNull);
     expect(scanned.price, isNull);
     expect(scanned.produced, isNull);
-    expect(scanned.onRoad, isNull);
   });
 
   test('les statistiques donnent la part de la collection complétée', () {

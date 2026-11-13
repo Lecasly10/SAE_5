@@ -159,8 +159,7 @@ class _StatsView extends StatelessWidget {
               const SizedBox(height: 10),
               Text(
                 'La rareté dépend de la marque, du prix neuf, du nombre '
-                'd’exemplaires fabriqués, de l’âge de la voiture et de la '
-                'fréquence à laquelle on la croise sur la route.',
+                'd’exemplaires fabriqués et de l’âge de la voiture.',
                 style: GoogleFonts.inter(
                   fontSize: 10,
                   height: 1.4,

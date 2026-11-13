@@ -178,7 +178,7 @@ Imagine un Pokédex, mais avec de vraies voitures :
 2. L'IA **repère** la voiture et dessine un **cadre rouge** autour.
 3. Elle **identifie** la marque et le modèle (par exemple *Ferrari F12 Berlinetta, 2012 – 2015*) et indique sa **confiance** en pourcentage.
 4. Si tu as un compte, tu peux **ajouter la voiture à ta bibliothèque**. Elle est conservée dans ton compte : tu la retrouves à chaque connexion.
-5. Chaque voiture a une **rareté** (Commune, Rare, Épique, Légendaire, Mythique) selon sa marque, son prix neuf, son nombre d'exemplaires (séries limitées), son âge et la fréquence à laquelle on la croise sur la route. Une voiture fabriquée à moins de 1 000 exemplaires (Ferrari Enzo, McLaren P1…) est mythique. La fiche montre aussi son prix neuf, si elle est courante sur la route, et l'endroit de la photo (lieu, ville et pays). Tu peux la **partager** depuis sa fiche.
+5. Chaque voiture a une **rareté** (Commune, Rare, Épique, Légendaire, Mythique) selon sa marque, son prix neuf, son nombre d'exemplaires (séries limitées), et son âge. Une voiture fabriquée à moins de 1 000 exemplaires (Ferrari Enzo, McLaren P1…) est mythique. La fiche montre aussi son prix neuf, son nombre d'exemplaires et l'endroit de la photo (lieu, ville et pays). Tu peux la **partager** depuis sa fiche.
 6. La bibliothèque a une page de **statistiques** (voitures, marques, rareté, valeur de la collection en prix neuf, voiture la plus chère, part des voitures connues de l'IA déjà repérées) et une **carte** qui place chaque voiture là où la photo a été prise.
 
 L'idée est née parce que plusieurs membres de l'équipe sont passionnés d'automobile, et que l'un d'eux photographie des voitures de collection (« carspotting »).
@@ -773,7 +773,7 @@ Les routes marquées 🔒 demandent l'en-tête `Authorization: Bearer <token>` (
 | `POST` | `/api/predict` | Reconnaît la voiture d'une photo, **sans compte** | `200` `{ recognized, confidence, box, carId, brand, model, years, suggestions }` si reconnue, sinon `{ recognized: false, reason, confidence, box, suggestions }` · `400` image invalide · `422` image illisible ou abîmée · `503` IA indisponible |
 | `POST` | `/api/training-photos` 🔒 | Garde une photo dont l'utilisateur a choisi la bonne voiture (`carId`), pour le prochain entraînement | `201` · `400` image ou voiture invalide · `401` · `403` accord non donné · `429` |
 | `GET` | `/api/catalog` | Toutes les voitures que l'IA connaît `[{ carId, brand, model, years }]`, pour choisir la bonne à la main | `200` · `503` IA indisponible |
-| `GET` | `/api/cars` 🔒 | Liste tes voitures, avec leur `rarity` (`commune`, `rare`, `epique`, `legendaire`, `mythique`), leur prix neuf `price` (€), leurs exemplaires `produced`, leur fréquence `onRoad` (`courante`, `peu_courante`, `tres_rare`) et leur `location` | `200` liste · `401` |
+| `GET` | `/api/cars` 🔒 | Liste tes voitures, avec leur `rarity` (`commune`, `rare`, `epique`, `legendaire`, `mythique`), leur prix neuf `price` (€), leurs exemplaires `produced` et leur `location` | `200` liste · `401` |
 | `GET` | `/api/cars/stats` 🔒 | Statistiques de ta collection : nombre de photos, de modèles et de marques, rareté, marques préférées, voitures placées sur la carte, part des voitures connues de l'IA | `200` · `401` |
 | `POST` | `/api/cars` 🔒 | Reconnaît **et enregistre** la voiture. `carId` (facultatif) : la voiture choisie par l'utilisateur, dans les suggestions ou dans `/api/catalog` (confiance `0` dans ce cas). `location` (facultatif) : `{ latitude, longitude }` du téléphone. Si tu as donné ton accord, l'endroit lu dans les métadonnées EXIF de la photo est gardé en priorité, sinon celui du téléphone | `201` voiture · `400` · `422` voiture non reconnue ou inconnue (rien n'est enregistré) · `503` · `500` |
 | `GET` | `/api/cars/:id/image` 🔒 | Renvoie la photo d'une de tes voitures | `200` image · `404` |
@@ -803,7 +803,7 @@ Le champ `box` est le rectangle de la voiture, en proportions de l'image (0 à 1
 | `brand`, `model`, `years` | par exemple `Ferrari`, `F12 Berlinetta`, `2012 – 2015` |
 | `confidence` | confiance de l'IA, en % (entier) |
 | `box` | rectangle de la voiture (ou `null`) |
-| `price`, `produced`, `rarity`, `onRoad` | prix neuf (€), exemplaires fabriqués (séries limitées), rareté et fréquence sur la route, calculés à l'ajout (voir `backend/services/rarity.js`) |
+| `price`, `produced`, `rarity` | prix neuf (€), exemplaires fabriqués (séries limitées) et rareté, calculés à l'ajout (voir `backend/services/rarity.js`) |
 | `location` | `{ latitude, longitude, source, place }` : où la photo a été prise, lu dans la photo (`photo`) ou donné par le téléphone (`device`), avec `place` : `{ name, city, country }`, le lieu le plus proche demandé à OpenStreetMap (Nominatim) ; ou `null` |
 | `image` | la photo (données + type) |
 | `createdAt` | date d'ajout |
@@ -888,7 +888,7 @@ docker run --rm -v "${PWD}/ai:/app" -w /app spotit-ai python main.py evaluate
 | `python main.py analyze --source …` | Compte les images par voiture du grand dataset | le grand dataset |
 | `python main.py extra` | Convertit DVM-Car et VMMRdb téléchargés au format du grand dataset (voir plus haut) | les zip téléchargés |
 | `python main.py catalog --source …` | Complète `cars.json` avec toutes les voitures du dataset, et de DVM-Car et VMMRdb s'ils sont convertis, qui ont au moins 50 photos (les fiches déjà présentes sont gardées) | le grand dataset |
-| `python main.py market` | Écrit `ai/models/market.json` : le prix neuf de chaque voiture et la fréquence à laquelle on la croise en Europe (ventes au Royaume-Uni de 2001 à 2020, tables de DVM-Car) et aux États-Unis (annonces de VMMRdb), plus le nombre d'exemplaires des séries limitées (liste `PRODUCED` dans `ai/src/market.py`). À relancer après `catalog` | `dvm/tables_V2.0.zip`, `vmmr/VMMRdb.zip` |
+| `python main.py market` | Écrit `ai/models/market.json` : le prix neuf de chaque voiture (tables de DVM-Car, voitures vendues au Royaume-Uni) et le nombre d'exemplaires des séries limitées (liste `PRODUCED` dans `ai/src/market.py`). À relancer après `catalog` | `dvm/tables_V2.0.zip` |
 | `python main.py collect` | Récupère dans MongoDB les photos confirmées (voitures ajoutées à une bibliothèque, corrections) des utilisateurs qui l'ont accepté, dans `ai/dataset_user/`, recadrées sur la voiture. Efface celles qui ont été supprimées ou dont l'accord a été retiré | `MONGODB_URI` |
 | `python main.py prepare --source …` | Crée `dataset_small` à partir de `cars.json` (remplace l'ancien) : 500 photos d'entraînement et 60 de test au plus par voiture, tous datasets confondus, et les photos de `dataset_user` | le grand dataset |
 | `python main.py train` | **Entraîne** le modèle ; s'il est au moins aussi bon que l'actuel, calcule les seuils et écrit `spotit_classifier.keras`, `classes.json`, `recognition.json`. Sauvegarde à chaque tour : relancé après une coupure, il reprend là où il s'était arrêté | `dataset_small` |

@@ -17,9 +17,8 @@ const clio = {
   from_year: 2012,
   to_year: 2019,
   price: 9100,
-  seen: { europe: 0.98, america: null },
 };
-const clioMarket = { price: 9100, seen: clio.seen, produced: null };
+const clioMarket = { price: 9100, produced: null };
 const box = { x: 0.1, y: 0.2, width: 0.5, height: 0.4 };
 
 describe('recognizeCar', () => {
@@ -64,7 +63,7 @@ describe('recognizeCar', () => {
       // L'IA n'a pas de prix pour cette voiture
       {
         carId: 'renault_twingo_2014_present', brand: 'Renault', model: 'Twingo', years: '2014 – aujourd’hui',
-        price: null, seen: null, produced: null, confidence: 31,
+        price: null, produced: null, confidence: 31,
       },
     ]);
   });
