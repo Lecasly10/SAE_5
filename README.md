@@ -178,10 +178,12 @@ Imagine un Pokédex, mais avec de vraies voitures :
 2. L'IA **repère** la voiture et dessine un **cadre rouge** autour.
 3. Elle **identifie** la marque et le modèle (par exemple *Ferrari F12 Berlinetta, 2012 – 2015*) et indique sa **confiance** en pourcentage.
 4. Si tu as un compte, tu peux **ajouter la voiture à ta bibliothèque**. Elle est conservée dans ton compte : tu la retrouves à chaque connexion.
+5. Chaque voiture a une **rareté** (Commune, Rare, Épique, Légendaire, Mythique) selon sa marque, son prix neuf, son nombre d'exemplaires (séries limitées), son âge et la fréquence à laquelle on la croise sur la route. Une voiture fabriquée à moins de 1 000 exemplaires (Ferrari Enzo, McLaren P1…) est mythique. La fiche montre aussi son prix neuf, si elle est courante sur la route, et l'endroit de la photo (lieu, ville et pays). Tu peux la **partager** depuis sa fiche.
+6. La bibliothèque a une page de **statistiques** (voitures, marques, rareté, valeur de la collection en prix neuf, voiture la plus chère, part des voitures connues de l'IA déjà repérées) et une **carte** qui place chaque voiture là où la photo a été prise.
 
 L'idée est née parce que plusieurs membres de l'équipe sont passionnés d'automobile, et que l'un d'eux photographie des voitures de collection (« carspotting »).
 
-**L'IA connaît 1 183 voitures de 79 marques** : chaque modèle du dataset et de DVM-Car et VMMRdb qui a au moins 50 photos, toutes générations et versions confondues (une seule « BMW M4 », une seule « Porsche 911 ») (Renault, Peugeot, Citroën, BMW, Audi, Mercedes, Toyota, Porsche, Ferrari…). La liste complète est dans `ai/models/cars.json`. Si l'IA n'est pas sûre d'elle, elle répond « voiture non reconnue » au lieu de deviner (voir [Limites connues](#14-limites-connues-et-suite)).
+**L'IA connaît 1 170 voitures de 79 marques** : chaque modèle du dataset et de DVM-Car et VMMRdb qui a au moins 50 photos, toutes générations et versions confondues (une seule « BMW M4 », une seule « Porsche 911 ») (Renault, Peugeot, Citroën, BMW, Audi, Mercedes, Toyota, Porsche, Ferrari…). La liste complète est dans `ai/models/cars.json`. Si l'IA n'est pas sûre d'elle, elle répond « voiture non reconnue » au lieu de deviner (voir [Limites connues](#14-limites-connues-et-suite)).
 
 ---
 
@@ -233,7 +235,7 @@ sequenceDiagram
     end
 ```
 
-**Corriger l'IA** : quand l'IA n'est pas sûre ou se trompe (bouton « Ce n'est pas la bonne voiture ? »), l'utilisateur touche la bonne voiture dans les suggestions. La fenêtre s'affiche alors avec cette voiture (« VOITURE CORRIGÉE »), et c'est elle qui est ajoutée à la bibliothèque. Si la bonne voiture n'est pas dans les suggestions, le bouton « Aider l'IA » (à côté de « Réessayer ») ouvre la liste des 1 183 voitures avec une recherche (« bmw m4 ») pour la choisir. Le backend n'accepte qu'une voiture de cette liste.
+**Corriger l'IA** : quand l'IA n'est pas sûre ou se trompe (bouton « Ce n'est pas la bonne voiture ? »), l'utilisateur touche la bonne voiture dans les suggestions. La fenêtre s'affiche alors avec cette voiture (« VOITURE CORRIGÉE »), et c'est elle qui est ajoutée à la bibliothèque. Si la bonne voiture n'est pas dans les suggestions, le bouton « Aider l'IA » (à côté de « Réessayer ») ouvre la liste des 1 170 voitures avec une recherche (« bmw m4 ») pour la choisir. Le backend n'accepte qu'une voiture de cette liste.
 
 **L'IA apprend avec les photos de l'application**, seulement pour les utilisateurs qui l'ont accepté dans les paramètres (« Autoriser l'entraînement de l'IA avec mes photos », désactivé par défaut, consentement RGPD). Chaque voiture ajoutée à leur bibliothèque, et chaque correction, est une photo dont la réponse est connue. Ces photos sont gardées dans MongoDB, puis ajoutées à l'entraînement suivant par `python main.py retrain` (voir [Réentraîner ou évaluer le modèle](#réentraîner-ou-évaluer-le-modèle)). Si l'utilisateur retire son accord, ses photos de correction sont supprimées et `collect` efface ses photos de `ai/dataset_user/`. Les photos sans réponse confirmée ne sont jamais utilisées : l'IA apprendrait ses propres erreurs.
 
@@ -242,7 +244,7 @@ sequenceDiagram
 ### Les deux modèles d'IA
 
 1. **Le détecteur** (`ai/models/detector/detect.tflite`) : un modèle *SSD MobileNet* déjà entraîné sur la base d'images COCO. Il sait trouver des voitures dans une photo et renvoie un rectangle. C'est lui qui permet de dessiner le **cadre rouge**.
-2. **Le classifieur** (`ai/models/spotit_classifier.keras`) : un modèle *EfficientNetV2-B3* entraîné par l'équipe sur les 1 183 voitures plus une classe « autre » (technique du *transfer learning* : on réutilise un modèle qui sait déjà reconnaître des formes et on lui apprend à choisir entre nos voitures). Il ne regarde que la voiture découpée dans le cadre rouge (avec un peu de marge), pas le décor autour. C'est lui qui donne la **marque, le modèle et la confiance**. Les années de production viennent de la fiche de la voiture (`ai/models/cars.json`).
+2. **Le classifieur** (`ai/models/spotit_classifier.keras`) : un modèle *EfficientNetV2-B3* entraîné par l'équipe sur 1 183 voitures plus une classe « autre » ; ses réponses sont additionnées pour les voitures regroupées depuis, soit 1 170 voitures (technique du *transfer learning* : on réutilise un modèle qui sait déjà reconnaître des formes et on lui apprend à choisir entre nos voitures). Il ne regarde que la voiture découpée dans le cadre rouge (avec un peu de marge), pas le décor autour. C'est lui qui donne la **marque, le modèle et la confiance**. Les années de production viennent de la fiche de la voiture (`ai/models/cars.json`).
 
 #### La « confiance » en clair
 La confiance n'est **pas** « la probabilité d'avoir raison ». C'est la part de préférence du modèle pour cette voiture **par rapport aux autres voitures**. Si deux voitures se ressemblent (Peugeot 3008 et 5008), le modèle hésite et la confiance se partage.
@@ -556,8 +558,9 @@ Get-NetTCPConnection -LocalPort 3000,5000 -State Listen | ForEach-Object { Stop-
 3. Clique sur **Fermer**, puis sur l'**engrenage** (en haut à droite) → **S'inscrire** (nom, e-mail, mot de passe d'au moins 6 caractères). Reviens à l'accueil avec la flèche.
 4. Refais un scan : le gros bouton est maintenant **« Ajouter à la bibliothèque »**. Clique dessus : une bulle te confirme l'ajout.
 5. Ouvre la **bibliothèque** (livre en haut à gauche) : ta voiture est là. Clique dessus pour ouvrir sa **fiche** (cadre, production, date de découverte, confiance).
-6. Clique sur **Supprimer de la bibliothèque** (puis confirme) : elle disparaît.
-7. Déconnecte-toi puis reconnecte-toi : tes voitures sont toujours là (elles sont dans MongoDB).
+6. Depuis la bibliothèque, ouvre les **statistiques** (graphique en haut à droite) et la **carte** (à côté). Pour que tes voitures apparaissent sur la carte, active « Enregistrer où mes voitures ont été photographiées » dans les paramètres avant de les ajouter.
+7. Clique sur **Supprimer de la bibliothèque** (puis confirme) : elle disparaît.
+8. Déconnecte-toi puis reconnecte-toi : tes voitures sont toujours là (elles sont dans MongoDB).
 
 ### Tester chaque partie séparément (utile en cas de problème)
 
@@ -765,13 +768,14 @@ Les routes marquées 🔒 demandent l'en-tête `Authorization: Bearer <token>` (
 | `POST` | `/api/auth/register` | Crée un compte (`name`, `email`, `password` de 8 caractères minimum) | `201` utilisateur · `400` données invalides · `409` e-mail déjà pris · `429` trop de tentatives |
 | `POST` | `/api/auth/login` | Connexion (`email`, `password`) | `200` `{ token, name, email, trainingConsent }` (token valable 7 jours) · `400` · `401` · `429` |
 | `GET` | `/api/account` 🔒 | Ton compte | `200` `{ name, email, trainingConsent }` · `401` |
-| `PATCH` | `/api/account` 🔒 | Change `name`, `email` (mêmes règles que l'inscription) et/ou l'accord pour entraîner l'IA (`trainingConsent` : `true`/`false`). Le retrait de l'accord supprime tes photos de correction | `200` compte · `400` · `401` · `409` e-mail déjà pris · `429` |
+| `PATCH` | `/api/account` 🔒 | Change `name`, `email` (mêmes règles que l'inscription) et/ou les accords pour entraîner l'IA (`trainingConsent`) et garder l'endroit des photos (`locationConsent`), `true`/`false`. Le retrait d'un accord supprime tes photos de correction ou les endroits déjà gardés | `200` compte · `400` · `401` · `409` e-mail déjà pris · `429` |
 | `DELETE` | `/api/account` 🔒 | Supprime ton compte, tes voitures et tes photos | `204` · `401` · `404` |
 | `POST` | `/api/predict` | Reconnaît la voiture d'une photo, **sans compte** | `200` `{ recognized, confidence, box, carId, brand, model, years, suggestions }` si reconnue, sinon `{ recognized: false, reason, confidence, box, suggestions }` · `400` image invalide · `422` image illisible ou abîmée · `503` IA indisponible |
 | `POST` | `/api/training-photos` 🔒 | Garde une photo dont l'utilisateur a choisi la bonne voiture (`carId`), pour le prochain entraînement | `201` · `400` image ou voiture invalide · `401` · `403` accord non donné · `429` |
 | `GET` | `/api/catalog` | Toutes les voitures que l'IA connaît `[{ carId, brand, model, years }]`, pour choisir la bonne à la main | `200` · `503` IA indisponible |
-| `GET` | `/api/cars` 🔒 | Liste tes voitures | `200` liste · `401` |
-| `POST` | `/api/cars` 🔒 | Reconnaît **et enregistre** la voiture. `carId` (facultatif) : la voiture choisie par l'utilisateur, dans les suggestions ou dans `/api/catalog` (confiance `0` dans ce cas) | `201` voiture · `400` · `422` voiture non reconnue ou inconnue (rien n'est enregistré) · `503` · `500` |
+| `GET` | `/api/cars` 🔒 | Liste tes voitures, avec leur `rarity` (`commune`, `rare`, `epique`, `legendaire`, `mythique`), leur prix neuf `price` (€), leurs exemplaires `produced`, leur fréquence `onRoad` (`courante`, `peu_courante`, `tres_rare`) et leur `location` | `200` liste · `401` |
+| `GET` | `/api/cars/stats` 🔒 | Statistiques de ta collection : nombre de photos, de modèles et de marques, rareté, marques préférées, voitures placées sur la carte, part des voitures connues de l'IA | `200` · `401` |
+| `POST` | `/api/cars` 🔒 | Reconnaît **et enregistre** la voiture. `carId` (facultatif) : la voiture choisie par l'utilisateur, dans les suggestions ou dans `/api/catalog` (confiance `0` dans ce cas). `location` (facultatif) : `{ latitude, longitude }` du téléphone. Si tu as donné ton accord, l'endroit lu dans les métadonnées EXIF de la photo est gardé en priorité, sinon celui du téléphone | `201` voiture · `400` · `422` voiture non reconnue ou inconnue (rien n'est enregistré) · `503` · `500` |
 | `GET` | `/api/cars/:id/image` 🔒 | Renvoie la photo d'une de tes voitures | `200` image · `404` |
 | `DELETE` | `/api/cars/:id` 🔒 | Supprime une de tes voitures | `204` · `404` |
 | `GET` | `/api/health` | Vérifie que le serveur tourne (utilisé par Docker) | `200` |
@@ -788,7 +792,7 @@ Le champ `box` est le rectangle de la voiture, en proportions de l'image (0 à 1
 
 ### Base de données (MongoDB, base `spotit`)
 
-**`users`** : `name`, `email` (unique), `password` (haché avec bcrypt, jamais en clair), `trainingConsent` (accord pour entraîner l'IA, `false` par défaut) et `trainingConsentAt` (date de l'accord).
+**`users`** : `name`, `email` (unique), `password` (haché avec bcrypt, jamais en clair), `trainingConsent` (accord pour entraîner l'IA, `false` par défaut), `trainingConsentAt` (date de l'accord) et `locationConsent` (accord pour garder l'endroit des photos, `false` par défaut).
 
 **`cars`** : une photo de la bibliothèque.
 
@@ -799,6 +803,8 @@ Le champ `box` est le rectangle de la voiture, en proportions de l'image (0 à 1
 | `brand`, `model`, `years` | par exemple `Ferrari`, `F12 Berlinetta`, `2012 – 2015` |
 | `confidence` | confiance de l'IA, en % (entier) |
 | `box` | rectangle de la voiture (ou `null`) |
+| `price`, `produced`, `rarity`, `onRoad` | prix neuf (€), exemplaires fabriqués (séries limitées), rareté et fréquence sur la route, calculés à l'ajout (voir `backend/services/rarity.js`) |
+| `location` | `{ latitude, longitude, source, place }` : où la photo a été prise, lu dans la photo (`photo`) ou donné par le téléphone (`device`), avec `place` : `{ name, city, country }`, le lieu le plus proche demandé à OpenStreetMap (Nominatim) ; ou `null` |
 | `image` | la photo (données + type) |
 | `createdAt` | date d'ajout |
 
@@ -806,8 +812,8 @@ Le champ `box` est le rectangle de la voiture, en proportions de l'image (0 à 1
 
 ### L'IA en détail
 
-- **Classes** : 1 183 voitures + « autre ». Données : dataset Kaggle [*Car Model Variants and Images*](https://www.kaggle.com/datasets/eimadevyni/car-model-variants-and-images-dataset) (≈ 3 800 modèles), complété par DVM-Car et VMMRdb (voir plus bas). Une voiture de l'application regroupe tous les dossiers du dataset d'un même modèle : carrosseries, finitions, versions et générations (par exemple toutes les Clio, ou toutes les Porsche 911 : Carrera, Turbo, GT3, 996, 997, 991…). Les regroupements sont faits par `python main.py catalog` et écrits dans `ai/models/cars.json` : 1 183 voitures. Les anciens identifiants (une voiture par génération) sont gardés dans `aliases`, pour que les photos déjà enregistrées dans l'application servent toujours.
-- **Images** : au moins 50 photos par voiture et 500 au maximum pour l'entraînement, dont 60 au maximum gardées pour le test, plus les photos confirmées dans l'application ; soit 346 447 images d'entraînement et 46 623 de test. La classe « autre » contient des photos de voitures absentes de la liste.
+- **Classes** : 1 170 voitures + « autre ». Le modèle actuel a été entraîné sur 1 183 voitures : les voitures rangées sous deux noms (Citroën DS 3 et DS 3, Honda et Acura NSX, Ford F250 et F350…, voir `SAME_CARS` dans `ai/src/catalog_builder.py`) ont été regroupées après coup, et l'application additionne leurs réponses. Données : dataset Kaggle [*Car Model Variants and Images*](https://www.kaggle.com/datasets/eimadevyni/car-model-variants-and-images-dataset) (≈ 3 800 modèles), complété par DVM-Car et VMMRdb (voir plus bas). Une voiture de l'application regroupe tous les dossiers du dataset d'un même modèle : carrosseries, finitions, versions et générations (par exemple toutes les Clio, ou toutes les Porsche 911 : Carrera, Turbo, GT3, 996, 997, 991…). Les regroupements sont faits par `python main.py catalog` et écrits dans `ai/models/cars.json` : 1 170 voitures. Les anciens identifiants (une voiture par génération) sont gardés dans `aliases`, pour que les photos déjà enregistrées dans l'application servent toujours.
+- **Images** : au moins 50 photos par voiture et 500 au maximum pour l'entraînement, dont 60 au maximum gardées pour le test, plus les photos confirmées dans l'application ; soit 346 447 images d'entraînement et 46 623 de test. La classe « autre » contient des photos de voitures absentes de la liste, y compris les modèles de DVM-Car et VMMRdb qui ont trop peu de photos (6 000 photos d'entraînement à partir du prochain entraînement, une par modèle avant d'en reprendre une deuxième).
 - **Classifieur** : EfficientNetV2-B3 (poids ImageNet), images en 300 × 300, *data augmentation* qui imite des photos de téléphone (miroir, rotation, zoom, décalage, perspective, luminosité, contraste, saturation, teinte, flou) sur une photo sur deux, l'autre restant intacte, précision mixte 16 bits. Le modèle sauvegardé ne contient pas ces transformations, entraînement en deux temps (nouvelle tête, puis affinage de tout le modèle) sur carte graphique, 15 % des images d'entraînement gardées pour régler les seuils.
 - **Résultats mesurés sur 46 623 photos de test** (`ai/models/evaluation/metrics.json`) :
 
@@ -882,6 +888,7 @@ docker run --rm -v "${PWD}/ai:/app" -w /app spotit-ai python main.py evaluate
 | `python main.py analyze --source …` | Compte les images par voiture du grand dataset | le grand dataset |
 | `python main.py extra` | Convertit DVM-Car et VMMRdb téléchargés au format du grand dataset (voir plus haut) | les zip téléchargés |
 | `python main.py catalog --source …` | Complète `cars.json` avec toutes les voitures du dataset, et de DVM-Car et VMMRdb s'ils sont convertis, qui ont au moins 50 photos (les fiches déjà présentes sont gardées) | le grand dataset |
+| `python main.py market` | Écrit `ai/models/market.json` : le prix neuf de chaque voiture et la fréquence à laquelle on la croise en Europe (ventes au Royaume-Uni de 2001 à 2020, tables de DVM-Car) et aux États-Unis (annonces de VMMRdb), plus le nombre d'exemplaires des séries limitées (liste `PRODUCED` dans `ai/src/market.py`). À relancer après `catalog` | `dvm/tables_V2.0.zip`, `vmmr/VMMRdb.zip` |
 | `python main.py collect` | Récupère dans MongoDB les photos confirmées (voitures ajoutées à une bibliothèque, corrections) des utilisateurs qui l'ont accepté, dans `ai/dataset_user/`, recadrées sur la voiture. Efface celles qui ont été supprimées ou dont l'accord a été retiré | `MONGODB_URI` |
 | `python main.py prepare --source …` | Crée `dataset_small` à partir de `cars.json` (remplace l'ancien) : 500 photos d'entraînement et 60 de test au plus par voiture, tous datasets confondus, et les photos de `dataset_user` | le grand dataset |
 | `python main.py train` | **Entraîne** le modèle ; s'il est au moins aussi bon que l'actuel, calcule les seuils et écrit `spotit_classifier.keras`, `classes.json`, `recognition.json`. Sauvegarde à chaque tour : relancé après une coupure, il reprend là où il s'était arrêté | `dataset_small` |
@@ -899,6 +906,7 @@ docker run --rm -v "${PWD}/ai:/app" -w /app spotit-ai python main.py evaluate
 - Les données reçues sont vérifiées (types, format de l'e-mail, taille des images, et contenu des images comparé au format annoncé) avant d'être utilisées, ce qui évite les injections dans les requêtes MongoDB.
 - Les connexions, les modifications du compte et les analyses de photos sont **limitées en nombre** (protection contre les essais en boucle). Le service IA refuse aussi les envois de plus de 8 Mo et les images abîmées.
 - Le backend ajoute des en-têtes de sécurité (`helmet`) et accepte toutes les origines par défaut ; `CORS_ORIGIN` permet de les restreindre.
+- L'endroit où une photo a été prise n'est gardé qu'avec l'accord de l'utilisateur (« Enregistrer où mes voitures ont été photographiées », désactivé par défaut). Retirer l'accord efface les endroits déjà gardés. Pour afficher le nom du lieu, la position est envoyée une fois au service OpenStreetMap (Nominatim) ; `GEOCODER_URL=` (vide) dans `.env` désactive cet envoi.
 - Chaque utilisateur ne voit et ne supprime **que ses propres voitures**. La suppression du compte efface aussi toutes ses voitures et ses photos.
 - Les conteneurs du backend et de l'IA ne tournent pas en administrateur.
 - Le fichier `.env` ne doit **jamais** être commité (il est dans `.gitignore`).
@@ -927,7 +935,7 @@ docker run --rm -v "${PWD}/ai:/app" -w /app spotit-ai python main.py evaluate
 | Modèle pré-entraîné de reconnaissance (MobileNet, SSD…) | ✅ EfficientNetV2 + SSD MobileNet |
 | Cadres autour des objets détectés et noms | ✅ cadre rouge + marque et modèle |
 | Pourcentage de confiance | ✅ jauge colorée |
-| Base de données de catégories | ✅ 1 183 voitures (modèles) de 79 marques (fiches dans `cars.json`) |
+| Base de données de catégories | ✅ 1 170 voitures (modèles) de 79 marques (fiches dans `cars.json`) |
 | Ajouter de nouvelles catégories | 🟡 possible en réentraînant (fiche dans `cars.json` puis `main.py`), pas encore depuis l'application |
 | Apprentissage personnalisé avec les images de l'utilisateur | ✅ photos confirmées ou corrigées dans l'application, ajoutées à chaque réentraînement |
 | Interface intuitive + historique des reconnaissances | ✅ bibliothèque personnelle avec fiches |
@@ -942,7 +950,7 @@ docker run --rm -v "${PWD}/ai:/app" -w /app spotit-ai python main.py evaluate
 ## 14. Limites connues et suite
 
 **Limites actuelles**
-- L'IA connaît **1 183 voitures** (modèles). Ses erreurs les plus fréquentes sont des voitures presque identiques (Ford F-250 et F-350, Citroën DS3 et DS 3 ou Honda et Acura NSX, la même voiture rangée sous deux marques, Dodge Ram 1500 et 2500, Jaguar XK et XKR). Environ 28 % des voitures hors liste sont prises pour une voiture connue.
+- L'IA connaît **1 170 voitures** (modèles). Ses erreurs les plus fréquentes étaient des voitures presque identiques (Ford F-250 et F-350, Citroën DS3 et DS 3 ou Honda et Acura NSX, la même voiture rangée sous deux marques, Dodge Ram 1500 et 2500, Jaguar XK et XKR) : elles sont maintenant une seule voiture. Environ 28 % des voitures hors liste sont prises pour une voiture connue.
 - Les photos du dataset sont des photos de presse, propres et bien cadrées : sur des photos prises au téléphone, l'IA est moins sûre d'elle et répond plus souvent « non reconnue », mais sa 1ʳᵉ suggestion est souvent la bonne voiture.
 - Plusieurs voitures n'ont que 50 à 100 photos d'entraînement.
 - La confiance paraît parfois basse même sur une bonne réponse (voir [section 2](#la--confiance--en-clair)).

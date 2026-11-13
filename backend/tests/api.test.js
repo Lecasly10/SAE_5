@@ -7,6 +7,7 @@ const jwt = require('jsonwebtoken');
 const Car = require('../models/Car');
 const TrainingPhoto = require('../models/TrainingPhoto');
 const User = require('../models/User');
+const { jpegWithGps } = require('./jpeg');
 
 const userId = '64b000000000000000000001';
 const headers = { Authorization: `Bearer ${jwt.sign({ id: userId }, 'test-secret')}` };
@@ -49,9 +50,15 @@ describe('API', () => {
     aiStub = http.createServer((req, res) => {
       req.resume();
       res.setHeader('Content-Type', 'application/json');
+      if (req.url.startsWith('/reverse')) {
+        res.end(JSON.stringify({ name: 'Tour Eiffel', address: { city: 'Paris', country: 'France' } }));
+        return;
+      }
       res.end(JSON.stringify(req.url === '/cars' ? aiCatalog : aiAnswer));
     });
+    // Le même faux serveur joue l'IA et le service qui donne le nom des lieux
     process.env.AI_URL = `http://127.0.0.1:${await listen(aiStub)}`;
+    process.env.GEOCODER_URL = process.env.AI_URL;
 
     server = http.createServer(require('../app'));
     baseUrl = `http://127.0.0.1:${await listen(server)}`;
@@ -185,11 +192,66 @@ describe('API', () => {
     assert.equal(fromList.json.confidence, 0);
   });
 
+  it('keeps where the photo was taken only when the user agreed to it', async (t) => {
+    const create = t.mock.method(Car, 'create', async (doc) => ({ ...doc, _id: 'abc' }));
+    let consent = false;
+    t.mock.method(User, 'findById', () => ({ select: async () => ({ locationConsent: consent }) }));
+    const photo = { image: jpegWithGps({ latitude: 48.85825, longitude: 2.2945 }).toString('base64'), contentType: 'image/jpeg' };
+    const device = { latitude: 45.764, longitude: 4.8357 };
+
+    const invalid = await call('POST', '/api/cars', { headers, body: { ...tinyPng, location: { latitude: 120 } } });
+    const refused = await call('POST', '/api/cars', { headers, body: photo });
+    consent = true;
+    const fromPhoto = await call('POST', '/api/cars', { headers, body: { ...photo, location: device } });
+    const fromDevice = await call('POST', '/api/cars', { headers, body: { ...tinyPng, location: device } });
+
+    assert.equal(invalid.status, 400);
+    assert.equal(refused.json.location, null);
+    const eiffel = { name: 'Tour Eiffel', city: 'Paris', country: 'France' };
+    assert.deepEqual(fromPhoto.json.location, { latitude: 48.85825, longitude: 2.2945, source: 'photo', place: eiffel });
+    assert.deepEqual(fromDevice.json.location, { ...device, source: 'device', place: eiffel });
+    assert.equal(fromDevice.json.rarity, 'commune');
+    assert.equal(create.mock.calls[2].arguments[0].rarity, 'commune');
+    assert.equal(create.mock.callCount(), 3);
+  });
+
+  it('sums up the collection', async (t) => {
+    t.mock.method(Car, 'find', () => ({
+      select: async () => [{ carId: f12.id, brand: 'Ferrari', model: 'F12 Berlinetta', years: '2012 – 2015', createdAt: new Date() }],
+    }));
+
+    const { status, json } = await call('GET', '/api/cars/stats', { headers });
+
+    assert.equal(status, 200);
+    assert.equal(json.total, 1);
+    assert.equal(json.catalogSize, aiCatalog.length);
+    assert.equal(json.rarities.legendaire, 1);
+  });
+
+  it('forgets the places of the photos when the location consent is withdrawn', async (t) => {
+    t.mock.method(User, 'findByIdAndUpdate', (id, changes) => ({
+      select: async () => ({ name: 'Alice', email: 'alice@example.com', ...changes }),
+    }));
+    const updateMany = t.mock.method(Car, 'updateMany', async () => ({}));
+
+    const invalid = await call('PATCH', '/api/account', { headers, body: { locationConsent: 'oui' } });
+    const given = await call('PATCH', '/api/account', { headers, body: { locationConsent: true } });
+    const withdrawn = await call('PATCH', '/api/account', { headers, body: { locationConsent: false } });
+
+    assert.equal(invalid.status, 400);
+    assert.equal(given.json.locationConsent, true);
+    assert.equal(withdrawn.json.locationConsent, false);
+    assert.equal(updateMany.mock.callCount(), 1);
+    assert.deepEqual(updateMany.mock.calls[0].arguments, [{ user: userId }, { location: null }]);
+  });
+
   it('lists every car the user can pick', async () => {
     const { status, json } = await call('GET', '/api/catalog');
 
     assert.equal(status, 200);
-    assert.deepEqual(json[0], { carId: f12.id, brand: 'Ferrari', model: 'F12 Berlinetta', years: '2012 – 2015' });
+    assert.deepEqual(json[0], {
+      carId: f12.id, brand: 'Ferrari', model: 'F12 Berlinetta', years: '2012 – 2015', price: null, seen: null, produced: null,
+    });
   });
 
   it('stores the training consent and deletes training photos when it is withdrawn', async (t) => {

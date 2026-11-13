@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -9,6 +10,7 @@ import '../models/recognition.dart';
 import '../services/api.dart';
 import '../services/auth_service.dart';
 import '../services/car_service.dart';
+import '../services/location_service.dart';
 import '../theme/spot_it_theme.dart';
 import '../widgets/analyze_button.dart';
 import '../widgets/photo_source_button.dart';
@@ -37,8 +39,11 @@ class _SpotItHomePageState extends State<SpotItHomePage> {
     try {
       final image = await _picker.pickImage(
         source: source,
-        maxWidth: 1280,
-        imageQuality: 85,
+        // Sur le web, réduire la photo efface l'endroit où elle a été prise
+        maxWidth: kIsWeb ? null : 1280,
+        imageQuality: kIsWeb ? null : 85,
+        // Garde les informations de la photo, dont sa position GPS
+        requestFullMetadata: true,
       );
       if (image == null) return;
       final bytes = await image.readAsBytes();
@@ -108,6 +113,10 @@ class _SpotItHomePageState extends State<SpotItHomePage> {
             await CarService.upload(
               bytes,
               carId: corrected ? car.carId : null,
+              // Le serveur préfère la position lue dans la photo
+              location: AuthService.locationConsent
+                  ? await LocationService.current()
+                  : null,
             );
             if (!mounted) return;
             _clearImage();

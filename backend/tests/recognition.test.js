@@ -10,7 +10,16 @@ const mockAi = (payload, ok = true, status = ok ? 200 : 500) => {
   global.fetch = async () => ({ ok, status, json: async () => payload });
 };
 
-const clio = { id: 'renault_clio_2012_2019', brand: 'Renault', model: 'Clio', from_year: 2012, to_year: 2019 };
+const clio = {
+  id: 'renault_clio_2012_2019',
+  brand: 'Renault',
+  model: 'Clio',
+  from_year: 2012,
+  to_year: 2019,
+  price: 9100,
+  seen: { europe: 0.98, america: null },
+};
+const clioMarket = { price: 9100, seen: clio.seen, produced: null };
 const box = { x: 0.1, y: 0.2, width: 0.5, height: 0.4 };
 
 describe('recognizeCar', () => {
@@ -30,6 +39,7 @@ describe('recognizeCar', () => {
       brand: 'Renault',
       model: 'Clio',
       years: '2012 – 2019',
+      ...clioMarket,
     });
   });
 
@@ -50,8 +60,12 @@ describe('recognizeCar', () => {
     assert.equal(result.reason, 'unknown');
     assert.equal(result.brand, undefined);
     assert.deepEqual(result.suggestions, [
-      { carId: 'renault_clio_2012_2019', brand: 'Renault', model: 'Clio', years: '2012 – 2019', confidence: 38 },
-      { carId: 'renault_twingo_2014_present', brand: 'Renault', model: 'Twingo', years: '2014 – aujourd’hui', confidence: 31 },
+      { carId: 'renault_clio_2012_2019', brand: 'Renault', model: 'Clio', years: '2012 – 2019', ...clioMarket, confidence: 38 },
+      // L'IA n'a pas de prix pour cette voiture
+      {
+        carId: 'renault_twingo_2014_present', brand: 'Renault', model: 'Twingo', years: '2014 – aujourd’hui',
+        price: null, seen: null, produced: null, confidence: 31,
+      },
     ]);
   });
 
@@ -105,6 +119,7 @@ describe('chooseCar', () => {
       brand: 'Renault',
       model: 'Clio',
       years: '2012 – 2019',
+      ...clioMarket,
       confidence: 0,
     });
     assert.equal(await chooseCar(unsureScan, 'ferrari_f12_berlinetta_2012_2015'), null);

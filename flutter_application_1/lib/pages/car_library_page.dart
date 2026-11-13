@@ -8,9 +8,12 @@ import '../services/auth_service.dart';
 import '../services/car_service.dart';
 import '../theme/spot_it_theme.dart';
 import '../widgets/car_image.dart';
+import '../widgets/rarity_badge.dart';
 import '../widgets/spot_it_widgets.dart';
 import '../widgets/toast.dart';
+import 'car_map_page.dart';
 import 'settings_page.dart';
+import 'stats_page.dart';
 
 class CarLibraryPage extends StatefulWidget {
   const CarLibraryPage({super.key});
@@ -52,6 +55,20 @@ class _CarLibraryPageState extends State<CarLibraryPage> {
     if (!deleted || !mounted) return;
     setState(() => _cars = _cars.where((c) => c.id != car.id).toList());
     showSpotItToast(context, 'Photo supprimée de la bibliothèque');
+  }
+
+  void _openStats() {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(builder: (_) => const StatsPage()),
+    );
+  }
+
+  Future<void> _openMap() async {
+    await Navigator.of(context).push(
+      MaterialPageRoute<void>(builder: (_) => CarMapPage(cars: _cars)),
+    );
+    // Une voiture a pu être supprimée depuis la carte
+    if (mounted) _load();
   }
 
   Future<void> _openSettings() async {
@@ -138,6 +155,24 @@ class _CarLibraryPageState extends State<CarLibraryPage> {
             subtitle: AuthService.isLoggedIn
                 ? '$count ${count > 1 ? 'voitures scannées' : 'voiture scannée'}'
                 : null,
+            trailing: AuthService.isLoggedIn
+                ? Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SpotItIconButton(
+                        icon: Icons.map_outlined,
+                        onTap: _openMap,
+                        showBorder: true,
+                      ),
+                      const SizedBox(width: 8),
+                      SpotItIconButton(
+                        icon: Icons.bar_chart_rounded,
+                        onTap: _openStats,
+                        showBorder: true,
+                      ),
+                    ],
+                  )
+                : null,
           ),
           Expanded(child: _body()),
         ],
@@ -167,7 +202,19 @@ class _CarCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Expanded(child: CarImage(key: ValueKey(car.id), carId: car.id)),
+            Expanded(
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  CarImage(key: ValueKey(car.id), carId: car.id),
+                  Positioned(
+                    top: 8,
+                    left: 8,
+                    child: RarityBadge(rarity: car.rarity, small: true),
+                  ),
+                ],
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.all(12),
               child: Column(

@@ -18,7 +18,16 @@ function formatYears({ from_year: from, to_year: to }) {
 }
 
 function describeCar(car) {
-  return { carId: car.id, brand: car.brand, model: car.model, years: formatYears(car) };
+  return {
+    carId: car.id,
+    brand: car.brand,
+    model: car.model,
+    years: formatYears(car),
+    // Prix neuf en euros et fréquence sur la route, pour la rareté
+    price: car.price ?? null,
+    seen: car.seen ?? null,
+    produced: car.produced ?? null,
+  };
 }
 
 async function askAi(path, options, failure) {

@@ -8,6 +8,9 @@ class AuthService {
   /// Accord de l'utilisateur pour que ses photos entraînent l'IA.
   static bool trainingConsent = false;
 
+  /// Accord pour garder l'endroit où chaque voiture a été photographiée.
+  static bool locationConsent = false;
+
   static bool get isLoggedIn => token != null;
 
   static void logout() {
@@ -15,6 +18,7 @@ class AuthService {
     name = null;
     email = null;
     trainingConsent = false;
+    locationConsent = false;
   }
 
   static Future<void> login(String email, String password) async {
@@ -41,16 +45,18 @@ class AuthService {
     await login(email, password);
   }
 
-  /// Change le nom, l'e-mail ou l'accord pour entraîner l'IA.
+  /// Change le nom, l'e-mail ou les accords (IA, position des photos).
   static Future<void> updateAccount({
     String? name,
     String? email,
     bool? trainingConsent,
+    bool? locationConsent,
   }) async {
     final data = await Api.json('PATCH', '/account', body: {
       if (name != null) 'name': name,
       if (email != null) 'email': email,
       if (trainingConsent != null) 'trainingConsent': trainingConsent,
+      if (locationConsent != null) 'locationConsent': locationConsent,
     });
     _keepAccount(data as Map<String, dynamic>);
   }
@@ -65,5 +71,6 @@ class AuthService {
     name = data['name'] as String;
     email = data['email'] as String;
     trainingConsent = data['trainingConsent'] == true;
+    locationConsent = data['locationConsent'] == true;
   }
 }

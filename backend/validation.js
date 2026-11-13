@@ -1,4 +1,5 @@
 const { HttpError } = require('./errors');
+const { checkedLocation } = require('./services/photoLocation');
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MAX_NAME_LENGTH = 60;
@@ -18,4 +19,12 @@ function readEmail(value) {
   return email;
 }
 
-module.exports = { cleanEmail, readName, readEmail };
+// Position envoyée par le téléphone, facultative
+function readLocation(value) {
+  if (value === undefined || value === null) return null;
+  const location = checkedLocation(value?.latitude, value?.longitude);
+  if (!location) throw new HttpError(400, 'Position invalide');
+  return location;
+}
+
+module.exports = { cleanEmail, readName, readEmail, readLocation };

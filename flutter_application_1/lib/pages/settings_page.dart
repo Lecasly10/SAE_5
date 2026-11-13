@@ -115,17 +115,36 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
-  void _showTrainingInfo() {
+  Future<void> _setLocationConsent(bool value) async {
+    if (!value) {
+      final confirmed = await showConfirmDialog(
+        context,
+        title: 'Retirer votre accord ?',
+        confirmLabel: 'Retirer',
+        message:
+            'Les endroits de vos photos seront oubliés et vos voitures disparaîtront de la carte.',
+      );
+      if (!confirmed) return;
+    }
+    await _call(
+      () => AuthService.updateAccount(locationConsent: value),
+      done: value
+          ? 'Vos prochaines voitures apparaîtront sur la carte'
+          : 'Accord retiré',
+    );
+  }
+
+  void _showInfo(String title, String text) {
     showDialog<void>(
       context: context,
       builder: (context) => SpotItDialog(
         title: Text(
-          "Entraînement de l'IA avec vos photos",
+          title,
           style: GoogleFonts.outfit(fontWeight: FontWeight.w700),
         ),
         content: SingleChildScrollView(
           child: Text(
-            kTrainingConsentText,
+            text,
             style: GoogleFonts.inter(
               fontSize: 13,
               height: 1.45,
@@ -321,10 +340,30 @@ class _SettingsPageState extends State<SettingsPage> {
         const SizedBox(height: 28),
         _sectionTitle('Confidentialité'),
         const SizedBox(height: 12),
-        _TrainingConsentTile(
+        _ConsentTile(
+          title: "Autoriser l'entraînement de l'IA avec mes photos",
+          description: "Vos photos de voitures confirmées sont conservées pour "
+              "apprendre à l'IA à mieux les reconnaître. Facultatif, "
+              'modifiable à tout moment.',
           value: AuthService.trainingConsent,
           onChanged: _setTrainingConsent,
-          onMore: _showTrainingInfo,
+          onMore: () => _showInfo(
+            "Entraînement de l'IA avec vos photos",
+            kTrainingConsentText,
+          ),
+        ),
+        const SizedBox(height: 12),
+        _ConsentTile(
+          title: 'Enregistrer où mes voitures ont été photographiées',
+          description: "L'endroit est lu dans la photo, ou demandé au "
+              'téléphone, pour placer vos voitures sur la carte. Facultatif, '
+              'modifiable à tout moment.',
+          value: AuthService.locationConsent,
+          onChanged: _setLocationConsent,
+          onMore: () => _showInfo(
+            'Position de vos photos',
+            kLocationConsentText,
+          ),
         ),
         const SizedBox(height: 28),
         _sectionTitle('Zone sensible', color: SpotItColors.danger),
@@ -407,13 +446,33 @@ const kTrainingConsentText =
     'Évitez les photos où l’on reconnaît des personnes.\n\n'
     'Base légale : votre consentement (article 6.1.a du RGPD).';
 
-class _TrainingConsentTile extends StatelessWidget {
-  const _TrainingConsentTile({
+const kLocationConsentText =
+    "Si vous activez cette option, Spot'It garde l'endroit où chaque voiture "
+    "de votre bibliothèque a été photographiée, pour l'afficher sur votre "
+    'carte.\n\n'
+    "• L'endroit est lu dans les informations de la photo (comme le fait "
+    "l'application Photos). Si la photo n'en a pas, Spot'It demande la "
+    'position du téléphone au moment de l’ajout. Le nom du lieu le plus '
+    'proche est demandé au service OpenStreetMap.\n'
+    '• Seul vous voyez vos voitures sur la carte. Les positions ne sont jamais '
+    'publiées, vendues ni partagées.\n'
+    "• Ce choix est facultatif : sans lui, l'application fonctionne de la "
+    'même façon, sans la carte.\n'
+    '• Vous pouvez retirer votre accord à tout moment depuis cette page. Les '
+    'endroits déjà enregistrés sont alors supprimés.\n\n'
+    'Base légale : votre consentement (article 6.1.a du RGPD).';
+
+class _ConsentTile extends StatelessWidget {
+  const _ConsentTile({
+    required this.title,
+    required this.description,
     required this.value,
     required this.onChanged,
     required this.onMore,
   });
 
+  final String title;
+  final String description;
   final bool value;
   final ValueChanged<bool> onChanged;
   final VoidCallback onMore;
@@ -434,7 +493,7 @@ class _TrainingConsentTile extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  "Autoriser l'entraînement de l'IA avec mes photos",
+                  title,
                   style: GoogleFonts.inter(
                     fontWeight: FontWeight.w600,
                     color: Colors.white,
@@ -451,9 +510,7 @@ class _TrainingConsentTile extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(right: 8),
             child: Text(
-              "Vos photos de voitures confirmées sont conservées pour "
-              "apprendre à l'IA à mieux les reconnaître. Facultatif, "
-              'modifiable à tout moment.',
+              description,
               style: GoogleFonts.inter(
                 fontSize: 11,
                 color: SpotItColors.secondaryText,

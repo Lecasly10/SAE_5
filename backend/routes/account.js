@@ -10,13 +10,19 @@ const router = express.Router();
 
 router.use(requireAuth);
 
-const FIELDS = 'name email trainingConsent';
+const FIELDS = 'name email trainingConsent locationConsent';
 
 const toJson = (user) => ({
   name: user.name,
   email: user.email,
   trainingConsent: user.trainingConsent,
+  locationConsent: user.locationConsent,
 });
+
+const readChoice = (value) => {
+  if (typeof value !== 'boolean') throw new HttpError(400, 'Choix invalide');
+  return value;
+};
 
 router.get('/', async (req, res) => {
   const user = await User.findById(req.userId).select(FIELDS);
@@ -24,17 +30,17 @@ router.get('/', async (req, res) => {
   res.json(toJson(user));
 });
 
-// Change le nom, l'e-mail ou l'accord pour entraîner l'IA (un ou plusieurs à la fois)
+// Change le nom, l'e-mail ou les accords (un ou plusieurs à la fois)
 router.patch('/', async (req, res) => {
-  const { name, email, trainingConsent } = req.body ?? {};
+  const { name, email, trainingConsent, locationConsent } = req.body ?? {};
   const changes = {};
   if (name !== undefined) changes.name = readName(name);
   if (email !== undefined) changes.email = readEmail(email);
   if (trainingConsent !== undefined) {
-    if (typeof trainingConsent !== 'boolean') throw new HttpError(400, 'Choix invalide');
-    changes.trainingConsent = trainingConsent;
+    changes.trainingConsent = readChoice(trainingConsent);
     changes.trainingConsentAt = trainingConsent ? new Date() : null;
   }
+  if (locationConsent !== undefined) changes.locationConsent = readChoice(locationConsent);
   if (!Object.keys(changes).length) throw new HttpError(400, 'Rien à modifier');
 
   let user;
@@ -48,6 +54,8 @@ router.patch('/', async (req, res) => {
 
   // Accord retiré : les photos gardées uniquement pour l'entraînement sont effacées
   if (trainingConsent === false) await TrainingPhoto.deleteMany({ user: req.userId });
+  // Accord retiré : les endroits des photos déjà enregistrées sont oubliés
+  if (locationConsent === false) await Car.updateMany({ user: req.userId }, { location: null });
 
   res.json(toJson(user));
 });

@@ -37,6 +37,7 @@ class CarShowcaseDialog extends StatefulWidget {
     required this.actions,
     this.discoveredOn,
     this.showConfidence = true,
+    this.details,
     super.key,
   });
 
@@ -48,6 +49,9 @@ class CarShowcaseDialog extends StatefulWidget {
 
   /// Faux quand c'est l'utilisateur, et non l'IA, qui a choisi la voiture.
   final bool showConfidence;
+
+  /// Informations en plus sous la confiance (rareté, lieu, partage).
+  final Widget? details;
 
   @override
   State<CarShowcaseDialog> createState() => _CarShowcaseDialogState();
@@ -194,6 +198,10 @@ class _CarShowcaseDialogState extends State<CarShowcaseDialog>
                       ],
                     ),
                   ),
+                  if (widget.details != null) ...[
+                    const SizedBox(height: 12),
+                    widget.details!,
+                  ],
                   const SizedBox(height: 20),
                   widget.actions,
                 ],

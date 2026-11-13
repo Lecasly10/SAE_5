@@ -55,6 +55,8 @@ services:
       CORS_ORIGIN: ${CORS_ORIGIN:-}
       PORT: 3000
       AI_URL: http://ai:5000
+      # Nom du lieu des photos (OpenStreetMap) ; GEOCODER_URL= vide pour ne pas l'utiliser
+      GEOCODER_URL: ${GEOCODER_URL-https://nominatim.openstreetmap.org}
     ports:
       - "3000:3000"
     depends_on:

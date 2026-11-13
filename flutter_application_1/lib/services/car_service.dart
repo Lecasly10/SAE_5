@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import '../models/collection_stats.dart';
 import '../models/recognition.dart';
 import '../models/scanned_car.dart';
 import 'api.dart';
@@ -9,11 +10,20 @@ class CarService {
   static List<Recognition>? _catalog;
 
   /// [carId] : voiture choisie par l'utilisateur quand l'IA s'est trompée.
-  static Future<ScannedCar> upload(Uint8List bytes, {String? carId}) async {
+  /// [location] : position du téléphone, utilisée si la photo n'en a pas.
+  static Future<ScannedCar> upload(
+    Uint8List bytes, {
+    String? carId,
+    CarLocation? location,
+  }) async {
     final json = await Api.json(
       'POST',
       '/cars',
-      body: {...Api.imageBody(bytes), if (carId != null) 'carId': carId},
+      body: {
+        ...Api.imageBody(bytes),
+        if (carId != null) 'carId': carId,
+        if (location != null) 'location': location.toJson(),
+      },
       expect: 201,
     );
     final car = ScannedCar.fromJson(json as Map<String, dynamic>);
@@ -49,6 +59,12 @@ class CarService {
     return ((await Api.json('GET', '/cars')) as List)
         .map((json) => ScannedCar.fromJson(json as Map<String, dynamic>))
         .toList();
+  }
+
+  static Future<CollectionStats> stats() async {
+    return CollectionStats.fromJson(
+      await Api.json('GET', '/cars/stats') as Map<String, dynamic>,
+    );
   }
 
   static Future<Uint8List> image(String id) async {

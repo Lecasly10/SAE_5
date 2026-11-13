@@ -9,6 +9,8 @@ module.exports = {
   mongoUri: process.env.MONGODB_URI,
   jwtSecret: process.env.JWT_SECRET || crypto.randomBytes(32).toString('hex'),
   aiUrl: process.env.AI_URL || 'http://localhost:5000',
+  // Service qui donne le nom du lieu d'une photo ; vide pour ne pas l'utiliser
+  geocoderUrl: process.env.GEOCODER_URL ?? 'https://nominatim.openstreetmap.org',
   corsOrigins: (process.env.CORS_ORIGIN || '')
     .split(',')
     .map((origin) => origin.trim())

@@ -7,6 +7,8 @@ const userSchema = new mongoose.Schema({
   // Accord pour que ses photos servent à entraîner l'IA, refusé par défaut
   trainingConsent: { type: Boolean, default: false },
   trainingConsentAt: { type: Date, default: null },
+  // Accord pour garder l'endroit où chaque voiture a été photographiée
+  locationConsent: { type: Boolean, default: false },
 });
 
 module.exports = mongoose.model('User', userSchema);
