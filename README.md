@@ -109,6 +109,7 @@ Ouvre `.env` (Bloc-notes ou VS Code), **enlève le `#`** au début de la ligne q
 | `MONGODB_URI` | base locale lancée par Docker | Mets ton adresse **MongoDB Atlas** (avec `/spotit` avant le `?`) pour utiliser la base partagée de l'équipe. Voir [section 6](#6-configurer-la-base-de-données-mongodb-atlas). |
 | `APP_PORT` | `8080` | Port de l'application dans le navigateur. Mets `8081` si le 8080 est déjà pris. |
 | `API_HOST` | `http://localhost:3000` | Adresse du serveur vue par le navigateur. À changer seulement pour ouvrir l'application depuis un autre ordinateur. |
+| `API_BIND` | `127.0.0.1` | Qui peut joindre le serveur (port 3000). Par défaut seulement ce PC ; mets `0.0.0.0` pour tester depuis un téléphone sur le même Wi-Fi. |
 | `CORS_ORIGIN` | toutes les origines | Adresses autorisées à appeler l'API, séparées par des virgules (par exemple `http://localhost:8080`). |
 
 Le même fichier `.env` sert aussi à l'[installation manuelle](#4-installation-pas-à-pas--windows-de-zéro) (le backend le lit à la racine du projet).
@@ -534,7 +535,7 @@ Pendant que `flutter run` tourne, tu peux taper dans son terminal :
 - `R` (majuscule) : redémarrer l'application ;
 - `q` : quitter.
 
-> 📱 **Autres plateformes** : `flutter devices` liste ce qui est disponible. L'application native Windows (`-d windows`) demande Visual Studio avec la charge de travail « Développement Desktop en C++ » ; un émulateur ou téléphone Android demande Android Studio. Pour ces cas, indique l'adresse du serveur au lancement : `flutter run --dart-define=API_HOST=http://10.0.2.2:3000` pour l'émulateur Android, ou `flutter run --dart-define=API_HOST=http://IP_DE_TON_PC:3000` pour un vrai téléphone sur le même Wi-Fi (par défaut : `http://localhost:3000`).
+> 📱 **Autres plateformes** : `flutter devices` liste ce qui est disponible. L'application native Windows (`-d windows`) demande Visual Studio avec la charge de travail « Développement Desktop en C++ » ; un émulateur ou téléphone Android demande Android Studio. Pour ces cas, indique l'adresse du serveur au lancement : `flutter run --dart-define=API_HOST=http://10.0.2.2:3000` pour l'émulateur Android, ou `flutter run --dart-define=API_HOST=http://IP_DE_TON_PC:3000` pour un vrai téléphone sur le même Wi-Fi (avec `API_BIND=0.0.0.0` dans `.env`, sinon le serveur n'est joignable que depuis le PC) (par défaut : `http://localhost:3000`).
 
 ### Tout arrêter
 
@@ -769,8 +770,8 @@ Les routes marquées 🔒 demandent l'en-tête `Authorization: Bearer <token>` (
 | `POST` | `/api/auth/login` | Connexion (`email`, `password`) | `200` `{ token, name, email, trainingConsent }` (token valable 7 jours) · `400` · `401` · `429` |
 | `GET` | `/api/account` 🔒 | Ton compte | `200` `{ name, email, trainingConsent }` · `401` |
 | `PATCH` | `/api/account` 🔒 | Change `name`, `email` (mêmes règles que l'inscription) et/ou les accords pour entraîner l'IA (`trainingConsent`) et garder l'endroit des photos (`locationConsent`), `true`/`false`. Le retrait d'un accord supprime tes photos de correction ou les endroits déjà gardés | `200` compte · `400` · `401` · `409` e-mail déjà pris · `429` |
-| `DELETE` | `/api/account` 🔒 | Supprime ton compte, tes voitures et tes photos | `204` · `401` · `404` |
-| `POST` | `/api/predict` | Reconnaît la voiture d'une photo, **sans compte** | `200` `{ recognized, confidence, box, carId, brand, model, years, suggestions }` si reconnue, sinon `{ recognized: false, reason, confidence, box, suggestions }` · `400` image invalide · `422` image illisible ou abîmée · `503` IA indisponible |
+| `DELETE` | `/api/account` 🔒 | Supprime ton compte, tes voitures et tes photos. Corps : `{ password }` (redemandé) | `204` · `400` · `401` mauvais mot de passe · `404` |
+| `POST` | `/api/predict` | Reconnaît la voiture d'une photo, **sans compte** (10 analyses par minute, 30 avec un compte) | `200` `{ recognized, confidence, box, carId, brand, model, years, suggestions }` si reconnue, sinon `{ recognized: false, reason, confidence, box, suggestions }` · `400` image invalide · `422` image illisible ou abîmée · `503` IA indisponible |
 | `POST` | `/api/training-photos` 🔒 | Garde une photo dont l'utilisateur a choisi la bonne voiture (`carId`), pour le prochain entraînement | `201` · `400` image ou voiture invalide · `401` · `403` accord non donné · `429` |
 | `GET` | `/api/catalog` | Toutes les voitures que l'IA connaît `[{ carId, brand, model, years }]`, pour choisir la bonne à la main | `200` · `503` IA indisponible |
 | `GET` | `/api/cars` 🔒 | Liste tes voitures, avec leur `rarity` (`commune`, `rare`, `epique`, `legendaire`, `mythique`), leur prix neuf `price` (€), leurs exemplaires `produced` et leur `location` | `200` liste · `401` |
@@ -904,10 +905,11 @@ docker run --rm -v "${PWD}/ai:/app" -w /app spotit-ai python main.py evaluate
 ### Sécurité
 - Les mots de passe sont **hachés** (bcrypt, 8 caractères minimum). Les connexions utilisent un **token JWT** signé par `JWT_SECRET` ; sans cette variable, une clé aléatoire est créée à chaque démarrage.
 - Les données reçues sont vérifiées (types, format de l'e-mail, taille des images, et contenu des images comparé au format annoncé) avant d'être utilisées, ce qui évite les injections dans les requêtes MongoDB.
-- Les connexions, les modifications du compte et les analyses de photos sont **limitées en nombre** (protection contre les essais en boucle). Le service IA refuse aussi les envois de plus de 8 Mo et les images abîmées.
+- Les connexions, les modifications du compte, la bibliothèque et les analyses de photos sont **limitées en nombre** (protection contre les essais en boucle). Sans compte, on peut analyser 10 photos par minute, 30 avec un compte. Le service IA refuse aussi les envois de plus de 8 Mo et les images abîmées.
 - Le backend ajoute des en-têtes de sécurité (`helmet`) et accepte toutes les origines par défaut ; `CORS_ORIGIN` permet de les restreindre.
 - L'endroit où une photo a été prise n'est gardé qu'avec l'accord de l'utilisateur (« Enregistrer où mes voitures ont été photographiées », désactivé par défaut). Retirer l'accord efface les endroits déjà gardés. Pour afficher le nom du lieu, la position est envoyée une fois au service OpenStreetMap (Nominatim) ; `GEOCODER_URL=` (vide) dans `.env` désactive cet envoi.
-- Chaque utilisateur ne voit et ne supprime **que ses propres voitures**. La suppression du compte efface aussi toutes ses voitures et ses photos.
+- Chaque utilisateur ne voit et ne supprime **que ses propres voitures**. La suppression du compte redemande le mot de passe et efface aussi toutes ses voitures et ses photos.
+- Le serveur (port 3000) n'est joignable que depuis le PC par défaut (`API_BIND`). L'application web envoie des en-têtes qui empêchent un autre site de l'afficher dans un cadre.
 - Les conteneurs du backend et de l'IA ne tournent pas en administrateur.
 - Le fichier `.env` ne doit **jamais** être commité (il est dans `.gitignore`).
 - Pour une vraie mise en production il resterait à ajouter : HTTPS, une limitation de débit derrière un proxy, et la rotation des clés.

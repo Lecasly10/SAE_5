@@ -1,3 +1,4 @@
+const bcrypt = require('bcrypt');
 const express = require('express');
 const Car = require('../models/Car');
 const TrainingPhoto = require('../models/TrainingPhoto');
@@ -60,8 +61,15 @@ router.patch('/', async (req, res) => {
   res.json(toJson(user));
 });
 
-// Supprime le compte et tout ce qui lui appartient
+// Supprime le compte et tout ce qui lui appartient. Le mot de passe est
+// redemandé : un jeton volé ne suffit pas.
 router.delete('/', async (req, res) => {
+  const { password } = req.body ?? {};
+  if (typeof password !== 'string') throw new HttpError(400, 'Mot de passe requis');
+  const user = await User.findById(req.userId).select('password');
+  if (!user) throw new HttpError(404, 'Introuvable');
+  if (!(await bcrypt.compare(password, user.password))) throw new HttpError(401, 'Mot de passe incorrect');
+
   await Car.deleteMany({ user: req.userId });
   await TrainingPhoto.deleteMany({ user: req.userId });
   const { deletedCount } = await User.deleteOne({ _id: req.userId });

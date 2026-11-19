@@ -57,8 +57,9 @@ services:
       AI_URL: http://ai:5000
       # Nom du lieu des photos (OpenStreetMap) ; GEOCODER_URL= vide pour ne pas l'utiliser
       GEOCODER_URL: ${GEOCODER_URL-https://nominatim.openstreetmap.org}
+    # Joignable seulement depuis ce PC ; API_BIND=0.0.0.0 pour un téléphone sur le même Wi-Fi
     ports:
-      - "3000:3000"
+      - "${API_BIND:-127.0.0.1}:3000:3000"
     depends_on:
       mongo:
         condition: service_healthy

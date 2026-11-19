@@ -37,13 +37,12 @@ const toJson = (car) => ({
 
 // Endroit de la photo : celui enregistré dans la photo, sinon la position du
 // téléphone. Gardé seulement si l'utilisateur l'a accepté.
-async function findLocation(req) {
+async function findLocation(req, user) {
   const device = readLocation(req.body.location);
+  if (!user.locationConsent) return null;
   const fromPhoto = req.image.contentType === 'image/jpeg' ? photoLocation(req.image.data) : null;
   if (!fromPhoto && !device) return null;
 
-  const user = await User.findById(req.userId).select('locationConsent');
-  if (!user?.locationConsent) return null;
   const location = fromPhoto ? { ...fromPhoto, source: 'photo' } : { ...device, source: 'device' };
   return { ...location, place: await findPlace(location) };
 }
@@ -51,7 +50,10 @@ async function findLocation(req) {
 router.post('/', scanLimiter, uploadedImage, async (req, res) => {
   const { carId: chosenId } = req.body;
   if (chosenId !== undefined && !isCarId(chosenId)) throw new HttpError(400, 'Voiture invalide');
-  const location = await findLocation(req);
+  // Le compte a pu être supprimé alors que son jeton est encore valide
+  const user = await User.findById(req.userId).select('locationConsent');
+  if (!user) throw new HttpError(401, 'Session expirée, reconnectez-vous');
+  const location = await findLocation(req, user);
 
   const scan = await recognizeCar(req.image.data);
   const chosen = await chooseCar(scan, chosenId);

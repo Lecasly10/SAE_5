@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../dialogs/delete_account_dialog.dart';
 import '../services/api.dart';
 import '../services/auth_service.dart';
 import '../services/car_service.dart';
@@ -163,14 +164,12 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Future<void> _deleteAccount() async {
-    final confirmed = await showConfirmDialog(
-      context,
-      title: 'Supprimer le compte ?',
-      message:
-          'Cette action est définitive. Votre compte, vos voitures et vos photos seront supprimés.',
-    );
-    if (confirmed &&
-        await _call(AuthService.deleteAccount, done: 'Compte supprimé')) {
+    final password = await showDeleteAccountDialog(context);
+    if (password != null &&
+        await _call(
+          () => AuthService.deleteAccount(password),
+          done: 'Compte supprimé',
+        )) {
       _resetForm();
     }
   }

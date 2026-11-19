@@ -3,6 +3,7 @@ process.env.JWT_SECRET = 'test-secret';
 const assert = require('node:assert/strict');
 const http = require('node:http');
 const { after, before, describe, it } = require('node:test');
+const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const Car = require('../models/Car');
 const TrainingPhoto = require('../models/TrainingPhoto');
@@ -171,6 +172,8 @@ describe('API', () => {
 
   it('saves the car the user picked instead of the one the AI guessed', async (t) => {
     const create = t.mock.method(Car, 'create', async (doc) => ({ ...doc, _id: 'abc' }));
+    let account = { locationConsent: false };
+    t.mock.method(User, 'findById', () => ({ select: async () => account }));
     const picked = { id: 'peugeot_308_2021_present', brand: 'Peugeot', model: '308', from_year: 2021, to_year: null };
     aiAnswer.suggestions = [{ ...picked, confidence: 12.2 }];
     t.after(() => {
@@ -181,6 +184,8 @@ describe('API', () => {
     const unknown = await call('POST', '/api/cars', { headers, body: { ...tinyPng, carId: 'renault_clio_2012_2019' } });
     const saved = await call('POST', '/api/cars', { headers, body: { ...tinyPng, carId: picked.id } });
     const fromList = await call('POST', '/api/cars', { headers, body: { ...tinyPng, carId: f12.id } });
+    account = null;
+    const deletedAccount = await call('POST', '/api/cars', { headers, body: { ...tinyPng, carId: f12.id } });
 
     assert.equal(invalid.status, 400);
     assert.equal(unknown.status, 422);
@@ -190,6 +195,9 @@ describe('API', () => {
     assert.equal(create.mock.calls[0].arguments[0].confidence, 12);
     assert.equal(fromList.json.brand, 'Ferrari');
     assert.equal(fromList.json.confidence, 0);
+    // Jeton encore valide d'un compte supprimé : rien n'est créé
+    assert.equal(deletedAccount.status, 401);
+    assert.equal(create.mock.callCount(), 2);
   });
 
   it('keeps where the photo was taken only when the user agreed to it', async (t) => {
@@ -294,22 +302,40 @@ describe('API', () => {
     assert.equal(update.mock.callCount(), 2);
   });
 
-  it('deletes the account with all its cars and photos', async (t) => {
+  it('deletes the account with all its cars and photos once the password is given again', async (t) => {
     const cars = t.mock.method(Car, 'deleteMany', async () => ({}));
     const photos = t.mock.method(TrainingPhoto, 'deleteMany', async () => ({}));
-    let exists = true;
-    t.mock.method(User, 'deleteOne', async () => ({ deletedCount: exists ? 1 : 0 }));
+    let account = { password: await bcrypt.hash('bon-mot-de-passe', 4) };
+    t.mock.method(User, 'findById', () => ({ select: async () => account }));
+    t.mock.method(User, 'deleteOne', async () => ({ deletedCount: 1 }));
+    const remove = (password) => call('DELETE', '/api/account', { headers, body: { password } });
 
     const anonymous = await call('DELETE', '/api/account');
-    const deleted = await call('DELETE', '/api/account', { headers });
-    exists = false;
-    const again = await call('DELETE', '/api/account', { headers });
+    const missing = await call('DELETE', '/api/account', { headers, body: {} });
+    const wrong = await remove('mauvais');
+    assert.equal(cars.mock.callCount(), 0);
+    const deleted = await remove('bon-mot-de-passe');
+    account = null;
+    const again = await remove('bon-mot-de-passe');
 
     assert.equal(anonymous.status, 401);
+    assert.equal(missing.status, 400);
+    assert.equal(wrong.status, 401);
     assert.equal(deleted.status, 204);
     assert.deepEqual(cars.mock.calls[0].arguments[0], { user: userId });
     assert.deepEqual(photos.mock.calls[0].arguments[0], { user: userId });
     assert.equal(again.status, 404);
+  });
+
+  it('lets guests try the AI less often than signed-in users', async () => {
+    let guest;
+    for (let attempt = 0; attempt < 11; attempt += 1) {
+      guest = await call('POST', '/api/predict', { body: tinyPng });
+    }
+    const signedIn = await call('POST', '/api/predict', { headers, body: tinyPng });
+
+    assert.equal(guest.status, 429);
+    assert.equal(signedIn.status, 200);
   });
 
   it('limits the number of login attempts', async () => {

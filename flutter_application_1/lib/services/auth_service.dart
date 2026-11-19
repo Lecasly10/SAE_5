@@ -62,8 +62,13 @@ class AuthService {
   }
 
   /// Supprime le compte, ses voitures et ses photos sur le serveur.
-  static Future<void> deleteAccount() async {
-    await Api.send('DELETE', '/account', expect: 204);
+  static Future<void> deleteAccount(String password) async {
+    await Api.send(
+      'DELETE',
+      '/account',
+      body: {'password': password},
+      expect: 204,
+    );
     logout();
   }
 
