@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../dialogs/car_card_dialog.dart';
+import '../models/library_filter.dart';
 import '../models/scanned_car.dart';
 import '../services/api.dart';
 import '../services/auth_service.dart';
 import '../services/car_service.dart';
 import '../theme/spot_it_theme.dart';
 import '../widgets/car_image.dart';
+import '../widgets/library_toolbar.dart';
 import '../widgets/rarity_badge.dart';
 import '../widgets/spot_it_widgets.dart';
 import '../widgets/toast.dart';
@@ -26,6 +28,7 @@ class _CarLibraryPageState extends State<CarLibraryPage> {
   List<ScannedCar> _cars = const [];
   bool _loading = false;
   String? _error;
+  LibraryFilter _filter = const LibraryFilter();
 
   @override
   void initState() {
@@ -121,6 +124,33 @@ class _CarLibraryPageState extends State<CarLibraryPage> {
         onAction: () => Navigator.pop(context),
       );
     }
+    final shown = _filter.apply(_cars);
+    return Column(
+      children: [
+        LibraryToolbar(
+          filter: _filter,
+          cars: _cars,
+          onChanged: (filter) => setState(() => _filter = filter),
+        ),
+        Expanded(
+          child: shown.isEmpty
+              ? _LibraryMessage(
+                  icon: Icons.search_off,
+                  title: 'Aucune voiture trouvée',
+                  message: 'Aucune voiture ne correspond à ces filtres.',
+                  actionIcon: Icons.filter_alt_off_outlined,
+                  actionLabel: 'Tout afficher',
+                  onAction: () => setState(
+                    () => _filter = LibraryFilter(sort: _filter.sort),
+                  ),
+                )
+              : _grid(shown),
+        ),
+      ],
+    );
+  }
+
+  Widget _grid(List<ScannedCar> cars) {
     return RefreshIndicator(
       color: SpotItColors.accent,
       backgroundColor: SpotItColors.surface,
@@ -134,11 +164,11 @@ class _CarLibraryPageState extends State<CarLibraryPage> {
           mainAxisSpacing: 12,
           childAspectRatio: 0.72,
         ),
-        itemCount: _cars.length,
+        itemCount: cars.length,
         itemBuilder: (context, index) => _CarCard(
-          key: ValueKey(_cars[index].id),
-          car: _cars[index],
-          onTap: () => _openPreview(_cars[index]),
+          key: ValueKey(cars[index].id),
+          car: cars[index],
+          onTap: () => _openPreview(cars[index]),
         ),
       ),
     );
@@ -147,13 +177,16 @@ class _CarLibraryPageState extends State<CarLibraryPage> {
   @override
   Widget build(BuildContext context) {
     final count = _cars.length;
+    final noun = count > 1 ? 'voitures scannées' : 'voiture scannée';
     return SpotItPage(
       child: Column(
         children: [
           SpotItHeader(
             title: 'Ma bibliothèque',
             subtitle: AuthService.isLoggedIn
-                ? '$count ${count > 1 ? 'voitures scannées' : 'voiture scannée'}'
+                ? _filter.isActive
+                    ? '${_filter.apply(_cars).length} sur $count $noun'
+                    : '$count $noun'
                 : null,
             trailing: AuthService.isLoggedIn
                 ? Row(
