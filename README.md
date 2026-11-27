@@ -20,19 +20,32 @@ Projet réalisé en équipe dans le cadre de la **SAE 5.01 — Développement av
 
 ---
 
-## Démarrage rapide avec Docker (recommandé)
+## Démarrage rapide avec Docker ou Podman (recommandé)
 
-**C'est le moyen le plus simple pour essayer l'application.** Docker fabrique et lance tout à ta place (l'IA, le serveur, la base de données et l'application), chacun dans sa « boîte » appelée *conteneur*. **Tu n'as besoin d'installer que Docker Desktop** : ni Node.js, ni Python, ni Flutter, ni compte MongoDB, ni fichier `.env`.
+**C'est le moyen le plus simple pour essayer l'application.** Docker (ou Podman, qui fait la même chose) fabrique et lance tout à ta place : l'IA, le serveur, la base de données et l'application, chacun dans sa « boîte » appelée *conteneur*. **Tu n'as besoin d'installer que Docker ou Podman** : ni Node.js, ni Python, ni Flutter, ni compte MongoDB, ni fichier `.env`.
 
 ```
-Installer Docker  →  télécharger le projet  →  docker compose up --build  →  http://localhost:8080
+Installer Docker ou Podman  →  télécharger le projet  →  une commande  →  http://localhost:8080
 ```
 
-**Ce qu'il faut sur tous les systèmes :** **8 Go de mémoire (RAM) minimum**, environ **10 Go de disque libre** et une connexion internet. Il faut aussi avoir le droit d'installer des logiciels (compte administrateur, ou `sudo` sous Linux). Sans ce droit, voir « Sous Linux, sans droits administrateur » plus bas.
+**Ce qu'il faut :** **8 Go de mémoire (RAM) minimum**, environ **10 Go de disque libre** et une connexion internet.
 
-### Étape A — Installer Docker (une seule fois)
+### Quel outil choisir ?
 
-#### Windows 10 ou 11 (64 bits)
+| Ton ordinateur | Ce que tu installes | Commande pour lancer |
+|---|---|---|
+| **Windows 10 ou 11** | Docker Desktop (droits administrateur nécessaires) | `docker compose` |
+| **macOS** | Docker Desktop (droits administrateur nécessaires) | `docker compose` |
+| **Linux, avec `sudo`** | Docker Engine | `docker compose` |
+| **Linux, sans droits administrateur** (PC d'école ou de travail) | Podman (souvent déjà installé) + `podman-compose` | `podman-compose` |
+
+Les étapes sont les mêmes partout, seule la commande change : **avec Podman, remplace `docker compose` par `podman-compose`** dans toute la suite.
+
+Pas de Docker, pas de Podman et pas de droits administrateur ? Suis l'[installation sans Docker ni Podman](#4-installation-sans-docker-ni-podman--windows).
+
+### Étape A — Installer l'outil (une seule fois)
+
+#### Windows — Docker Desktop
 
 La virtualisation doit être activée (c'est le cas sur presque tous les PC récents).
 
@@ -53,7 +66,11 @@ La virtualisation doit être activée (c'est le cas sur presque tous les PC réc
 
 > ⚠️ **Docker Desktop doit rester ouvert** tant que tu utilises l'application.
 
-#### Linux (Ubuntu, Debian, Fedora…)
+#### macOS — Docker Desktop
+
+Installe Docker Desktop avec [Homebrew](https://brew.sh) (`brew install --cask docker`) ou depuis https://www.docker.com/products/docker-desktop/, lance-le et attends **« Engine running »**. Vérifie ensuite dans le Terminal avec `docker compose version`.
+
+#### Linux avec `sudo` — Docker Engine (Ubuntu, Debian, Fedora…)
 
 Le script officiel de Docker installe Docker Engine et Docker Compose :
 ```bash
@@ -65,77 +82,75 @@ sudo usermod -aG docker $USER
 ```
 **Déconnecte-toi puis reconnecte-toi** (pour pouvoir utiliser `docker` sans `sudo`), puis vérifie avec `docker compose version`.
 
-#### macOS
+#### Linux sans droits administrateur — Podman
 
-Installe Docker Desktop avec [Homebrew](https://brew.sh) (`brew install --cask docker`) ou depuis https://www.docker.com/products/docker-desktop/, lance-le et attends « Engine running ».
+1. Vérifie que Podman est installé et qu'il peut lancer un conteneur :
+   ```bash
+   podman run --rm docker.io/library/hello-world
+   ```
+   Tu dois voir **« Hello from Docker! »**. Si la commande n'existe pas, Podman n'est pas installé : demande-le à l'administrateur du PC, ou suis l'[installation sans Docker ni Podman](#5-installation-sans-docker-ni-podman--linux-et-macos).
+2. Installe `podman-compose` dans ton dossier personnel (sans `sudo` ni `pip`) avec l'outil `uv` :
+   ```bash
+   curl -LsSf https://astral.sh/uv/install.sh | sh
+   ```
+   ```bash
+   ~/.local/bin/uv tool install podman-compose
+   ```
+3. Vérifie avec `podman-compose --version` (si la commande est introuvable, ferme et rouvre le terminal, ou tape `~/.local/bin/podman-compose`).
 
-#### Sous Linux, sans droits administrateur (Podman)
-
-Certains PC (par exemple à l'IUT) ont déjà **Podman**, qui lance les mêmes conteneurs sans `sudo`. Il manque seulement `podman-compose`, qu'on installe dans son dossier personnel :
-```bash
-curl -LsSf https://astral.sh/uv/install.sh | sh
-~/.local/bin/uv tool install podman-compose
-```
-Ensuite, remplace `docker compose` par `podman-compose` dans toutes les commandes (`podman-compose up --build -d`).
-- Si la construction échoue avec `insufficient UIDs or GIDs available in user namespace`, l'administrateur n'a pas réservé d'identifiants à ton compte (`/etc/subuid`). Ce réglage, à lancer une seule fois, peut contourner le problème (pas encore testé par l'équipe) :
-  ```bash
-  mkdir -p ~/.config/containers && printf '[storage]\ndriver = "overlay"\n[storage.options.overlay]\nignore_chown_errors = "true"\n' > ~/.config/containers/storage.conf && podman system reset -f
-  ```
-- Les images prennent environ 6 Go dans ton dossier personnel : vérifie ton quota.
+> ⚠️ Si le test de l'étape 1 affiche `insufficient UIDs or GIDs`, `newuidmap` ou `/etc/subuid`, ton compte n'a pas le droit de lancer des conteneurs. Seul l'administrateur du PC peut l'ajouter (fichiers `/etc/subuid` et `/etc/subgid`). Sinon, suis l'[installation sans Docker ni Podman](#5-installation-sans-docker-ni-podman--linux-et-macos).
+>
+> 💾 Les images prennent environ 6 Go **dans ton dossier personnel** : vérifie ton quota de disque.
 
 ### Étape B — Télécharger le projet
 
-**Sans Git (le plus simple)** : clique sur ce lien pour télécharger le projet, puis fais un clic droit sur le fichier → **Extraire tout…** :
-https://github.com/Lecasly10/SAE_5/archive/refs/heads/main.zip
+**Windows**
+- **Sans Git (le plus simple)** : télécharge https://github.com/Lecasly10/SAE_5/archive/refs/heads/main.zip, puis clic droit sur le fichier → **Extraire tout…**
+- **Avec Git** : dans PowerShell, `git clone https://github.com/Lecasly10/SAE_5.git`
 
-**Avec Git** :
-```powershell
-git clone https://github.com/Lecasly10/SAE_5.git
-```
-```powershell
-cd SAE_5
-```
+Ensuite, **ouvre un terminal dans le dossier du projet** : dans l'Explorateur de fichiers, ouvre le dossier (celui où se trouve `docker-compose.yml`), fais un clic droit dans un espace vide → **« Ouvrir dans le Terminal »**.
 
-Ensuite, **ouvre PowerShell dans le dossier du projet** : dans l'Explorateur de fichiers, ouvre le dossier (celui où se trouve `docker-compose.yml`), fais un clic droit dans un espace vide → **« Ouvrir dans le Terminal »**.
+**Linux et macOS** : dans le terminal,
+```bash
+git clone https://github.com/Lecasly10/SAE_5.git && cd SAE_5
+```
 
 ### Étape C — Tout lancer (une seule commande)
 
-```powershell
-docker compose up --build
-```
+Dans le dossier du projet :
 
-- ⏳ **La toute première fois, compte 10 à 25 minutes selon ta connexion** : Docker télécharge et construit tout (environ 3 Go à télécharger : TensorFlow, Flutter, etc.). Ça ne se fait qu'**une seule fois**. Les fois suivantes, le démarrage prend moins d'une minute.
+| Docker (Windows, macOS, Linux) | Podman (Linux sans droits) |
+|---|---|
+| `docker compose up --build` | `podman-compose up --build` |
+
+- ⏳ **La toute première fois, compte 10 à 25 minutes selon ta connexion** : tout est téléchargé et construit (environ 3 Go : TensorFlow, Flutter, etc.). Ça ne se fait qu'**une seule fois**. Les fois suivantes, le démarrage prend moins d'une minute.
 - Le terminal affiche beaucoup de texte : c'est normal. Ne le ferme pas.
-- C'est prêt quand tu vois dans les messages `Serveur sur le port 3000` (l'IA met 20 à 60 secondes à se charger). Tu peux aussi vérifier avec `docker compose ps` : les conteneurs `ai`, `backend` et `mongo` doivent être **healthy**.
+- C'est prêt quand tu vois dans les messages `Serveur sur le port 3000` (l'IA met 20 à 60 secondes à se charger). Tu peux aussi vérifier avec `docker compose ps` (ou `podman-compose ps`) : les conteneurs `ai`, `backend` et `mongo` doivent être **healthy**.
 - **Ouvre ensuite ton navigateur sur : http://localhost:8080**
 
 ### Utiliser l'application
 
 Suis le parcours de la [section 8](#8-tester-que-tout-fonctionne). En résumé : **Insérer une photo** → choisis `ai/images/f12.jpg` (dans le dossier du projet) → **Analyser la photo** → un cadre rouge entoure la voiture et un popup donne la marque, le modèle et la confiance. Crée un compte (engrenage en haut à droite) pour ajouter la voiture à ta bibliothèque.
 
-> 💾 Les comptes et les voitures créés avec Docker sont enregistrés **sur ton ordinateur** (une base MongoDB locale), pas dans la base partagée de l'équipe. Ils sont conservés d'un lancement à l'autre.
+> 💾 Les comptes et les voitures créés ainsi sont enregistrés **sur ton ordinateur** (une base MongoDB locale), pas dans la base partagée de l'équipe. Ils sont conservés d'un lancement à l'autre.
 
 ### Arrêter, relancer, réinitialiser
 
-| Je veux… | Commande |
-|---|---|
-| **Arrêter** | `Ctrl + C` dans le terminal, puis `docker compose down` |
-| **Relancer** (rapide) | `docker compose up` |
-| **Relancer après une mise à jour du projet** (`git pull` ou nouveau ZIP) | `docker compose up --build` |
-| **Lancer en arrière-plan** (sans garder le terminal) | `docker compose up --build -d`, puis `docker compose down` pour arrêter |
-| **Voir l'état des conteneurs** | `docker compose ps` |
-| **Voir les messages d'un conteneur** (en cas de souci) | `docker compose logs ai` (ou `backend`, `app`, `mongo`) |
-| **Tout effacer et repartir de zéro** (comptes et voitures aussi) | `docker compose down -v` |
+| Je veux… | Docker | Podman |
+|---|---|---|
+| **Arrêter** | `Ctrl + C`, puis `docker compose down` | `Ctrl + C`, puis `podman-compose down` |
+| **Relancer** (rapide) | `docker compose up` | `podman-compose up` |
+| **Relancer après une mise à jour** (`git pull` ou nouveau ZIP) | `docker compose up --build` | `podman-compose up --build` |
+| **Lancer en arrière-plan** (sans garder le terminal) | `docker compose up --build -d` | `podman-compose up --build -d` |
+| **Voir l'état des conteneurs** | `docker compose ps` | `podman-compose ps` |
+| **Voir les messages d'un conteneur** (en cas de souci) | `docker compose logs ai` (ou `backend`, `app`, `mongo`) | `podman-compose logs ai` |
+| **Tout effacer et repartir de zéro** (comptes et voitures aussi) | `docker compose down -v` | `podman-compose down -v` |
 
 ### Le fichier `.env` : facultatif
 
-**Avec Docker, tu n'as rien à écrire** : tout fonctionne avec des valeurs par défaut prévues pour tester en local. Le fichier `.env` sert seulement si tu veux **changer un réglage**.
+**Avec Docker ou Podman, tu n'as rien à écrire** : tout fonctionne avec des valeurs par défaut prévues pour tester en local. Le fichier `.env` sert seulement si tu veux **changer un réglage**.
 
-Pour en créer un, depuis le dossier du projet :
-```powershell
-Copy-Item .env.example .env
-```
-Ouvre `.env` (Bloc-notes ou VS Code), **enlève le `#`** au début de la ligne que tu veux modifier, change la valeur, puis relance avec `docker compose up --build`.
+Pour en créer un, depuis le dossier du projet : `Copy-Item .env.example .env` (Windows) ou `cp .env.example .env` (Linux, macOS). Ouvre `.env` dans un éditeur de texte, **enlève le `#`** au début de la ligne que tu veux modifier, change la valeur, puis relance avec `docker compose up --build` (ou `podman-compose up --build`).
 
 | Réglage | Valeur par défaut | À quoi ça sert |
 |---|---|---|
@@ -146,9 +161,9 @@ Ouvre `.env` (Bloc-notes ou VS Code), **enlève le `#`** au début de la ligne q
 | `API_BIND` | `127.0.0.1` | Qui peut joindre le serveur (port 3000). Par défaut seulement ce PC ; mets `0.0.0.0` pour tester depuis un téléphone sur le même Wi-Fi. |
 | `CORS_ORIGIN` | toutes les origines | Adresses autorisées à appeler l'API, séparées par des virgules (par exemple `http://localhost:8080`). |
 
-Le même fichier `.env` sert aussi à l'[installation manuelle](#4-installation-pas-à-pas--windows-de-zéro) (le backend le lit à la racine du projet).
+Le même fichier `.env` sert aussi à l'[installation sans Docker ni Podman](#4-installation-sans-docker-ni-podman--windows) (le backend le lit à la racine du projet).
 
-### Ce que Docker lance
+### Ce qui est lancé
 
 | Conteneur | Rôle | Accessible sur |
 |---|---|---|
@@ -160,10 +175,12 @@ Le même fichier `.env` sert aussi à l'[installation manuelle](#4-installation-
 
 Ils démarrent dans le bon ordre : la base et l'IA d'abord, puis le serveur, puis l'application.
 
-### Problèmes Docker fréquents
+### Problèmes fréquents (Docker et Podman)
 
 | Message ou symptôme | Cause | Solution |
 |---|---|---|
+| `podman-compose: command not found` | Le dossier `~/.local/bin` n'est pas encore connu du terminal | Ferme et rouvre le terminal, ou tape `~/.local/bin/podman-compose` |
+| Podman : `insufficient UIDs or GIDs available in user namespace` | Ton compte n'a pas de plage d'identifiants réservée (`/etc/subuid`, `/etc/subgid`) | Seul l'administrateur du PC peut l'ajouter. Sinon, suis l'[installation sans Docker ni Podman](#5-installation-sans-docker-ni-podman--linux-et-macos) |
 | `docker : The term 'docker' is not recognized…` | Docker Desktop n'est pas installé, ou le terminal a été ouvert avant | Installe-le (étape A), puis **ferme et rouvre** PowerShell |
 | `failed to connect to the docker API at npipe:////./pipe/dockerDesktopLinuxEngine… cannot find the file` | **Docker Desktop n'est pas lancé** | Ouvre Docker Desktop et attends « Engine running » |
 | Docker Desktop ne démarre pas, parle de **virtualisation** ou de **WSL** | La virtualisation est désactivée, ou WSL 2 n'est pas installé | Dans un PowerShell **administrateur** : `wsl --install`, puis redémarre. Si besoin, active la virtualisation dans le BIOS de l'ordinateur |
@@ -178,19 +195,19 @@ Ils démarrent dans le bon ordre : la base et l'IA d'abord, puis le serveur, pui
 | J'ai modifié le code mais je ne vois pas la différence | Docker utilise l'ancienne version construite | Relance avec `docker compose up --build` |
 | Après une mise à jour, le navigateur affiche encore l'ancienne application | Le navigateur garde une copie de l'ancienne version | Sur la page, **F12**, puis clic droit sur le bouton d'actualisation → **« Vider le cache et effectuer une actualisation forcée »** (une seule fois) |
 
-> 🛠️ **Tu veux modifier le code ?** Docker sert à **essayer** le projet. Pour développer (rechargement à chaud, débogage), utilise plutôt l'[installation manuelle](#4-installation-pas-à-pas--windows-de-zéro).
+> 🛠️ **Tu veux modifier le code ?** Docker et Podman servent à **essayer** le projet. Pour développer (rechargement à chaud, débogage), utilise plutôt l'[installation sans Docker ni Podman](#4-installation-sans-docker-ni-podman--windows).
 
 ---
 
 ## Sommaire
 
-**➡️ Pressé ? Va directement au [Démarrage rapide avec Docker](#démarrage-rapide-avec-docker-recommandé).**
+**➡️ Pressé ? Va directement au [Démarrage rapide avec Docker ou Podman](#démarrage-rapide-avec-docker-ou-podman-recommandé).**
 
 1. [À quoi ça sert ?](#1-à-quoi-ça-sert-)
 2. [Comment ça marche](#2-comment-ça-marche)
 3. [Ce qu'il faut avant de commencer (prérequis)](#3-ce-quil-faut-avant-de-commencer-prérequis)
-4. [Installation pas à pas — Windows (de zéro)](#4-installation-pas-à-pas--windows-de-zéro)
-5. [Installation — Linux et macOS](#5-installation--linux-et-macos)
+4. [Installation sans Docker ni Podman — Windows](#4-installation-sans-docker-ni-podman--windows)
+5. [Installation sans Docker ni Podman — Linux et macOS](#5-installation-sans-docker-ni-podman--linux-et-macos)
 6. [Configurer la base de données (MongoDB Atlas)](#6-configurer-la-base-de-données-mongodb-atlas)
 7. [Lancer l'application](#7-lancer-lapplication)
 8. [Tester que tout fonctionne](#8-tester-que-tout-fonctionne)
@@ -297,7 +314,7 @@ La jauge de l'application est verte à partir de 70 %, orange à partir de 40 %,
 
 ## 3. Ce qu'il faut avant de commencer (prérequis)
 
-> 💡 **Avec Docker, tu n'as besoin de rien de tout ça** (ni Node.js, ni Python, ni Flutter) : seulement Docker Desktop, voir le [Démarrage rapide](#démarrage-rapide-avec-docker-recommandé). Cette liste concerne l'**installation manuelle**, pour développer.
+> 💡 **Avec Docker ou Podman, tu n'as besoin de rien de tout ça** (ni Node.js, ni Python, ni Flutter) : seulement Docker ou Podman, voir le [Démarrage rapide](#démarrage-rapide-avec-docker-ou-podman-recommandé). Cette liste concerne l'**installation sans Docker ni Podman**, pour développer ou si tu ne peux pas installer Docker.
 
 ### Matériel et système
 - Un ordinateur sous **Windows 10/11** (guide complet ci-dessous), **Linux** ou **macOS**.
@@ -321,9 +338,9 @@ La jauge de l'application est verte à partir de 70 %, orange à partir de 40 %,
 
 ---
 
-## 4. Installation pas à pas — Windows (de zéro)
+## 4. Installation sans Docker ni Podman — Windows
 
-> 💡 Cette installation est destinée à **développer** le projet. Pour simplement l'essayer, le [Démarrage rapide avec Docker](#démarrage-rapide-avec-docker-recommandé) est beaucoup plus court.
+> 💡 Cette installation est destinée à **développer** le projet. Pour simplement l'essayer, le [Démarrage rapide avec Docker ou Podman](#démarrage-rapide-avec-docker-ou-podman-recommandé) est beaucoup plus court.
 
 On suppose un Windows 11 « vierge ». Chaque commande se tape dans **PowerShell** : appuie sur la touche **Windows**, tape `PowerShell`, appuie sur Entrée.
 
@@ -421,7 +438,7 @@ cd ..
 
 ### Étape 7 — Créer le fichier de configuration `.env`
 
-> ℹ️ Ce fichier concerne l'installation manuelle uniquement : **Docker n'en a pas besoin**.
+> ℹ️ Ce fichier concerne l'installation sans Docker ni Podman : **avec Docker ou Podman, il n'est pas nécessaire**.
 
 Ce fichier contient les mots de passe : il reste **sur ton ordinateur** et n'est jamais envoyé sur GitHub.
 
@@ -460,42 +477,68 @@ cd ..
 
 ---
 
-## 5. Installation — Linux et macOS
+## 5. Installation sans Docker ni Podman — Linux et macOS
 
 > ℹ️ Ces instructions sont l'adaptation des étapes Windows. L'équipe a testé le projet sur **Windows 11 + Edge** ; sous Linux/macOS le principe est identique mais certaines commandes peuvent demander des ajustements.
 
-### Linux (exemple Ubuntu/Debian)
+### Linux (Ubuntu, Debian, Fedora…), sans `sudo`
 
-```bash
-sudo apt update
-sudo apt install -y git curl unzip xz-utils python3 python3-venv nodejs npm
-```
-- **Python** : TensorFlow 2.21 fonctionne avec Python 3.10 à 3.13. Vérifie avec `python3 --version` (si c'est 3.14, installe une version plus ancienne).
-- **Node.js** : si `node -v` affiche une version inférieure à 20, installe une version récente avec [nvm](https://github.com/nvm-sh/nvm) ou NodeSource.
-- **Flutter** : suis https://docs.flutter.dev/get-started/install/linux (ou `sudo snap install flutter --classic`), puis vérifie avec `flutter doctor`.
-- **Navigateur** : installe Chrome ou Chromium, puis lance l'appli avec `flutter run -d chrome`.
+Tout s'installe **dans ton dossier personnel** : pas besoin de droits administrateur. Il faut seulement `git` et `curl` (presque toujours déjà là) et environ **8 Go** de place dans ton dossier.
 
+**1. Télécharger le projet**
 ```bash
-git clone https://github.com/Lecasly10/SAE_5.git
-cd SAE_5
-python3 -m venv ai/.venv
-ai/.venv/bin/python -m pip install -r ai/requirements.txt
-(cd backend && npm install)
-cp .env.example .env      # puis remplis .env (voir étape 7)
-cd flutter_application_1 && flutter pub get && cd ..
+git clone https://github.com/Lecasly10/SAE_5.git && cd SAE_5
 ```
 
-Lancement (3 terminaux, voir [section 7](#7-lancer-lapplication)) :
+**2. Python 3.13 et l'IA.** L'outil `uv` télécharge lui-même Python 3.13 si celui du système est trop récent (TensorFlow ne marche pas encore avec 3.14) :
 ```bash
-cd ai && .venv/bin/python server.py                  # terminal 1
-cd backend && node server.js                         # terminal 2
-cd flutter_application_1 && flutter run -d chrome    # terminal 3
+curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
+```bash
+~/.local/bin/uv venv -p 3.13 ai/.venv && ~/.local/bin/uv pip install -p ai/.venv -r ai/requirements.txt
+```
+
+**3. Node.js et le backend**, avec `nvm` :
+```bash
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
+```
+**Ferme et rouvre le terminal**, retourne dans le dossier `SAE_5`, puis :
+```bash
+nvm install 22 && (cd backend && npm install)
+```
+
+**4. Flutter**
+```bash
+git clone --depth 1 --branch 3.47.5 https://github.com/flutter/flutter.git ~/flutter
+```
+```bash
+echo 'export PATH="$HOME/flutter/bin:$PATH"' >> ~/.bashrc && source ~/.bashrc && (cd flutter_application_1 && flutter pub get)
+```
+
+**5. Le fichier `.env`** avec l'adresse de la base de données (demande-la à l'équipe ou crée ta base, voir [section 6](#6-configurer-la-base-de-données-mongodb-atlas)) :
+```bash
+cp .env.example .env
+```
+Ouvre `.env` dans un éditeur de texte et remplis `MONGODB_URI`.
+
+**6. Lancer** (3 terminaux, chacun dans le dossier `SAE_5`) :
+```bash
+cd ai && .venv/bin/python server.py                                     # terminal 1 : l'IA
+```
+```bash
+cd backend && node server.js                                            # terminal 2 : le serveur
+```
+```bash
+cd flutter_application_1 && flutter run -d web-server --web-port 8080   # terminal 3 : l'application
+```
+Ouvre ensuite **http://localhost:8080** dans ton navigateur (Firefox ou Chrome).
+
+> 💡 Si tu as `sudo`, tu peux aussi installer Git, Node.js, Python et Flutter avec le gestionnaire de paquets de ta distribution (`apt`, `dnf`…) : les étapes 5 et 6 restent les mêmes.
 
 ### macOS
 
 - Installe [Homebrew](https://brew.sh), puis `brew install git node python@3.13` et Flutter (https://docs.flutter.dev/get-started/install/macos).
-- Mêmes commandes que Linux (remplace `chrome` par `macos` si tu veux l'application native).
+- Mêmes étapes 1, 5 et 6 que Linux, avec `python3.13 -m venv ai/.venv` puis `ai/.venv/bin/python -m pip install -r ai/requirements.txt` pour l'IA et `(cd backend && npm install)` pour le serveur. Pour l'application native, remplace `-d web-server --web-port 8080` par `-d macos`.
 - ⚠️ L'application macOS est en « sandbox » et bloque le réseau par défaut : vérifie que `macos/Runner/DebugProfile.entitlements` et `macos/Runner/Release.entitlements` (dans `flutter_application_1/`) contiennent `com.apple.security.network.client` à `true`.
 
 ---
