@@ -11,6 +11,7 @@ import '../services/api.dart';
 import '../services/auth_service.dart';
 import '../services/car_service.dart';
 import '../services/location_service.dart';
+import '../services/photo_shrink.dart';
 import '../theme/spot_it_theme.dart';
 import '../widgets/analyze_button.dart';
 import '../widgets/photo_source_button.dart';
@@ -39,14 +40,14 @@ class _SpotItHomePageState extends State<SpotItHomePage> {
     try {
       final image = await _picker.pickImage(
         source: source,
-        // Sur le web, réduire la photo efface l'endroit où elle a été prise
+        // Sur le web, réduire ici effacerait sa position : shrinkPhoto le fait
         maxWidth: kIsWeb ? null : 1280,
         imageQuality: kIsWeb ? null : 85,
         // Garde les informations de la photo, dont sa position GPS
         requestFullMetadata: true,
       );
       if (image == null) return;
-      final bytes = await image.readAsBytes();
+      final bytes = await shrinkPhoto(await image.readAsBytes());
       if (!mounted) return;
       setState(() => _selectedBytes = bytes);
     } catch (_) {

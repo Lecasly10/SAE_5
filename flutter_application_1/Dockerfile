@@ -1,4 +1,4 @@
-FROM debian:bookworm-slim AS build
+FROM docker.io/library/debian:bookworm-slim AS build
 
 ARG FLUTTER_VERSION=3.47.5
 ARG API_HOST=http://localhost:3000
@@ -20,9 +20,10 @@ COPY . .
 RUN flutter build web --release --no-web-resources-cdn --dart-define=API_HOST=${API_HOST}
 
 
-FROM nginx:alpine
+# nginx sans droits administrateur
+FROM docker.io/nginxinc/nginx-unprivileged:alpine
 
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /app/build/web /usr/share/nginx/html
 
-EXPOSE 80
+EXPOSE 8080

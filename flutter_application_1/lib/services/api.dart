@@ -72,6 +72,8 @@ class Api {
   }
 
   static String _errorOf(http.Response res) {
+    // Refusée par nginx avant d'arriver au backend, donc sans message JSON
+    if (res.statusCode == 413) return 'Photo trop lourde, essayez-en une autre';
     try {
       return jsonDecode(res.body)['error'] as String;
     } catch (_) {

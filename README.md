@@ -25,12 +25,16 @@ Projet réalisé en équipe dans le cadre de la **SAE 5.01 — Développement av
 **C'est le moyen le plus simple pour essayer l'application.** Docker fabrique et lance tout à ta place (l'IA, le serveur, la base de données et l'application), chacun dans sa « boîte » appelée *conteneur*. **Tu n'as besoin d'installer que Docker Desktop** : ni Node.js, ni Python, ni Flutter, ni compte MongoDB, ni fichier `.env`.
 
 ```
-Installer Docker Desktop  →  télécharger le projet  →  docker compose up --build  →  http://localhost:8080
+Installer Docker  →  télécharger le projet  →  docker compose up --build  →  http://localhost:8080
 ```
 
-### Étape A — Installer Docker Desktop (une seule fois)
+**Ce qu'il faut sur tous les systèmes :** **8 Go de mémoire (RAM) minimum**, environ **10 Go de disque libre** et une connexion internet. Il faut aussi avoir le droit d'installer des logiciels (compte administrateur, ou `sudo` sous Linux). Sans ce droit, voir « Sous Linux, sans droits administrateur » plus bas.
 
-**Ce qu'il faut :** Windows 10 ou 11 (64 bits), **8 Go de mémoire (RAM) minimum**, environ **10 Go de disque libre**, et la virtualisation activée (c'est le cas sur presque tous les PC récents).
+### Étape A — Installer Docker (une seule fois)
+
+#### Windows 10 ou 11 (64 bits)
+
+La virtualisation doit être activée (c'est le cas sur presque tous les PC récents).
 
 1. Ouvre **PowerShell** (touche **Windows**, tape `PowerShell`, Entrée) et tape :
    ```powershell
@@ -48,6 +52,36 @@ Installer Docker Desktop  →  télécharger le projet  →  docker compose up -
    Chaque commande doit afficher un numéro de version.
 
 > ⚠️ **Docker Desktop doit rester ouvert** tant que tu utilises l'application.
+
+#### Linux (Ubuntu, Debian, Fedora…)
+
+Le script officiel de Docker installe Docker Engine et Docker Compose :
+```bash
+curl -fsSL https://get.docker.com | sudo sh
+```
+```bash
+sudo systemctl enable --now docker
+sudo usermod -aG docker $USER
+```
+**Déconnecte-toi puis reconnecte-toi** (pour pouvoir utiliser `docker` sans `sudo`), puis vérifie avec `docker compose version`.
+
+#### macOS
+
+Installe Docker Desktop avec [Homebrew](https://brew.sh) (`brew install --cask docker`) ou depuis https://www.docker.com/products/docker-desktop/, lance-le et attends « Engine running ».
+
+#### Sous Linux, sans droits administrateur (Podman)
+
+Certains PC (par exemple à l'IUT) ont déjà **Podman**, qui lance les mêmes conteneurs sans `sudo`. Il manque seulement `podman-compose`, qu'on installe dans son dossier personnel :
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+~/.local/bin/uv tool install podman-compose
+```
+Ensuite, remplace `docker compose` par `podman-compose` dans toutes les commandes (`podman-compose up --build -d`).
+- Si la construction échoue avec `insufficient UIDs or GIDs available in user namespace`, l'administrateur n'a pas réservé d'identifiants à ton compte (`/etc/subuid`). Ce réglage, à lancer une seule fois, peut contourner le problème (pas encore testé par l'équipe) :
+  ```bash
+  mkdir -p ~/.config/containers && printf '[storage]\ndriver = "overlay"\n[storage.options.overlay]\nignore_chown_errors = "true"\n' > ~/.config/containers/storage.conf && podman system reset -f
+  ```
+- Les images prennent environ 6 Go dans ton dossier personnel : vérifie ton quota.
 
 ### Étape B — Télécharger le projet
 
@@ -910,9 +944,9 @@ docker run --rm -v "${PWD}/ai:/app" -w /app spotit-ai python main.py evaluate
 - L'endroit où une photo a été prise n'est gardé qu'avec l'accord de l'utilisateur (« Enregistrer où mes voitures ont été photographiées », désactivé par défaut). Retirer l'accord efface les endroits déjà gardés. Pour afficher le nom du lieu, la position est envoyée une fois au service OpenStreetMap (Nominatim) ; `GEOCODER_URL=` (vide) dans `.env` désactive cet envoi.
 - Chaque utilisateur ne voit et ne supprime **que ses propres voitures**. La suppression du compte redemande le mot de passe et efface aussi toutes ses voitures et ses photos.
 - Le serveur (port 3000) n'est joignable que depuis le PC par défaut (`API_BIND`). L'application web envoie des en-têtes qui empêchent un autre site de l'afficher dans un cadre.
-- Les conteneurs du backend et de l'IA ne tournent pas en administrateur.
+- Les conteneurs du backend, de l'IA et de l'application ne tournent pas en administrateur (nginx sans droits root).
 - Le fichier `.env` ne doit **jamais** être commité (il est dans `.gitignore`).
-- Pour une vraie mise en production il resterait à ajouter : HTTPS, une limitation de débit derrière un proxy, et la rotation des clés.
+- Pour héberger l'appli derrière un proxy HTTPS : `NODE_ENV=production` (le backend refuse alors de démarrer sans `JWT_SECRET`) et `TRUST_PROXY=1` (nombre de proxys devant le backend, pour que les limites par minute voient la vraie adresse des visiteurs).
 
 ---
 
@@ -960,15 +994,14 @@ docker run --rm -v "${PWD}/ai:/app" -w /app spotit-ai python main.py evaluate
 - La connexion n'est gardée qu'**en mémoire** : on doit se reconnecter à chaque redémarrage de l'application.
 - Le bouton « Ajouter » relance l'IA côté serveur (analyse en double volontaire : on ne fait pas confiance à un résultat envoyé par l'application).
 - Les tests automatiques couvrent les fiches, la préparation du dataset, les seuils, le serveur IA, le backend et la lecture des réponses dans l'application ; il n'y a pas encore de test des écrans.
-- Le backend et l'IA ne tournent qu'en local.
 
 **Pistes pour la suite**
 1. Constituer un petit jeu de vraies photos prises au téléphone pour régler le seuil « non reconnue » sur des conditions réelles.
-2. Raretés et points par voiture (« Ferrari = légendaire »), fiche enrichie, filtres, score total.
+2. Score total et succès (les raretés, la fiche enrichie et les filtres sont faits).
 3. Garder la connexion sur l'appareil (`shared_preferences`).
 4. Corriger une voiture qui n'est pas dans les 5 suggestions (recherche dans toute la liste), et lancer le réentraînement automatiquement chaque nuit (tâche planifiée).
 5. Faire tourner l'IA **sur le téléphone** (TensorFlow Lite) et tester sur Android.
-6. Héberger le backend et l'IA en ligne.
+6. Embarquer l'application sur Android (APK).
 
 ---
 

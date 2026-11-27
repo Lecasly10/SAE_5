@@ -12,6 +12,7 @@ const predictRoutes = require('./routes/predict');
 const trainingPhotoRoutes = require('./routes/trainingPhotos');
 
 const app = express();
+app.set('trust proxy', config.trustProxy);
 
 app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }));
 app.use(cors(config.corsOrigins.length ? { origin: config.corsOrigins } : undefined));

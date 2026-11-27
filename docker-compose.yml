@@ -2,7 +2,7 @@ name: spotit
 
 services:
   mongo:
-    image: mongo:7
+    image: docker.io/library/mongo:7
     restart: unless-stopped
     volumes:
       - mongo-data:/data/db
@@ -53,6 +53,9 @@ services:
       MONGODB_URI: ${MONGODB_URI:-mongodb://mongo:27017/spotit}
       JWT_SECRET: ${JWT_SECRET:-}
       CORS_ORIGIN: ${CORS_ORIGIN:-}
+      # Pour héberger derrière un proxy HTTPS (voir README, Sécurité)
+      NODE_ENV: ${NODE_ENV:-}
+      TRUST_PROXY: ${TRUST_PROXY:-}
       PORT: 3000
       AI_URL: http://ai:5000
       # Nom du lieu des photos (OpenStreetMap) ; GEOCODER_URL= vide pour ne pas l'utiliser
@@ -78,7 +81,7 @@ services:
         API_HOST: ${API_HOST:-http://localhost:3000}
     restart: unless-stopped
     ports:
-      - "${APP_PORT:-8080}:80"
+      - "${APP_PORT:-8080}:8080"
     depends_on:
       backend:
         condition: service_healthy
