@@ -3,9 +3,9 @@
   "min_margin": 0.0,
   "calibration": {
     "target_precision": 0.9,
-    "images": 51967,
-    "accepted": 48055,
-    "precision": 0.9504,
-    "found": 0.8802
+    "images": 52172,
+    "accepted": 47867,
+    "precision": 0.9484,
+    "found": 0.8852
   }
 }

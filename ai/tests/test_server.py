@@ -1,4 +1,7 @@
 import unittest
+from io import BytesIO
+
+from PIL import Image, ImageFilter
 
 from src.catalog import CarCatalog
 from src.config import AI_DIR
@@ -46,7 +49,11 @@ class ServerTest(unittest.TestCase):
         self.assertIsNotNone(answer["box"])
 
     def test_unsure_answer_comes_with_suggestions(self):
-        answer = post_image(self.client, "mx5.jpg").get_json()
+        # Photo très floue : le modèle ne peut pas être sûr de lui
+        blurred = Image.open(AI_DIR / "images" / "mx5.jpg").convert("RGB").filter(ImageFilter.GaussianBlur(25))
+        data = BytesIO()
+        blurred.save(data, "JPEG")
+        answer = self.client.post("/predict", data=data.getvalue()).get_json()
 
         self.assertFalse(answer["recognized"])
         self.assertIsNone(answer["car"])
